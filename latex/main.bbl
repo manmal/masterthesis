@@ -1,0 +1,57 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem{url:echonest}
+\url{http://developer.echonest.com/docs/v4/}
+
+\bibitem{url:meemix}
+\url{http://devzone.wiki.meemix.com/index.php?title=MeeMix_API}
+
+\bibitem{url:lastfm}
+\url{http://www.lastfm.de/api}
+
+\bibitem{pachet:02g}
+Aucouturier, J.J., Pachet, F.: Music similarity measures: What's the use? In:
+  Ircam (ed.) Proceedings of the 3rd International Symposium on Music
+  Information Retrieval. pp. 157--163. Paris, France (October 2002)
+
+\bibitem{Cooper:2006:VAM}
+Cooper, M., Foote, J., Pampalk, E., Tzanetakis, G.: Visualization in
+  audio-based music information retrieval. Comput. Music J.  30,  42--62 (June
+  2006), \url{http://portal.acm.org/citation.cfm?id=1176357.1176365}
+
+\bibitem{DBLP:journals/mta/FrankLPGR09}
+Frank, J., Lidy, T., Peiszer, E., Genswaider, R., Rauber, A.: Creating ambient
+  music spaces in real and virtual worlds. Multimedia Tools Appl.  44(3),
+  449--468 (2009)
+
+\bibitem{DBLP:journals/cgf/HoltenW09}
+Holten, D., van Wijk, J.J.: Force-directed edge bundling for graph
+  visualization. Comput. Graph. Forum  28(3),  983--990 (2009)
+
+\bibitem{LID_05ismir}
+Lidy, T., Rauber, A.: Evaluation of feature extractors and psycho-acoustic
+  transformations for music genre classification. In: Proceedings of the Sixth
+  International Conference on Music Information Retrieval (ISMIR 2005). pp.
+  34--41. London, UK (September 11-15 2005)
+
+\bibitem{DBLP:conf/ismir/MayerNR08}
+Mayer, R., Neumayer, R., Rauber, A.: Rhyme and style features for musical genre
+  classification by song lyrics. In: ISMIR. pp. 337--342 (2008)
+
+\bibitem{mcfee09_hesas}
+McFee, B., Lanckriet, G.: Heterogeneous embedding for subjective artist
+  similarity. In: Tenth International Symposium for Music Information Retrieval
+  (ISMIR2009)) (October 2009)
+
+\bibitem{Morrison:2003:FMS}
+Morrison, A., Ross, G., Chalmers, M.: Fast multidimensional scaling through
+  sampling, springs and interpolation. Information Visualization  2,  68--77
+  (March 2003), \url{http://dx.doi.org/10.1057/palgrave.ivs.9500040}
+
+\bibitem{DBLP:conf/webist/SarmentoGCO09}
+Sarmento, L., Gouyon, F., Costa, B.G., Oliveira, E.C.: Visualizing networks of
+  music artists with rama. In: WEBIST. pp. 232--237 (2009)
+
+\end{thebibliography}

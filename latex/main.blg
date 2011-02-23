@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99d (TeX Live 2010)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: splncs03.bst
+Database file #1: refs.bib
+Warning--entry type for "url:meemix" isn't style-file defined
+--line 64 of file refs.bib
+Warning--entry type for "url:echonest" isn't style-file defined
+--line 71 of file refs.bib
+Warning--entry type for "url:lastfm" isn't style-file defined
+--line 78 of file refs.bib
+A bad cross reference---entry "DBLP:conf/webist/SarmentoGCO09"
+refers to entry "DBLP:conf/webist/2009", which doesn't exist
+A bad cross reference---entry "DBLP:conf/ismir/MayerNR08"
+refers to entry "DBLP:conf/ismir/2008", which doesn't exist
+Warning--to sort, need author or key in url:meemix
+Warning--to sort, need author or key in url:echonest
+Warning--to sort, need author or key in url:lastfm
+You've used 12 entries,
+            2785 wiz_defined-function locations,
+            663 strings with 6594 characters,
+and the built_in function-call counts, 6511 in all, are:
+= -- 549
+> -- 160
+< -- 12
++ -- 67
+- -- 55
+* -- 405
+:= -- 786
+add.period$ -- 15
+call.type$ -- 12
+change.case$ -- 73
+chr.to.int$ -- 0
+cite$ -- 15
+duplicate$ -- 591
+empty$ -- 619
+format.name$ -- 64
+if$ -- 1461
+int.to.chr$ -- 0
+int.to.str$ -- 12
+missing$ -- 108
+newline$ -- 41
+num.names$ -- 20
+pop$ -- 212
+preamble$ -- 1
+purify$ -- 51
+quote$ -- 0
+skip$ -- 206
+stack$ -- 0
+substring$ -- 426
+swap$ -- 315
+text.length$ -- 12
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 48
+warning$ -- 3
+while$ -- 46
+width$ -- 14
+write$ -- 112
+(There were 2 error messages)

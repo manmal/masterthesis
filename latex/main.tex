@@ -1,0 +1,73 @@
+
+%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is the LaTeX source for the instructions to authors using
+% the LaTeX document class 'llncs.cls' for contributions to
+% the Lecture Notes in Computer Sciences series.
+% http://www.springer.com/lncs       Springer Heidelberg 2006/05/04
+%
+% It may be used as a template for your own input - copy it
+% to a new file with a new name and use it as the basis
+% for your article.
+%
+% NB: the document class 'llncs' has its own and detailed documentation, see
+% ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e/llncsdoc.pdf
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+
+\usepackage{url}
+\usepackage{breakurl}
+\urldef{\mailsa}\path|{alfred.hofmann, ursula.barth, ingrid.haas, frank.holzwarth,|
+\urldef{\mailsb}\path|anna.kramer, leonie.kunz, christine.reiss, nicole.sator,|
+\urldef{\mailsc}\path|erika.siebert-cole, peter.strasser, lncs}@springer.com|    
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\begin{document}
+
+\mainmatter  
+
+\title{Computation and Visualization of Subjective Artist Similarity for Music Libraries on Android Devices\\}
+\titlerunning{Subjective Artist Similarity on Android Devices}
+
+\author{Manuel Maly}
+\authorrunning{Manuel Maly}
+
+\institute{Institute of Software Technology and Interactive Systems\\
+Vienna University of Technology}
+
+\toctitle{Computation and Visualization of Subjective Artist Similarity for Music Libraries on Android Devices}
+\tocauthor{Manuel Maly}
+\maketitle
+
+
+\begin{abstract}
+Abstract goes here.
+
+\keywords{subjective artist similarity, multi-dimensional scaling, audio analysis}
+\end{abstract}
+
+\tableofcontents
+
+%\cite{mashups}
+
+\include{01-introduction}
+\include{02-relatedwork}
+\include{03-scenario}
+\include{04-computation}
+\include{05-visualization}
+\include{06-implementation}
+\include{07-userstudy}
+\include{08-conclusion}
+\include{09-references}
+\include{10-appendix}
+
+
+\end{document}
