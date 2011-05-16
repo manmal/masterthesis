@@ -164,14 +164,27 @@ Therefore, it is desirable to give heed to the choice of visualization method to
 Since the field of music and music collection visualization is broad and not all algorithms can be presented within this thesis, the author decided to select only the field of two-dimensional collection visualizations for further investigation. It must be noted that several fields of visualizations are left out of the scope here, including:
 
 \begin{itemize}
-	\item \textbf{Abstract visualization as an artform} - Certain artforms try to make music more tangible by creating matching images, as in the movie "2001 - A Space Odyssey" by Stanley Kubrick, or the demo scene in Germany \cite{Scheib:2002}.
-	\item \textbf{Realtime computed images as abstract visualization} have become common components of almost every desktop audio player, presenting the user with animated images which somehow resemble certain features of the currently played music.
+	\item \textbf{Abstract visualization as an artform} - Certain artforms try to make music more tangible by creating matching images, as in the movie "2001 - A Space Odyssey" by Stanley Kubrick, or in works by the demo scene in Germany \cite{Scheib:2002}.
+	\item \textbf{Realtime computed images as abstract visualization} have become common components of many desktop audio players, presenting the user with animated images (fractals, 3D-animations,...) which somehow resemble certain features of the currently played music.
 	\item \textbf{3D environments resembling music content} give users the ability to roam through a virtual space similar to the way they interact with the physical world, as described in \cite{Dittenbach:2007}.
 \end{itemize}
 
+The scope of this thesis confines itself to the visualization of music tracks as objects, relating these objects to each other, and disregarding their real-time aspects (i.e., not generating any visualizations during playback).
+Intuitively, the computation and visualization of those relations (also, the quality of relations, e.g. ranking or dissimilarity distances) are closely related to each other. In some cases, a certain mode of computation of object relations more or less forces or forbids the usage of certain visualization approaches. Therefore, the presented modes of visualization are at least closely related to their computational counterparts from the previous subsection.
 
-An introduction to the topic of self-organizing maps (SOM), which are in this context also called "islands of music" is given in \cite{Cooper:2006:VAM}. This methodology operates on raw audio streams which are analysed by aforementioned feature extraction algorithms, and subsequently displaying them on an elevation-map, similar to a geographical map. 
-A new approach to graph visualization for music library navigation is described in \cite{Muelder:2010fk}.
+Previous work has shown that \textbf{self-organizing maps (SOM)}, which are in this context also called "islands of music" are well suited as visualizations of related music objects \cite{Cooper:2006:VAM}. This methodology depends on raw audio stream analysis (performed by aforementioned feature extraction algorithms), and subsequently displaying them on an elevation-map, similar to a geographical map. Proof-of-concepts have been successfully implemented, as has been demonstrated in \cite{NeuDitRau_05ismir}, featuring the PlaySOM. The information such self-organizing map visualizations want to give the user is: There are clusters of similar pieces of music in the provided collection, and within one cluster the contained music files most similar to each other. Additionally, each cluster has its own weight vector which can be used to add semantic height annotation to the map - for example, clusters whose objects contain a high tempo can be marked "high" (as opposed to clusters with slower music being marked as "low"), generating a corresponding height profile.
+
+Another broad group of (dis-)similarity visualizations is made up of \textbf{force-directed graph layouts}. They all consist of nodes (music objects) and edges (relations between objects). Additionally, the distances (edge lengths) between nodes approximate a function over the previously determined dissimilarities between the music objects.
+As has been described in \cite{gansner:1998}, the application of pseudo-physical forces on an undirected graph provides for a improvement of the graph layout. This is achieved by adding attractive or repulsive forces to all nodes in the graph, such that nodes push away from or attract each other. As long as there is energy left in a graph (i.e., there are objects which are not in their optimal position), the nodes are moved in a way that satisfies the applied forces. Such a force can be compared to a spring connecting two nodes, and for this reason a subset of those graph layouts are called \textbf{spring model}, on which has been elaborated in the previous subchapter. Obviously, spring model graphs in the context of multidimensional scaling are very tightly related with the computational aspects of MDS. Still, there are visualization-only aspects to spring graphs which can be formulated as the following questions:
+
+\begin{itemize}
+	\item How are edges displayed, or are they displayed at all?
+	\item How are intersecting edges dealt with?
+	\item How are objects presented?
+	\item How are dissimilarities scaled to geometric distances (linearly, exponentially, logarithmically,...)?
+\end{itemize}
+
+TODO: read and integrate \cite{Muelder:2010fk}.
 
 \subsection{Drawing and Optimization of Graphs Based on Multidimensional Scaling}
 
