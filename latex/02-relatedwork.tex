@@ -9,7 +9,7 @@ relevant or related to this thesis. They are grouped into the following topics o
 		  (given optimal circumstances).
 	\item \textbf {Features of digital music} - Gives an overview of existing methods of 
 		  feature extraction which are purely based on computational methods.
-	\item \textbf {Subjective artist similarity computation} - Lists literature which is related
+	\item \textbf {Subjective music similarity computation} - Lists literature which is related
 		  to this thesis' problem of computing the subjective similarity of artists, which is
 		  based on subjectiveness as experienced by humans.
 	\item \textbf {Visualization of artist similarity} - Provides an overview of existing 
@@ -59,7 +59,7 @@ As has been mentioned previously, most audio classifiers analyze the bitstream o
 the bitstream is only one dimension of a piece of music, if we regard it as a multidimensional object. For example,
 it is also possible to analyse the lyrics, as has been done in \cite{DBLP:conf/ismir/MayerNR08}.
 
-\subsection{Subjective Artist Similarity Computation}
+\subsection{Subjective Music Similarity Computation}
 
 Subjective similarity, as the author understands it, expresses human opinions on a certain object. As previously
 mentioned, it is obvious that humans will hardly agree on attributes of music, and the same person might even make
@@ -90,13 +90,88 @@ mobile device because of performance requirements. It is assumed by the author t
 of music file or artist similarity, the data provided by social music services (as opposed to hybrid 
 approaches) is sufficiently meaningful, as their daily user base is in the millions and still growing.
 
-A combination or fusion of similarity rankings from various social music services has been performed by the
-author of \cite{Marshall:2010}. In this article it is demonstrated that various methods of embedding or fusing
-similarity rankings from online services can provide different meaningful similarity models, some of which
-give more weight to unknown artists. However, this approach is clearly limited to the embedding of rankings 
-and does not compute continuous values as similarity measure.
+Apart from the source of similarity metrics, also the scope of computation has to be given thought to.
+Depending on a user's scenario, the user might want to explore her own music collection, or she might want
+to discover music similar to her own. In the following subsections, both cases are considered.
+
+\subsubsection{Similarity Computation for Collections of Music}
+
+In order to provide a meaningful, semantic overview of a collection of objects, data must be available 
+or generated for all objects in the collection, or for most of them. 
+
+As has been mentioned before, \textbf{extraction of features} of music files may be used to gather metrics
+about the analysed files. The data retrieved may then be combined into a feature vector of N dimensions,
+where N is the number of features. When all files in the analysed music collection have been classified in
+this way, a \textbf{self-organizing map} can be trained with the resulting feature vectors, mapping 
+vectors with small Euclidean distances spatially near to each other \cite{RAU_02ismir}. This results
+in a map where elevation represents the frequency of vectors in certain areas - thus, a high elevation
+at a point on the map means that the feature vector attached to the point is similar to a big number of music
+files. It is obvious that self-organizing maps are well suited for visually clustering music files by their 
+features. However, it must be noted that this approach is only feasible if a huge amount of music metadata 
+can be retrieved, either by feature extraction or other methods like text mining. Therefore, self-organizing 
+maps can be considered not being quite suitable for the goals and scope of this thesis.
+
+An alternative to feature extraction in this context is the construction of a 
+\textbf{similarity matrix} containing all objects of the analysed music collection. A similarity matrix contains
+the similarities (or rather the dissimilarities) of all items to each other, in the form of distances.
+Intuitively, the measured item-item distance is higher if they are more dissimilar to each other (a distance of
+zero expressing equalness between items). Data sources for similarity matrices describing music include 
+(as described earlier in this chapter):
+\begin{itemize}
+	\item Surveys, playlist co-occurrences, user collection co-occurrences, web text mining,... 
+	\item Similarity rankings or measures from public Web APIs
+\end{itemize}
+As mentioned before, we will concentrate on the latter for complexity reasons. The task of building up a 
+similarity matrix for a collection of music titles would then be reduced to a number of Web API calls, mapping the
+resulting distances or rankings to the objects in the collection. Similarity matrices can then be processed
+to find a suitable two-dimensional representation in Euclidean space, where the spatial distance between
+objects represents their similarity, or rather the dissimilarity. This process is called multi-dimensional scaling (MDS), and it has found broad adoption in scientific and industrial applications. 
+
+One of the most common multi-dimensional scaling techniques is the adoption of a spring model, which emulates the physical behaviour of steel rings connected by metal springs \cite{Morrison:2003:FMS}. To continue with the analogy, MDS starts off with the steel rings at random positions, and in multiple iterations tries to satisfy the springs' forces. A spring's force is usually proportional to the discrepancy of two objects' high-dimensional distance and their low-dimensional distance. The fitness of the model (all steel rings being at their optimal position, considering all connected springs) is described by a stress function. The lower the stress function's output, the better suits the new low-dimensional model the original high-dimensional model. In most cases a perfect match between high-dimensional and low-dimensional Euclidean distances (stress function output = 0) is not possible, and thus for the MDS calculation to terminate, sensible termination criteria have to be defined - e.g., if the velocity of objects moving at each iteration falls below a predefined threshold, the algorithm terminates and the resulting low-dimensional representation is accepted as being "good enough".
+
+Unfortunately, common spring model (or: metric distance) MDS is inflexible in the sense that the whole computation has to be performed all over again if slight changes to the data set occur \cite{Morrison:2003:FMS}. 
+Therefore, a computationally advantageous and more flexible approach to multi-dimensional scaling has been presented in \cite{Morrison:2003:FMS}, combining MDS with sampling and interpolation. As opposed to common multi-dimensional
+scaling, this hybrid methodology starts off with a random sample of size $\sqrt{N}$, where N is the number of objects contained in the dataset. After the spring model computation described above has been performed on the subset, the rest of the data set ($N - \sqrt{N}$ objects) is integrated into the low-dimensional model by an interpolation process which is described in detail in \cite{Morrison:2003:FMS}. It has been found in the article that this combination of algorithms improves greatly on the accuracy of the model (i.e., a lower stress function output) and offers a sub-quadratic run time of $\mathcal O(N*\sqrt{N})$.
+
+\subsubsection{Discovering Objects Similar to a Given Object}
+
+After the elaboration of means of exploring the semi-static collection of objects in a user's library, heed must be given to the discovery of unknown objects. Equipped with similarity data retrieved from various web APIs it is not only possible to compute relations of objects within a library, but also to find related objects which are currently not present in the library. It is clear that the same algorithms which have been previously described would compute usable outcomes by simply adding unknown objects to a library's representation (e.g. spring model MDS); yet, it can be assumed that in most cases only one object in a library is the starting point of a search for similar objects. This renders a big part of the library's representation irrelevant for this use case - consider a user searching for interprets similar to "The Beatles" - most likely, she will not be interested in how these unknown interprets relate to other bands in her library. Also, integrating such previously unknown objects into the representation of a big library will be computationally and query-wise infeasible, as dissimilarity distances to all objects in the library have to be determined. It must be noted that the representation for unknown object discovery can only be a crude approximation (because of the previously described volatility of subjective similarity), and for this reason not only numerical measures, but also similarity rankings are considered sufficient for this use case.
+
+A derivation from a previously proposed method can be considered here: Suiting the requirements well is a spring model MDS approach applied to a small dataset consisting of the starting point object (in the example being "The Beatles") and previously unkown objects which are most similar to it (retrieved via web APIs). The size of such a dataset would presumably peak at 30-40 objects, making common spring model multi-dimensional scaling computationally feasible. Naturally, the sampling/interpolation approach described in the previous subsection would also apply here, further decreasing the computation time.
+
+However, a computationally less expensive algorithm for such means has been proposed in \cite{Marshall:2010}, consisting of a fusion of similarity rankings from various social music services. In this article it is demonstrated that various methods of embedding (fusing) similarity rankings from online services can provide different meaningful similarity models, some of which give more weight to unknown artists. Intuitively, this methodology is able to compute a ranked list of similar objects, based on multiple sources for greater reliability, in a customizable way. The fusion methods reach from rank-average to concordet-fusion (unweighted directed graph). Three major benefits speak in this approach's favour over global numerical similarity measurements:
+
+\begin{itemize}
+	\item \textbf{Potentially insignificant computation times} while preserving a stable similarity ranking very well suited for mobile end users.
+	\item \textbf{Simple but effective customization} achieved by easily exchangable fusion algorithm components.
+	\item \textbf{Reducing the number of web API queries to a minimum} greatly reduces the overall number of network requests, making the method even better suited for mobile usage.
+\end{itemize}
+
+It must be noted at this point that the rank fusion algorithm is neither able to define distances between arbitrary objects in the dataset - only a dissimilarity ranking between the starting point object (e.g. "The Beatles") and the remaining objects is obtained - nor is it able to force the inclusion of objects (from a local library) in the ranking. This algorithm depends fully on the objects provided by external sources, meaning that if the starting point object is not contained in external sources, no meaningful result can be obtained. However, the author considers the amount of objects which can be obtained from third party web APIs sufficient for the algorithm to perform well for most of all objects in a typical user's library.
 
 \subsection{Visualization of Artist Similarity}
+
+The mode or fashion of data visualization can be considered a crucial aspect of interfaces for humans (i.e., graphical user interfaces). Today, humans' ability to apprehend information presented to them is limited in several ways, some of which are physical, and some of which are of psychological nature. Some of these limiting factors include:
+
+\begin{itemize}
+	\item Restriction of short-term memory,
+	\item Limited power of concentration,
+	\item Narrow attention span (especially while using mobile device),
+	\item Color blindness,...
+\end{itemize}
+
+Therefore, it is desirable to give heed to the choice of visualization method to achieve optimal apprehension results, without hindering information understanding through visualization errors.
+Since the field of music and music collection visualization is broad and not all algorithms can be presented within this thesis, the author decided to select only the field of two-dimensional collection visualizations for further investigation. It must be noted that several fields of visualizations are left out of the scope here, including:
+
+\begin{itemize}
+	\item \textbf{Abstract visualization as an artform} - Certain artforms try to make music more tangible by creating matching images, as in the movie "2001 - A Space Odyssey" by Stanley Kubrick, or the demo scene in Germany \cite{Scheib:2002}.
+	\item \textbf{Realtime computed images as abstract visualization} have become common components of almost every desktop audio player, presenting the user with animated images which somehow resemble certain features of the currently played music.
+	\item \textbf{3D environments resembling music content} give users the ability to roam through a virtual space similar to the way they interact with the physical world, as described in \cite{Dittenbach:2007}.
+\end{itemize}
+
+
+An introduction to the topic of self-organizing maps (SOM), which are in this context also called "islands of music" is given in \cite{Cooper:2006:VAM}. This methodology operates on raw audio streams which are analysed by aforementioned feature extraction algorithms, and subsequently displaying them on an elevation-map, similar to a geographical map. 
+A new approach to graph visualization for music library navigation is described in \cite{Muelder:2010fk}.
 
 \subsection{Drawing and Optimization of Graphs Based on Multidimensional Scaling}
 
