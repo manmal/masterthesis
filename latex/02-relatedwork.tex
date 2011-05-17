@@ -15,9 +15,9 @@ relevant or related to this thesis. They are grouped into the following topics o
 	\item \textbf {Visualization of artist similarity} - Provides an overview of existing 
 		  methods and models of visualization of data similarity in general, and music similarity
 		  in particular.
-	\item \textbf {Drawing and optimization of graphs based on multidimensional scaling} - Gives an
-		  overview of literature dealing with the technical and mathematical background of 
-		  multi-dimensional visualization on two-dimensional output devices.
+%	\item \textbf {Drawing and optimization of graphs based on multidimensional scaling} - Gives an
+%		  overview of literature dealing with the technical and mathematical background of 
+%		  multi-dimensional visualization on two-dimensional output devices.
 \end{itemize}
 
 \subsection{Motivation for the Topic of This Thesis}
@@ -45,13 +45,6 @@ As opposed to subjective artist similarity, there are music features or measures
 purely computational approaches. In the field of audio feature extraction, a wide range of classifiers
 (feature extractors) has been created. These classifiers in many cases run a bitstream analysis of a digitally
 stored music file and extract one or more reproducible measures characterizing the file. 
-
-
-
-TODO: MORE SOURCES FOR GENERAL FEATURE EXTRACTION
-
-
-
 Interestingly, it is confirmed in \cite{LID_05ismir} that the use of psycho-acoustic enhancements before
 feature extraction improves the classification accuracy significantly. It can be concluded that the outcomes of
 audio feature extraction are influenced by many factors which are not always intuitive.
@@ -175,18 +168,19 @@ Intuitively, the computation and visualization of those relations (also, the qua
 Previous work has shown that \textbf{self-organizing maps (SOM)}, which are in this context also called "islands of music" are well suited as visualizations of related music objects \cite{Cooper:2006:VAM}. This methodology depends on raw audio stream analysis (performed by aforementioned feature extraction algorithms), and subsequently displaying them on an elevation-map, similar to a geographical map. Proof-of-concepts have been successfully implemented, as has been demonstrated in \cite{NeuDitRau_05ismir}, featuring the PlaySOM. The information such self-organizing map visualizations want to give the user is: There are clusters of similar pieces of music in the provided collection, and within one cluster the contained music files most similar to each other. Additionally, each cluster has its own weight vector which can be used to add semantic height annotation to the map - for example, clusters whose objects contain a high tempo can be marked "high" (as opposed to clusters with slower music being marked as "low"), generating a corresponding height profile.
 
 Another broad group of (dis-)similarity visualizations is made up of \textbf{force-directed graph layouts}. They all consist of nodes (music objects) and edges (relations between objects). Additionally, the distances (edge lengths) between nodes approximate a function over the previously determined dissimilarities between the music objects.
-As has been described in \cite{gansner:1998}, the application of pseudo-physical forces on an undirected graph provides for a improvement of the graph layout. This is achieved by adding attractive or repulsive forces to all nodes in the graph, such that nodes push away from or attract each other. As long as there is energy left in a graph (i.e., there are objects which are not in their optimal position), the nodes are moved in a way that satisfies the applied forces. Such a force can be compared to a spring connecting two nodes, and for this reason a subset of those graph layouts are called \textbf{spring model}, on which has been elaborated in the previous subchapter. Obviously, spring model graphs in the context of multidimensional scaling are very tightly related with the computational aspects of MDS. Still, there are visualization-only aspects to spring graphs which can be formulated as the following questions:
+As has been described in \cite{gansner:1998}, the application of pseudo-physical forces on an undirected graph provides for a improvement of the graph layout. This is achieved by adding attractive or repulsive forces to all nodes in the graph, such that nodes push away from or attract each other. As long as there is energy left in a graph (i.e., there are objects which are not in their optimal position), the nodes are moved in a way that satisfies the applied forces. The authors of \cite{Muelder:2010fk} have described and experimented with several graph-based layouts, and among them was a force-directed layout algorithm called LinLog \cite{noack:2003}, which has been found to deliver the most aestethic results.
+
+The forces in a force-directed graph layout can behave like springs connecting nodes, and for this reason a subset of force-directed graph layouts is called \textbf{spring model}, which has been described in length in the previous subchapter in the context of multi-dimensional scaling (MDS). The calculation of a spring model's layout is very tightly coupled with the overall MDS computation, even in hybrid approaches \cite{Morrison:2003:FMS} - in the case of MDS in combination with spring models, the visualization approach cannot be cleanly separated from the computation approach.
+
+Other graph layouts which pose options for music collection discovery include \cite{Muelder:2010fk}:
 
 \begin{itemize}
-	\item How are edges displayed, or are they displayed at all?
-	\item How are intersecting edges dealt with?
-	\item How are objects presented?
-	\item How are dissimilarities scaled to geometric distances (linearly, exponentially, logarithmically,...)?
+	\item Principal Component Analysis (PCA) layouts 
+	\item Tree map layouts 
+	\item Space filling curve layouts
 \end{itemize}
 
-TODO: read and integrate \cite{Muelder:2010fk}.
-
-\subsection{Drawing and Optimization of Graphs Based on Multidimensional Scaling}
+% \subsection{Drawing and Optimization of Force-Directed Graph Layouts}
 
 
 \subsection{Summary of this Section}
