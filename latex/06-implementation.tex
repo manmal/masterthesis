@@ -1,8 +1,120 @@
-\section{Implementation of Artist Similarity Visualization on Android}
+\section{Implementation of Artist Similarity Visualization for Android Devices}
+\label{sec:implementation}
+
+\subsection{Assembly of Algorithms and Information Flow In Concrete Implemention}
+
+In section ~\ref{sec:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given.
+
+\subsubsection{Library Visualization}
+
+\begin{itemize}
+	\item Extraction of music metadata on the device \\\\
+			\textbf{Input:} Access cursor to a data store containing the device's music library metadata.  \\
+			\textbf{Algorithm:} Iterates through all artists and tracks in the device's music library.
+			If an entity has not yet been registered in the app's database, parts of its metadata are 
+			compiled and put into the database. \\
+			\textbf{Output:} Local music metadata stored in the app's database.\\
+			
+	\item Matching of the device's music metadata with metadata from web sources \\\\
+			\textbf{Input:} Local music metadata stored in the app's database.  \\
+			\textbf{Algorithm:} Iterates through all local music metadata previously retrieved, and calls
+			Last.fm's RESTful API to find matching entities - picking the first match as best match. These pieces
+			of remote metadata are then stored in the app's database. \\
+			\textbf{Output:} Remote music metadata stored in the app's database. \\
+			
+	\item Querying of Artist Similarity data from web sources \\\\
+			\textbf{Input:} Local music metadata and matched metadata from remote web sources stored in the app's database. \\
+			\textbf{Algorithm:} Iterates through all local and remote music metadata previously retrieved, and calls
+			Last.fm's RESTful API to get the 100 most similar artists for each. \\
+			\textbf{Output:} Artist similarity relations stored in the app's database. \\
+			
+	\item Completion of Artist Similarity data \\\\
+			\textbf{Input:} Artist similarity relations stored in the app's database. \\
+			\textbf{Algorithm:} Iterates through the previously retrieved artist similarity relations, and
+			adds approximations for similarity relations which have not been found in the web API's results.
+			These approximations are calculated as described in section ~\ref{sec:computation}. \\
+			\textbf{Output:} Complete artist similarity relations stored in the app's database. \\
+			
+	\item Laying out artists in 2D space with a Multi Dimensional Scaling (MDS) algorithm \\\\
+			\textbf{Input:} Complete artist similarity relations stored in the app's database.   \\
+			\textbf{Algorithm:} Applies a multistep (see sub-steps) algorithm which uses previously
+			retrieved similarity data to position nodes resembling artists without overlappings.  \\
+			\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that their position 
+			indicates their similarity to each other. \\
+			
+		\subitem Building up of a distance matrix between artists \\\\
+				\textbf{Input:} Complete artist similarity relations stored in the app's database. \\
+				\textbf{Algorithm:} Iterates through all artist similarity relations, calculates a
+				distance value (\emph{d = Similarity * -1 + 1}, d $\in$ [0, 1] ), and writes it into
+				a matrix data structure where both dimensions' labels consist of all existing artists. \\
+				\textbf{Output:} Distance matrix of artists, based on their inverted similarities. \\
+				
+		\subitem Generation of a subset of artists and laying them out according to spring model forces	\\\\
+				\textbf{Input:} Distance matrix of artists, based on their inverted similarities. \\
+				\textbf{Algorithm:} Picks a random sample of artists, assigns random positions to them,
+				and applies a multi-dimensional scaling algorithm on them (see subsection 
+				~\ref{subsec:implementation-mds} later in this section). \\
+				\textbf{Output:} Graph structure of nodes resembling artists (correctly positioned subset) \\
+				
+		\subitem Addition of the remaining artists, positioning them around the initial subset \\\\
+				\textbf{Input:} Graph structure of nodes resembling artists (correctly positioned subset) \\
+				\textbf{Algorithm:} Iterates through the remaining artist nodes and positions each on a position
+				next to its most similar artist (estimating which quadrant will be the best). \\
+				\textbf{Output:} Graph structure of nodes resembling artists, many of them suboptimally positioned \\
+				
+		\subitem Application of spring model forces on all nodes for a few iterations \\\\
+				\textbf{Input:} Graph structure of nodes resembling artists, many of them suboptimally positioned \\
+				\textbf{Algorithm:} Applies the aforementioned multi-dimensional algorithm on the whole graph of
+				all artist nodes, thus reducing system stress (finding a better position for each artist).  \\
+				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that their position 
+				indicates their similarity to each other.\\
+				
+	\item Removal of overlapping of artists' depictions in 2D space	\\\\
+				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that their position 
+				indicates their similarity to each other. \\
+				\textbf{Algorithm:} Empties out the graph, and re-adds the artist nodes back into it, one by one,
+				while optionally moving nodes when they are added such that they do not overlap any other nodes. This
+				movement is determined by the vector of both node's center coordinates and their amount
+				of overlapping. For more details about this algorithm, see 
+				~\ref{subsec:implementation-overlapping} later in this section. \\
+				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that they don't 
+				overlap each other and their position indicates their similarity to each other. \\
+				
+	\item Display of the laid out artists in OpenGL	\\\\
+				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that they don't 
+				overlap each other and their position indicates their similarity to each other. \\
+				\textbf{Algorithm:} \\
+				\textbf{Output:} OpenGL view object and auxiliary system objects \\
+				
+	\item Continuous reaction to user actions (zooming, panning, tapping) \\\\
+				\textbf{Input:} OpenGL view object and auxiliary system objects \\
+				\textbf{Algorithm:}  \\
+				\textbf{Output: -}
+\end{itemize}
 
 \subsection{Structure of the Application}
-\subsection{Web-Service Workflow}
-\subsection{Android Environment}
-\subsection{Artist Similarity Visualization Variants}
+
+\subsubsection{About Android Apps}
+
+Android is a mobile operating system developed by the Open Handset Alliance ~\cite{url:openhandsetalliance}, led by Google. Its architecture allows for 3rd party programs (called "apps") to easily be run and debugged on Android devices.
+Android apps are run in the Dalvik VM which makes use of a register-based architecture, relying on a Linux kernel for low-level functionality ~\cite{dalvik}. The most wide-spread programming language for building Android apps is Java, but various other languages such as Scala or even scripting languages like Groovy or Lua can be used. Since mid 2009, developers can also write and integrate native C and C++ code by making use of the Native Development Kit (NDK).
+
+From an app developer's perspective, the frameworks contained in Android dictate a user-centric application structure, made up of so-called Activities ~\cite{url:androidactivity}. Every Activity encapsulates a screen which is presented to the user. Activities are loosely coupled, allowing only serialized objects and primitive values to be passed between them.
+
+User interface composition in Android is performed partly in the CPU (e.g., in Java code), and partly in the device's GPU (by using the OpenGL interface). Apps can also choose between these composition variants.
+
+Android is a strictly touch-centric operating system, meaning that most user interactions are performed via the device's touch screen. Originally, Android devices were bound to provide hardware buttons, but starting with Android 4.0, those buttons are gradually replaced with software buttons (displayed on the touch screen).
+
+\subsection{Retrieval of Similarity Data}
+
+
+
+\subsection{Implementation of Multidimensional Scaling}
+\label{subsec:implementation-mds}
+
+\subsection{Implementation of Removal of Node Overlappings}
+\label{subsec:implementation-overlapping}
+
+\subsection{Visualization Details}
 
 \subsection{Summary of this Section}
