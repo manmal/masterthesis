@@ -1,9 +1,6 @@
-\section{Implementation of Artist Similarity Visualization for Android Devices}
-\label{sec:implementation}
-
 \subsection{Assembly of Algorithms and Information Flow In Concrete Implemention}
 
-In section ~\ref{sec:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given.
+In section ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given.
 
 \subsubsection{Library Visualization}
 
@@ -32,7 +29,7 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 			\textbf{Input:} Artist similarity relations stored in the app's database. \\
 			\textbf{Algorithm:} Iterates through the previously retrieved artist similarity relations, and
 			adds approximations for similarity relations which have not been found in the web API's results.
-			These approximations are calculated as described in section ~\ref{sec:computation}. \\
+			These approximations are calculated as described in section ~\ref{ch:computation}. \\
 			\textbf{Output:} Complete artist similarity relations stored in the app's database. \\
 			
 	\item Laying out artists in 2D space with a Multi Dimensional Scaling (MDS) algorithm \\\\
@@ -53,7 +50,7 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 				\textbf{Input:} Distance matrix of artists, based on their inverted similarities. \\
 				\textbf{Algorithm:} Picks a random sample of artists, assigns random positions to them,
 				and applies a multi-dimensional scaling algorithm on them (see subsection 
-				~\ref{subsec:implementation-mds} later in this section). \\
+				~\ref{subch:implementation-mds} later in this section). \\
 				\textbf{Output:} Graph structure of nodes resembling artists (correctly positioned subset) \\
 				
 		\subitem Addition of the remaining artists, positioning them around the initial subset \\\\
@@ -76,7 +73,7 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 				while optionally moving nodes when they are added such that they do not overlap any other nodes. This
 				movement is determined by the vector of both node's center coordinates and their amount
 				of overlapping. For more details about this algorithm, see 
-				~\ref{subsec:implementation-overlapping} later in this section. \\
+				~\ref{subch:implementation-overlapping} later in this section. \\
 				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that they don't 
 				overlap each other and their position indicates their similarity to each other. \\
 				
@@ -99,21 +96,21 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 \subsubsection{Artist Discovery}
 
 \begin{itemize}
-	\item Querying of the artists most similar to "subject" from web sources \\\\
-				\textbf{Input:} "Subject" artist the user has selected for discovery. \\
-				\textbf{Algorithm:} Queries Last.fm for the artists most similar to "subject", and returns
+	\item Querying of the artists most similar to "'subject"' from web sources \\\\
+				\textbf{Input:} "'Subject"' artist the user has selected for discovery. \\
+				\textbf{Algorithm:} Queries Last.fm for the artists most similar to "'subject"', and returns
 				an excerpt of those. \\
-				\textbf{Output:} Excerpt of artists most similar to "subject". \\
-	\item Integration of the retrieved artists around "subject" in 2D space, at randomized but similar positions \\\\
-				\textbf{Input:} Excerpt of artists most similar to "subject". \\
-				\textbf{Algorithm:} Applies a force-based layout algorithm on the collection of "subject" and
-				its similar artists, such that the similar artists are arranged in a star around "subject". \\
+				\textbf{Output:} Excerpt of artists most similar to "'subject"'. \\
+	\item Integration of the retrieved artists around "'subject"' in 2D space, at randomized but similar positions \\\\
+				\textbf{Input:} Excerpt of artists most similar to "'subject"'. \\
+				\textbf{Algorithm:} Applies a force-based layout algorithm on the collection of "'subject"' and
+				its similar artists, such that the similar artists are arranged in a star around "'subject"'. \\
 				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that similar
-				artists encircle "subject". \\
+				artists encircle "'subject"'. \\
 	\item Continuous re-arrangement of the retrieved artists based on a force-based layout algorithm (also reacting to newly added similar artists) \\\\
 				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that similar
-				artists encircle "subject". \\
-				\textbf{Algorithm:} As the user selects more artist nodes as "subject" and load
+				artists encircle "'subject"'. \\
+				\textbf{Algorithm:} As the user selects more artist nodes as "'subject"' and load
 				its similar artists, this algorithm is then restarted, but the previous subjects and their
 				similar artists are kept, and their positions adapted as needed - i.e., force-based layout
 				calculation does not stop for those. \\
@@ -124,67 +121,67 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_1_initial}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_1_initial}
   \caption{The initial graph state before MDS calculation}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_2_after_5_subset_iterations}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_2_after_5_subset_iterations}
   \caption{Graph state after 5 iterations of the initial subset}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_3_after_20_subset_iterations}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_3_after_20_subset_iterations}
   \caption{Graph state after 20 spring force iterations of the initial subset}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_4_after_5_restnode_additions}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_4_after_5_restnode_additions}
   \caption{Graph state after 5 placements of nodes outside the initial subset}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_5_after_all_restnode_additions}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_5_after_all_restnode_additions}
   \caption{Graph state after placements of all nodes outside the initial subset}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_6_after_5_cleanup_iterations}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_6_after_5_cleanup_iterations}
   \caption{Graph state after 5 spring force iterations of all nodes}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_7_after_10_cleanup_iterations}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_7_after_10_cleanup_iterations}
   \caption{Graph state after 10 spring force iterations of all nodes}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_8_after_5_uncollided_nodes}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_8_after_5_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from 5 nodes}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_9_after_half_uncollided_nodes}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_9_after_half_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from half of all nodes}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_10_after_all_uncollided_nodes}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_10_after_all_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from all nodes}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.4\textwidth]{images/screen_mds_11_final_big_picture}
+    \includegraphics[width=0.4\textwidth]{figures/screen_mds_11_final_big_picture}
   \caption{Big picture of the graph state after the end of MDS computation}
 \end{figure}
 
@@ -195,11 +192,11 @@ In section ~\ref{sec:scenario}, an overview was given of how algorithms work tog
 Android has a cursor-based query system for multimedia metadata (kept up-to-date transparently by the
 operation system). Creation of a cursor for all artists on the device is performed by program code like this:
 
-\begin{code}
+\begin{verbatim}
 Cursor artistCursor = mContext.getContentResolver().query(
 	MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
     artistProjection, null, null, null);
-\end{code}
+\end{verbatim}
 
 Since the returned metadata also contains a unique key for each multimedia file, metadata can be
 persisted in a database (disconnected from the VM's memory) and later be reused without obstacles.
@@ -231,13 +228,13 @@ Echonest's artist similarity results contain no similarity metric, but only the 
 
 Last.fm's artist similarity data is, in contrast to Echonest, augmented with accurate similarity measures in the range of $[0 .. 1]$. But, it is not possible to query Last.fm for a certain similarity relationship between two certain artists - instead, the top 100 similar artists for a certain artist can be retrieved. It's clear that this way, many artist-to-artist relations in a music collection will not receive a similarity measure. Instead, a dedicated algorithm has to approximate similarity values which were not provided by Last.fm.
 
-As Last.fm provides similarity value lists per artist ("subject"), it can be assumed that every relation to an artist not on the list has a similarity value within the interval \emph{[0 .. x], x = lowest known similarity of "subject" to any other artist}. Not having any more details at hand than this fact, the expected value of such an unknown similarity value is $x / 2$ - the author of this thesis decided to use this value as an approximation.
+As Last.fm provides similarity value lists per artist ("'subject"'), it can be assumed that every relation to an artist not on the list has a similarity value within the interval \emph{[0 .. x], x = lowest known similarity of "'subject"' to any other artist}. Not having any more details at hand than this fact, the expected value of such an unknown similarity value is $x / 2$ - the author of this thesis decided to use this value as an approximation.
 
 \subsubsection{Similarity Approximation Algorithm}
 
 In the following, the algorithm to interpolate similarity values (which is being used in the App's implementation) is described in simplified Java code:
 
-\begin{code}
+\begin{verbatim}
 for (artistOnDevice : allArtistsOnDevice) {
   similarArtists = LastFM.getSimilarArtists(artistOnDevice);
   for (innerArtistOnDevice : allArtistsOnDevice) {
@@ -271,14 +268,14 @@ for (artistOnDevice : allArtistsOnDevice) {
   }
 }	            
 	
-\end{code}
+\end{verbatim}
 
 \subsection{Implementation of Multidimensional Scaling}
-\label{subsec:implementation-mds}
+\label{subch:implementation-mds}
 
-The selected MDS algorithm has already been discussed broadly in section ~\ref{sec:computation}. Implementation of this algorithm required the creation of a number of helper and data classes, but on the whole, the implementation follows the pseudocode from section ~\ref{sec:computation} closely. To better illustrate step 3. from the mentioned pseudocode, the implementational part is included in the following as simplified Java code:
+The selected MDS algorithm has already been discussed broadly in section ~\ref{ch:computation}. Implementation of this algorithm required the creation of a number of helper and data classes, but on the whole, the implementation follows the pseudocode from section ~\ref{ch:computation} closely. To better illustrate step 3. from the mentioned pseudocode, the implementational part is included in the following as simplified Java code:
 
-\begin{code}
+\begin{verbatim}
 subject: the node to be positioned near any other node
 initialSubset: the initial nodes subset of size sqrt(number of all nodes)
 currentSubsetNodes: the nodes subset incrementally populated 
@@ -330,14 +327,14 @@ for (int i = 1; i <= QUADRANT_REFINING_ITERATIONS; i++) {
 
 currentSubsetNodes.add(subject);
 	
-\end{code}
+\end{verbatim}
 
 \subsection{Implementation of Removal of Node Overlappings}
-\label{subsec:implementation-overlapping}
+\label{subch:implementation-overlapping}
 
-The algorithm used for the removal of node overlappings has been shown in section ~/ref{sec:visualization}. The actual implementation required some pragmatic changes, therefore the code is listed in the following in simplified Java:
+The algorithm used for the removal of node overlappings has been shown in section ~/ref{ch:visualization}. The actual implementation required some pragmatic changes, therefore the code is listed in the following in simplified Java:
 
-\begin{code}
+\begin{verbatim}
 allNodes: all artists within the graph
 nodesWithoutOverlap: artists within the graph which do not overlap with other artists
 iterationsCount: number of iterations allowed to find a new position for one artist
@@ -360,7 +357,7 @@ for (subjectNode : allNodes) {
   }
   nodesWithoutOverlap.add(subjectNode);
 }
-\end{code}
+\end{verbatim}
 
 The optimized algorithm has a predefined number of iterations, by the end of which a node should no longer overlap any other nodes. This number has to be chosen carefully - too high and the overall computation duration will increase linearly, too low and not all node overlappings will be removed.
 
@@ -382,7 +379,7 @@ There are three touchscreen gestures supported by the App's implementation:
 \begin{itemize}
 	\item \textbf{Panning/Scrolling} - The user taps the finger onto the screen surface, does not let 
 	go, and pulls the finger across the surface. As long as the finger does not part from the surface, 
-	the "pan/scroll" is active.
+	the "'pan/scroll"' is active.
 	\item \textbf{Zooming} - The user rests two fingers on the screen surface, and changes the distance
 	between her finger tips. If the distance decreases, then the zoom factor will increase; and vice versa.
 	Ideally, the touched points would always stay right under the user's finger tips, but in the built
@@ -407,7 +404,7 @@ To make transitions between view states in the App smoother and easier to follow
 
 \subsubsection{About Android Apps}
 
-Android is a mobile operating system developed by the Open Handset Alliance ~\cite{url:openhandsetalliance}, led by Google. Its architecture allows for 3rd party programs (called "apps") to easily be run and debugged on Android devices.
+Android is a mobile operating system developed by the Open Handset Alliance ~\cite{url:openhandsetalliance}, led by Google. Its architecture allows for 3rd party programs (called "'apps"') to easily be run and debugged on Android devices.
 Android apps are run in the Dalvik VM which makes use of a register-based architecture, relying on a Linux kernel for low-level functionality ~\cite{dalvik}. The most wide-spread programming language for building Android apps is Java, but various other languages such as Scala or even scripting languages like Groovy or Lua can be used. Since mid 2009, developers can also write and integrate native C and C++ code by making use of the Native Development Kit (NDK).
 
 From an app developer's perspective, the frameworks contained in Android dictate a user-centric application structure, made up of so-called Activities ~\cite{url:androidactivity}. Every Activity encapsulates a screen which is presented to the user. Activities are loosely coupled, allowing only serialized objects and primitive values to be passed between them.

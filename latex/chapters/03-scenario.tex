@@ -1,6 +1,3 @@
-\section{Scenario and Scope of this Thesis}
-\label{sec:scenario}
-
 In this chapter, the scope of this thesis will be defined and a user scenario outlined. 
 
 \subsection{Scope Definition}
@@ -17,7 +14,7 @@ The scope of this thesis is defined by the following goals:
 
 \subsection{Selected Artist Similarity Computation}
 
-After consideration of the options for similarity computation in section ~\ref{sec:relatedwork}, the author has concluded that the approach presented in \cite{Morrison:2003:FMS} (combining multi-dimensional scaling with spring models and interpolation), seems to be a promising approach to the problem of music library visualization, accommodating mobile devices by especially fast computation. The approach will not be applied unaltered, but modifications and enhancements will be made and described in this thesis. 
+After consideration of the options for similarity computation in section ~\ref{ch:relatedwork}, the author has concluded that the approach presented in \cite{Morrison:2003:FMS} (combining multi-dimensional scaling with spring models and interpolation), seems to be a promising approach to the problem of music library visualization, accommodating mobile devices by especially fast computation. The approach will not be applied unaltered, but modifications and enhancements will be made and described in this thesis. 
 It must be noted that this computational method is limited in the amount of objects which can feasibly be displayed (and computed) on a mobile device. Also, since for some data structures no similarity metrics are currently available, the adapted MDS method is not suitable for all kinds of music data. Therefore, a fallback algorithm is selected for the display of hierarchical data objects: the force-directed layout algorithm presented in \cite{Kobourov04} is of low computational complexity, and its results seem promising.
 
 \subsection{Selected Visualization Computation}
@@ -26,7 +23,7 @@ Since an MDS computation approach has been selected for further proceeding, the 
 
 \subsection{Selected Algorithm for Removal of Overlapping of Artists}
 
-The author of this thesis decided to use an iterative approach to the removal of graph node overlappings - a modification and simplification of the idea of the force-transfer algorithm \cite{Huang03force-transfer:a}. Graph nodes are added into a fresh space, one by one, and while they are added, they are positioned such that overlappings with other nodes are eliminated. This elimination is performed by moving the freshly added node on the vector [overlapped node's center TO added node's center] so far that they don't overlap anymore. As this might create new overlappings, several iterations of this "pushing away" are performed, until the freshly added node does not overlap any other nodes. The outcome of this algorithm is a cleanly laid out representation of the previously crowded MDS computation outcome.
+The author of this thesis decided to use an iterative approach to the removal of graph node overlappings - a modification and simplification of the idea of the force-transfer algorithm \cite{Huang03force-transfer:a}. Graph nodes are added into a fresh space, one by one, and while they are added, they are positioned such that overlappings with other nodes are eliminated. This elimination is performed by moving the freshly added node on the vector [overlapped node's center TO added node's center] so far that they don't overlap anymore. As this might create new overlappings, several iterations of this "'pushing away"' are performed, until the freshly added node does not overlap any other nodes. The outcome of this algorithm is a cleanly laid out representation of the previously crowded MDS computation outcome.
 
 \subsection{Selected Layout Algorithm for Artist Discovery}
 
@@ -34,7 +31,7 @@ Since the graph of discovered artists is not star-shaped (one single subject art
 
 \subsection{Overview of the Assembly of Algorithms and Information Flow}
 
-To give the reader a better picture of the sections to come, an overview shall be given which explains how the selected algorithms process and pass on information to each other. An in-depth explanation of these information flows will be given in the section ~\ref{sec:implementation}.
+To give the reader a better picture of the sections to come, an overview shall be given which explains how the selected algorithms process and pass on information to each other. An in-depth explanation of these information flows will be given in the section ~\ref{ch:implementation}.
 
 \subsubsection{Library Visualization}
 
@@ -57,13 +54,13 @@ DURCH GRAFIK ERSETZEN:
 
 \subsubsection{Artist Discovery}
 
-Artist discovery is initiated by the user selecting a certain artist ("subject"), and requesting discovery mode.
+Artist discovery is initiated by the user selecting a certain artist ("'subject"'), and requesting discovery mode.
 
 DURCH GRAFIK ERSETZEN:
 
 \begin{itemize}
-	\item Querying of the artists most similar to "subject" from web sources
-	\item Integration of the retrieved artists around "subject" in 2D space, at randomized but similar positions
+	\item Querying of the artists most similar to "'subject"' from web sources
+	\item Integration of the retrieved artists around "'subject"' in 2D space, at randomized but similar positions
 	\item Continuous re-arrangement of the retrieved artists based on a force-based layout algorithm (also reacting to newly added similar artists)
 \end{itemize}
 
