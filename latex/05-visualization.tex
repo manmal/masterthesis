@@ -1,4 +1,5 @@
 \section{Visualization of Artist Similarity}
+\label{sec:visualization}
 
 In this section, the visualization of objects whose positions have previously been computed (see section ~\ref{sec:computation}) will be discussed. Also, the interaction patterns for the mobile application prototype will be defined.
 
@@ -16,6 +17,8 @@ Information will be displayed to the user in a hierarchical way - to limit the a
 	\item \textbf{Artists} - images and labels of the respective artists are displayed. Their positions relative to each other depict the artists' similarities. Here, the user can select an artist and proceed to the next hierarchical level by pressing a button:
 	\item \textbf{A certain artist and her album(s)} - images and labels of the previously selected artist and her albums (stored on the device), arranged in a starlike way (without any similarity information conveyed). Again, the user can select an album and proceed to the next hierarchical level by pressing a button:
 	\item \textbf{An album's tracks} - a list of tracks, carrying the image of the belonging album. The user can choose to start playback of one or all of the tracks.
+	\item \textbf{Related Artists (Discovery)} - From within the \textbf{Artists} view, the user can choose to display artists which are related to a certain artist in a semantic way, as established by the Last.fm API.
+	
 \end{itemize}
 
 To improve the user's understanding of the current navigational status, so-called breadcrumbs. Breadcrumbs achieve "visitor location awareness in a simple and direct way" \cite{Tesoriero:2008:Breadcrumbs} if applied to 2D spaces. A breadcrumb in this context is a series of links displayed on top of the graph, each representing one hierarchical level. An example for breadcrumbs shown while a list of tracks (lowest hierarchical level) could be: "Artist: Air > Album: Talkie Walkie". Further, a button is added which positions the viewport at the center of the graph, for the user to recover in case she has lost track of the viewport's position.
@@ -40,5 +43,18 @@ As this may impact the perception of the graph by humans in a negative way (obje
 The authors of ~\cite{journals/vlc/MisueELS95} therefore define the concept of the Mental Map, meaning that a graph has properties which should be maintained if transformed: Orthogonal Ordering, Proximity Relations, and Topology. An algorithm called Force Scan (FS) is then proposed to remove node overlappings while preserving the Mental Map of a graph. FS operates by first moving nodes horizontally, maintaining their horizontal ordering, and then moving nodes vertically, maintaining their vertical ordering. Several improvements to FS have been discussed (~\cite{Hayashi:1998:LAP:647550.728930} ~\cite{Huang03force-transfer:a} ~\cite{Li:2005}), while the algorithm in ~\cite{Huang03force-transfer:a} - \textbf{Force Transfer (FT)} - seems to be the most suitable for this thesis' use case, as it is of lower computational complexity than FS and produces pleasing layouts.
 
 The FT algorithm identifies clusters of overlapping nodes, and then performs transfer scans on them: left-to-right, right-to-left, upside-to-downside, and downside-to-upside. During the scans, the nodes in each cluster are moved such that the clusters become free of overlaps. Multiple iterations may be necessary, as the separation of one cluster may cause nodes to move on top of nodes from other clusters - thereby forming new clusters. Finally, the layout eventually is overlap-free, preserving the aforementioned mental map of the graph.
+
+The aforementioned methods of overlap-removal are complex (considering the need to form clusters), so the author decided to employ a more basic approach, but very similar to the previous algorithms. The graph canvas is virtually emptied, and re-filled one by one with the originally contained artist nodes, while making sure that a newly added node does not overlap with any others. The algorithm is described in the following listing:
+
+\begin{enumerate}
+\item Remove all nodes from the graph structure.	
+\item For every node ("subjectNode") do:
+	\subitem For every node ("alreadyPositionedNode") in the set of already positioned nodes do:
+	\subsubitem If the distance between subjectNode and alreadyPositionedNode is beneath a
+	threshold, create a vector from alreadyPositionedNode's center to subjectNode's center, set
+	its length such that they don't overlap, and displace subjectNode by it.
+	\subsubitem If subjectNode still overlaps with another node, step to 2.1.
+	\subsubitem Add subjectNode to the set of already positioned nodes.
+\end{enumerate}
 
 \subsection{Summary of this Section}
