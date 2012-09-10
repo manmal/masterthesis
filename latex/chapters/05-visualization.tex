@@ -2,11 +2,11 @@ In this section, the visualization of objects whose positions have previously be
 
 INSERT SUBCHAPTERS LIST HERE
 
-\subsection{Visualization}
+\section{Visualization}
 
 After the computation of similarity measures and the resulting layout of music objects has been performed (see section ~\ref{ch:computation}), the mode of visualization has to be defined. As has already been discussed, the possible modes of information display have been narrowed down due to several constraints, determining that the visualization must be two-dimensional. Small screens on mobile devices introduce a further constraint: in most use cases, not all of the content will fit on one screen; therefore, a zooming and panning mechanism will be employed. To provide users with a rich experience, the objects shall not be shown as points, but as shapes - if an image of the object exists in an online source, it shall be used, or otherwise, an arbitrary rectangle shall be shown. In order that users can orient themselves better, a non-solid background will be used - ideally, it will emulate 3-dimensionality by moving and zooming while the user pans or zooms the graph.
 
-\subsection{User Interaction}
+\section{User Interaction}
 
 Information will be displayed to the user in a hierarchical way - to limit the amount of information displayed all at once, it is split up and logical links are established. The hierarchy is made up of:
 
@@ -24,7 +24,7 @@ Within the graph viewport, interaction will be a mix of touch based interaction 
 Following the established conventions of touch interfaces, navigatable objects (like artists or albums) are made touchable. Likewise, the user can reach upper view hierarchies by pressing the hardware (or software-emulated) back button common to Android devices.
 Exploration of the graph is performed by two common touch gestures, namely pinch-to-zoom and one-finger-panning. To zoom, the user places two fingers on the graph viewport and moving her fingers either apart (zooming in) or towards each other (zooming out). To pan, the user places one finger on the graph and moves it around as if it were a piece of paper and the screen an aperture showing the paper.
 
-\subsection{Removal of Node Overlapping}
+\section{Removal of Node Overlapping}
 
 As the reader may have noticed, the positions of objects computed as described in section ~\ref{ch:computation} don't respect any aesthetic criteria. ~\cite{Li:2005} gives an overview of such criteria, three of which also apply to graphs produced by MDS:
 
@@ -54,4 +54,4 @@ The aforementioned methods of overlap-removal are complex (considering the need 
 	\subsubitem Add subjectNode to the set of already positioned nodes.
 \end{enumerate}
 
-\subsection{Summary of this Section}
+\section{Summary of this Section}

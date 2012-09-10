@@ -17,7 +17,7 @@ relevant or related to this thesis. They are grouped into the following topics o
 %		  multi-dimensional visualization on two-dimensional output devices.
 \end{itemize}
 
-\subsection{Motivation for the Topic of This Thesis}
+\section{Motivation for the Topic of This Thesis}
 
 Music is an integral part of the daily life in nearly all societies, and the list of published titles 
 is growing every day. As huge amounts of data tend to be hard to digest, ontologies have to be created, 
@@ -36,7 +36,7 @@ any distinct similarity measure between two music titles, due to the implicit fu
 It can be assumed that it is rare that two humans would agree on the same similarity between music files
 if they vote independent of each other.
 
-\subsection{Features of Digital Music}
+\section{Features of Digital Music}
 
 As opposed to subjective artist similarity, there are music features or measures which can be retrieved by
 purely computational approaches. In the field of audio feature extraction, a wide range of classifiers
@@ -49,7 +49,7 @@ As has been mentioned previously, most audio classifiers analyze the bitstream o
 the bitstream is only one dimension of a piece of music, if we regard it as a multidimensional object. For example,
 it is also possible to analyse the lyrics, as has been done in \cite{DBLP:conf/ismir/MayerNR08}.
 
-\subsection{Subjective Music Similarity Computation}
+\section{Subjective Music Similarity Computation}
 
 Subjective similarity, as the author understands it, expresses human opinions on a certain object. As previously
 mentioned, it is obvious that humans will hardly agree on attributes of music, and the same person might even make
@@ -84,7 +84,7 @@ Apart from the source of similarity metrics, also the scope of computation has t
 Depending on a user's scenario, the user might want to explore her own music collection, or she might want
 to discover music similar to her own. In the following subsections, both cases are considered.
 
-\subsubsection{Similarity Computation for Collections of Music}
+\subsection{Similarity Computation for Collections of Music}
 
 In order to provide a meaningful, semantic overview of a collection of objects, data must be available 
 or generated for all objects in the collection, or for most of them. 
@@ -123,7 +123,7 @@ Unfortunately, common spring model (or: metric distance) MDS is inflexible in th
 Therefore, a computationally advantageous and more flexible approach to multi-dimensional scaling has been presented in \cite{Morrison:2003:FMS}, combining \textbf{MDS with sampling and interpolation}. As opposed to common multi-dimensional
 scaling, this hybrid methodology starts off with a random sample of size $\sqrt{N}$, where N is the number of objects contained in the dataset. After the spring model computation described above has been performed on the subset, the rest of the data set ($N - \sqrt{N}$ objects) is integrated into the low-dimensional model by an interpolation process which is described in detail in \cite{Morrison:2003:FMS}. It has been found in the article that this combination of algorithms improves greatly on the accuracy of the model (i.e., a lower stress function output) and offers a sub-quadratic run time of $\mathcal O(N*\sqrt{N})$.
 
-\subsubsection{Discovering Objects Similar to a Given Object}
+\subsection{Discovering Objects Similar to a Given Object}
 
 After the elaboration of means of exploring the semi-static collection of objects in a user's library, heed must be given to the recommendation of unknown objects. Equipped with similarity data retrieved from various web APIs it is not only possible to compute relations of objects within a library, but also to find related objects which are currently not present in the library. It is clear that the same algorithms which have been previously described would compute usable outcomes by simply adding unknown objects to a library's representation (e.g. spring model MDS); yet, it can be assumed that in most cases only one object in a library is the starting point of a search for similar objects. This renders a big part of the library's representation irrelevant for this use case - consider a user searching for interprets similar to "'The Beatles"' - most likely, she will not be interested in how these unknown interprets relate to other bands in her library. Also, integrating such previously unknown objects into the representation of a big library will be computationally and query-wise infeasible, as dissimilarity distances to all objects in the library have to be determined. It must be noted that the representation for unknown object recommendation can only be a crude approximation (because of the previously described volatility of subjective similarity), and for this reason not only numerical measures, but also similarity rankings are considered sufficient for this use case.
 
@@ -139,7 +139,7 @@ However, a computationally less expensive algorithm for such means has been prop
 
 It must be noted at this point that the rank fusion algorithm is neither able to define distances between arbitrary objects in the dataset - only a dissimilarity ranking between the starting point object (e.g. "'The Beatles"') and the remaining objects is obtained - nor is it able to force the inclusion of objects (from a local library) in the ranking. This algorithm depends fully on the objects provided by external sources, meaning that if the starting point object is not contained in external sources, no meaningful result can be obtained. However, the author considers the amount of objects which can be obtained from third party web APIs sufficient for the algorithm to perform well for most of all objects in a typical user's library.
 
-\subsection{Visualization of Artist Similarity}
+\section{Visualization of Artist Similarity}
 
 The mode or fashion of data visualization can be considered a crucial aspect of interfaces for humans (i.e., graphical user interfaces). Today, humans' ability to apprehend information presented to them is limited in several ways, some of which are physical, and some of which are of psychological nature. Some of these limiting factors include:
 
@@ -162,7 +162,7 @@ Since the field of music and music collection visualization is broad and not all
 The scope of this thesis confines itself to the visualization of music tracks as objects, relating these objects to each other, and disregarding their real-time aspects (i.e., not generating any visualizations during playback).
 Intuitively, the computation and visualization of those relations (also, the quality of relations, e.g. ranking or dissimilarity distances) are closely related to each other. In some cases, a certain mode of computation of object relations more or less forces or forbids the usage of certain visualization approaches. Therefore, the presented modes of visualization are at least closely related to their computational counterparts from the previous subsection.
 
-\subsubsection{Visualization of Collections of Music}
+\subsection{Visualization of Collections of Music}
 
 Previous work has shown that \textbf{self-organizing maps (SOM)}, which are in this context also called "'islands of music"' are well suited as visualizations of related music objects \cite{Cooper:2006:VAM}. This methodology depends on raw audio stream analysis (performed by aforementioned feature extraction algorithms), and subsequently displaying them on an elevation-map, similar to a geographical map. Proof-of-concepts have been successfully implemented, as has been demonstrated in \cite{NeuDitRau_05ismir}, featuring the PlaySOM. The information such self-organizing map visualizations want to give the user is: There are clusters of similar pieces of music in the provided collection, and within one cluster the contained music files most similar to each other. Additionally, each cluster has its own weight vector which can be used to add semantic height annotation to the map - for example, clusters whose objects contain a high tempo can be marked "'high"' (as opposed to clusters with slower music being marked as "'low"'), generating a corresponding height profile.
 
@@ -179,12 +179,12 @@ Other graph layouts which pose options for music collection browsing include \ci
 	\item Space filling curve layouts
 \end{itemize}
 
-\subsubsection{Visualizations for the Recommendation of Unknown Objects}
+\subsection{Visualizations for the Recommendation of Unknown Objects}
 
 As has been discussed in the previous subchapter, the computational approaches for the recommendation of new objects can be either very similar to the computation of ordinary collection visualization, or they can use more simplified rank-based models. The former are clearly covered properly by the broad range of previously described visualization methods for collections of objects.
 On the contrary, visualization possibilities for rank-based computation models are not as manifold, due to the fuzzy dissimilarities between objects - a ranking can not be used to acquire deterministic object distances. However, since the goal of the visualization of such a ranking is to provide a very rough overview to the user, a deterministic visualization is not necessary. It can even be considered to omit the ranks, and just display these objects as relations of the same relevance, as has been done by the authors of \cite{DBLP:conf/webist/SarmentoGCO09}. It seems that also for this use case, a force-directed graph layout provides for the most aestethic results \cite{DBLP:journals/spe/FruchtermanR91}. Additionally, such layouts can execute their self-optimization in realtime while being presented to their user without affecting the user experience in a negative way, as is shown by \cite{url:tuneglue}. Additionally, the nodes in such layouts are user-manipulable in realtime.
 
-% \subsection{Drawing and Optimization of Force-Directed Graph Layouts}
+% \section{Drawing and Optimization of Force-Directed Graph Layouts}
 
 
-\subsection{Summary of this Section}
+\section{Summary of this Section}
