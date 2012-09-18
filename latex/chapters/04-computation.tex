@@ -1,4 +1,4 @@
-In this section, the computation of similarities between artists within collections of music
+In this chapter, the computation of similarities between artists within collections of music
 will be presented.
 
 \begin{itemize}
@@ -39,6 +39,7 @@ assigned a similarity connection \{X, Y\} of \\
 \emph{0.5 * [last similarity value in the list of artist X's similar artists]} (expected value).
 
 \section{Multidimensional Scaling Algorithm}
+\label{sec:mds-algorithm}
 
 \subsection{About Multidimensional Scaling}
 
@@ -67,6 +68,7 @@ Since the previously mentioned web sources provide readymade similarity measures
 
 \subsection{Concrete MDS Algorithm}
 
+
 As mentioned before, the chosen MDS algorithm is based on a spring model. In the real world, steel rings interconnected with springs strive to form an equilibrium, where all forces enacted by the springs are balanced. In a perfect equilibrium, the position of every steel ring is a compromise of all forces acting on it, and the rings will not move anymore. The "'system stress"' is then zero. The real-world spring system will also produce non-perfect ending states because of energy loss in the system - at some point, the rings will not move anymore because the original kinetic energy has transformed into other forms of energy and is not available for movement of rigid springs.
 In a digital emulation of this concept, objects are moved around by high-dimensional forces (springs) until, theoretically, an equilibrium has been reached. However, the balancing effect (swinging) produced by these forces cannot happen continously as in the real word. Instead, the swinging spring effect is approximated by computing iterations, each representing a system state at a certain time. Since there is no loss of energy in the system (as observed in the real-world spring system) for every iteration, there are configurations in which the objects will be pushed around by the forces forever, never reaching a final static state. It is therefore common to limit the amount of iterations or regard the positions of objects as "'good enough"' when the system stress has fallen below a threshold. Since system stress grows proportionally to the number of objects (if stress among them stays the same), an optimal system stress threshold is non-trivial to calculate.
 Research has produced both basic and more refined algorithms which approximate the behaviour of a spring model. 
@@ -87,6 +89,7 @@ Chalmers therefore introduces a stochastic sampling method and the use of neighb
 Further on, \cite{Morrison:2003:FMS} introduces another optimization: Initially, only a subset of all objects is selected and the aforementioned stochastic layout algorithm is performed on those. Then, the rest of the objects is added to the layout following an estimation of their best positions. Finally, the stochastic layout algorithm is performed again, for a limited number of iterations. Thus, the complexity of the algorithm is further reduced to $\mathcal O(N*\sqrt{N})$.
 
 \subsection{Selected Algorithm in Detail}
+\label{subsec:mds-selected-algorithm}
 
 The optimized algorithm is composed of these steps (C1, C2, C3, C4 being predefined constants):
 

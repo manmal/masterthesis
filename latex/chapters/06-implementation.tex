@@ -1,4 +1,5 @@
 \section{Assembly of Algorithms and Information Flow In Concrete Implemention}
+\label{sec:algorithm-assembly}
 
 In section ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given.
 
@@ -117,72 +118,139 @@ In section ~\ref{ch:scenario}, an overview was given of how algorithms work toge
 				\textbf{Output:} - \\
 \end{itemize}
 
-\section{Algorithms with Screenshots}
+\section{Algorithm Illustrations}
+
+The previously described algorithms used for the composition of the App will in the following be  illustrated by screenshots of their outcome. These screenshots are based on an example library which the author of this thesis used while debugging and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} could be a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis.
+
+\subsection{Before Computation}
+
+In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (to avoid edge cases during the application of spring model forces later on, which arise when all nodes are located at the origin).
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_1_initial}
   \caption{The initial graph state before MDS calculation}
+  \label{fig:screen_mds_1_initial}
 \end{figure}
+
+\newpage
+\subsection{After 5 Subset Iterations (MDS)}
+\label{subsec:mds-after-five-subset-iterations}
+
+As previously described in sections ~\ref{sec:mds-algorithm} and ~\ref{sec:algorithm-assembly}, the first steps in the App's MDS computation are:
+
+\begin{enumerate}
+	\item Generation of a subset of nodes, and
+	\item Application of a number of spring model iterations on this subset.
+\end{enumerate}
+
+The screenshot depicted in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations} shows the graph's state after five iterations of step 2. If compared to figure ~\ref{fig:screen_mds_1_initial}, it can be observed that four of the artist nodes have been moved to more outward positions.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_2_after_5_subset_iterations}
   \caption{Graph state after 5 iterations of the initial subset}
+  \label{fig:screen_mds_2_after_5_subset_iterations}
 \end{figure}
+
+\newpage
+\subsection{After 20 Subset Iterations (MDS)}
+
+Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_after_20_subset_iterations} shows graph state during the second step (application of a number of spring model iterations on the initial subset) of MDS computation, but with 20 iterations of progress. It's easy to see that the four artist nodes (which have already been moved in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations}) have been displaced even more.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_3_after_20_subset_iterations}
   \caption{Graph state after 20 spring force iterations of the initial subset}
+  \label{fig:screen_mds_3_after_20_subset_iterations}
 \end{figure}
+
+\newpage
+\subsection{After 5 Placements of Remaining Nodes (MDS)}
+
+After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that some nodes visible on the screen have been moved to positions which differ greatly from the old positions in the last screenshot. Because the placement algorithm is of low complexity, as has been shown in section ~\ref{subsec:mds-selected-algorithm}, placements are performed in much shorter time than the previously described subset iterations.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_4_after_5_restnode_additions}
   \caption{Graph state after 5 placements of nodes outside the initial subset}
+  \label{fig:screen_mds_4_after_5_restnode_additions}
 \end{figure}
+
+\newpage
+\subsection{After All Placements of Remaining Nodes (MDS)}
+
+Figure ~\ref{fig:screen_mds_5_after_all_restnode_additions} shows the graph's state after all nodes not in the initial subset have been placed in approximated positions. Although all nodes have been displaced at least once, this is an intermediate state, not yet resembling the algorithm's final outcome. Most nodes should be at least near their optimal position, minimizing system stress, but tests have shown that some nodes will be displaced by much in the following placement corrections. Due to the nature of the performed placement approximation, the such placed nodes take into account only the most similar node - yet there may be other nodes at an entirely different position in the graph to which the placed node is also similar.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_5_after_all_restnode_additions}
   \caption{Graph state after placements of all nodes outside the initial subset}
+  \label{fig:screen_mds_5_after_all_restnode_additions}
 \end{figure}
+
+\newpage
+\subsection{After 5 Placement Correction Iterations (MDS)}
+
+Similar to the beginning of the calculations (depicted in section ~\ref{subsec:mds-after-five-subset-iterations}), the spring model algorithm is again applied to the graph, but on all nodes at once. The previously approximated positions for many of the nodes have to be corrected (i.e., system stress has to be reduced) for the produced layout to increase significance. Some or many of the nodes are even at the wrong side of the graph, judging by the forces enacted by all other nodes. Application of a limited number of spring model iterations has the potential to improve the expressiveness of the layout greatly. Figure ~\ref{fig:screen_mds_6_after_5_cleanup_iterations} displays graph state after five spring model iterations.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_6_after_5_cleanup_iterations}
-  \caption{Graph state after 5 spring force iterations of all nodes}
+  \caption{Graph state after 5 spring model iterations of all nodes}
+  \label{fig:screen_mds_6_after_5_cleanup_iterations}
 \end{figure}
+
+\newpage
+\subsection{After 10 Placement Correction Iterations (MDS)}
+\label{subsec:mds-after-ten-placement-iterations}
+
+After 10 spring model iterations, the resulting layout is supposed to sufficiently satisfy the graph's similarity forces. The result is shown in figure ~\ref{fig:screen_mds_7_after_10_cleanup_iterations}, which also resembles the final outcome of the MDS algorithm. 
+The graph's nodes have been laid out such that their centers' positions reduce system stress - not giving any heed to overlappings. Therefore, the process does not end here, but these overlappings have to be eliminated.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_7_after_10_cleanup_iterations}
   \caption{Graph state after 10 spring force iterations of all nodes}
+  \label{fig:screen_mds_7_after_10_cleanup_iterations}
 \end{figure}
+
+\newpage
+\subsection{After Removal of Node Overlappings from 5 Nodes}
+
+By applying the anti-overlap algorithm described in section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_8_after_5_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from 5 nodes}
+  \label{fig:screen_mds_8_after_5_uncollided_nodes}
 \end{figure}
+
+\newpage
+\subsection{After Removal of Node Overlappings from Half of All Nodes}
+
+As a continuation of the last screenshot, the following figure ~\ref{fig:screen_mds_9_after_half_uncollided_nodes} depicts the graph's state after half of all artist nodes have been repositioned to avoid overlappings.
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_9_after_half_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from half of all nodes}
+  \label{fig:screen_mds_9_after_half_uncollided_nodes}
 \end{figure}
+
+\newpage
+\subsection{After Removal of Node Overlappings from All Nodes}
+
+Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subsection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the MDS algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
+
+In the actual App implementation, this is the first state displayed to the user - all previous states are hidden from her. Subsequently, the App reacts to touch gestures in order to enable navigation and exploration of the structure on small screens (it's understood that screenshot~\ref{fig:screen_mds_10_after_all_uncollided_nodes} does not show all artists of the graph).
 
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.4\textwidth]{figures/screen_mds_10_after_all_uncollided_nodes}
   \caption{Graph state after removal of node overlappings from all nodes}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_11_final_big_picture}
-  \caption{Big picture of the graph state after the end of MDS computation}
+  \label{fig:screen_mds_10_after_all_uncollided_nodes}
 \end{figure}
 
 \section{Retrieval of Music Metadata}
