@@ -19,7 +19,7 @@ relevant or related to this thesis. They are grouped into the following topics o
 Music is an integral part of the daily life in nearly all societies, and the list of published titles 
 is growing every day. As huge amounts of data tend to be hard to digest, a promising approach is to create ontologies  
 by which music can be categorized in a hierarchical fashion. Aside from the general motivations for this thesis presented in Chapter ~\ref{ch:intro}, the motivation to choose music similarity as a means of ordering music has its roots in recent resesarch. The categorization of arbitrary music titles
-is neither implicit nor trivial, and music similarity has been a promising metric which can be derived from usage data, as opposed to deriving it from analyzation of music bitstreams.
+is neither implicit nor trivial, and music similarity has been a promising metric which can be derived from usage data, as opposed to deriving it from analysis of music bitstreams.
 Serving the demands of Electronic Music Distribution (EMD), the authors of \cite{pachet:02g} elaborate
 on the feasibility of music similarity measures. It is found in \cite{pachet:02g} that the introduced
 similarity measure (timbre similarity) combined with other measures can yield interesting results. It is
@@ -29,16 +29,16 @@ due to the subjective demands.
 It is clear that even the best-educated music experts could hardly agree on 
 any distinct similarity measure between two music titles, due to the implicit fuzziness of subjective measures. In \cite{Ellis02thequest}, it is mentioned that a simple mistake as overlooking an artist when rating similarities can severely change the results.
 For this reason, it can be assumed that it is rare that two humans would agree on the same similarity between music files
-if they vote independent of each other.
+if they voted independent of each other.
 
 As mobile devices are becoming increasingly ubiquitious, this thesis is focusing on strategies and implementations of music similarity for mobile computing.
 
 \section{Features of Digital Music}
 
 As opposed to subjective artist similarity, there are music features or measures which can be retrieved by
-purely computational approaches. In the field of audio feature extraction, a wide range of classifiers
-(feature extractors) has been created. These classifiers in many cases run a bitstream analysis of a digitally
-stored music file and extract one or more reproducible measures characterizing the file. 
+purely computational approaches. In the field of audio feature extraction, a wide range of feature extractors
+has been created. Feature extractors perform bitstream analysis of digitally
+stored music files and extract one or more reproducible measures characterizing the file. Subsequently, the music files can be classified by the features.
 Interestingly, it is confirmed in \cite{LID_05ismir} that the use of psycho-acoustic enhancements before
 feature extraction improves the classification accuracy significantly. It can be concluded that the outcomes of
 audio feature extraction are influenced by many factors which are not always intuitive.
@@ -47,7 +47,7 @@ the bitstream is only one dimension of a piece of music, if we regard it as a mu
 it is also possible to analyze the lyrics, as has been done in \cite{DBLP:conf/ismir/MayerNR08}. 
 Feature extraction typically requires a lot of computational effort before similarity between two audio streams can be determined (which still is not guaranteed to represent human subjective similarity). However, the time it takes an app until the user can interact with it is an important feature in usability. Therefore, other approaches to similarity retrieveal which have lower computational impact should be preferred to feature extraction.
 
-\section{Subjective Music Similarity Computation}
+\section{Subjective Music Similarity Retrieval}
 
 Subjective similarity, as the author understands it, expresses human opinions on a certain object. As previously
 mentioned, it is obvious that humans will hardly agree on attributes of music, and the same person might even make
@@ -82,7 +82,7 @@ Apart from the source of similarity metrics, also the scope of computation has t
 Depending on a user's scenario, the user might want to explore her own music collection, or she might want
 to discover music similar to her own. In the following subsections, both cases are considered.
 
-\subsection{Similarity Computation for Collections of Music}
+\subsection{2D-Projection of Collections of Music}
 
 In order to provide a meaningful, semantic overview of a collection of objects, data must be available 
 or generated for all objects in the collection, or for most of them. 
@@ -134,7 +134,7 @@ After the elaboration of means of exploring the semi-static collection of object
 
 A derivation from a previously proposed method can be considered here: Suiting the requirements well is a spring model MDS approach applied to a small dataset consisting of the starting point object (in the example being "'The Beatles"') and previously unknown objects which are most similar to it (retrieved via web APIs). The size of such a dataset would presumably peak at 30-40 objects, making common spring model multi-dimensional scaling computationally feasible. Naturally, the sampling/interpolation approach described in the previous subsection would also apply here, further decreasing the computation time.
 
-However, a computationally less expensive algorithm for such means has been proposed in \cite{Marshall:2010}, consisting of a fusion of similarity rankings from various social music services. In this article it is demonstrated that various methods of embedding (fusing) similarity rankings from online services can provide different meaningful similarity models, some of which give more weight to unknown artists. Intuitively, this methodology is able to compute a ranked list of similar objects, based on multiple sources for greater reliability, in a customizable way. The fusion methods reach from rank-average to concordet-fusion (unweighted directed graph). Three major benefits speak in this approach's favor over global numerical similarity measurements:
+A computationally less expensive algorithm for such means has been proposed in \cite{Marshall:2010}, consisting of a fusion of similarity rankings from various social music services. In this article it is demonstrated that various methods of embedding (fusing) similarity rankings from online services can provide different meaningful similarity models, some of which give more weight to unknown artists. This methodology is able to compute a ranked list of similar objects, based on multiple sources for greater reliability, in a customizable way. The fusion methods reach from rank-average to concordet-fusion (unweighted directed graph). Three major benefits speak in this approach's favor over global numerical similarity measurements:
 
 \begin{itemize}
 	\item \textbf{Potentially insignificant computation times} while preserving a stable similarity ranking very well suited for mobile end users.
@@ -142,7 +142,8 @@ However, a computationally less expensive algorithm for such means has been prop
 	\item \textbf{Reducing the number of web API queries to a minimum} greatly reduces the overall number of network requests, making the method faster and even better suited for mobile usage.
 \end{itemize}
 
-It must be noted at this point that the rank fusion algorithm is neither able to define distances between arbitrary objects in the dataset - only a dissimilarity ranking between the starting point object (e.g. "'The Beatles"') and the remaining objects is obtained - nor is it able to force the inclusion of objects (from a local library) in the ranking. This algorithm depends fully on the objects provided by external sources, meaning that if the starting point object is not contained in external sources, no meaningful result can be obtained. However, the author considers the amount of objects which can be obtained from third party web APIs sufficient for the algorithm to perform well for most of all objects in a typical user's library.
+It must be noted though that the rank fusion algorithm is neither able to define distances between arbitrary objects in the dataset - only a dissimilarity ranking between the starting point object (e.g. "'The Beatles"') and the remaining objects is obtained - nor is it able to force the inclusion of objects (from a local library) in the ranking.
+Therefore, it is only kept here as a related reference, but cannot be applied to this thesis. Instead, in cases where it is necessary, similarity values from various web sources will be combined by calculating their mean - for example, if Last.fm reports that "'The Beatles"' and "'The Who"' share a similarity of 0.8, and Echonest claims a value of 0.7 for that same artists, then the resulting value will be 0.75.
 
 \section{Visualization of Artist Similarity}
 
