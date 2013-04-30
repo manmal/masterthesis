@@ -2,7 +2,7 @@
 \chapterstyle{veelo}
 
 \usepackage{TUINFDA}
-
+\usepackage{pdfpages}
 \usepackage{url}
 \usepackage{breakurl}
 \usepackage{fancyvrb}
@@ -12,9 +12,9 @@
 \usepackage{amssymb}
 \usepackage{hyperref}					% links in pdf
 \usepackage{graphicx}            			% Figures
-\usepackage{verbatim}            			% Code-Environment
+\usepackage{verbatim}            			% Code-\textbf{Environment}
 \usepackage[lined,linesnumbered,algochapter]{algorithm2e} % Algorithm-Environment
-
+\usepackage{algorithmicx}
 \usepackage{pgf}					
 \usepackage{tikz}					% tikz graphics
 \usetikzlibrary{arrows,automata}
@@ -139,7 +139,7 @@
 \input{chapters/03-scenario}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Computation of Artist Similarity Based on Webservices}
+\chapter{Computation of Artist Similarity Based on Web Services}
 \label{ch:computation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -167,7 +167,7 @@
 \input{chapters/07-userstudy}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Conclusion}
+\chapter{Conclusion and Outlook}
 \label{ch:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -177,7 +177,21 @@
 %%% BACKMATTER %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\appendix
+\newpage
+\begin{appendices}
+  \chapter{Pre-Test Questionnaire}
+  \label{app:pretest}
+  \includepdf[pages=-]{appendices/Pre_Test_Questionnaire.pdf}
+  \chapter{Post-Test Questionnaire}
+  \label{app:posttest}
+  \includepdf[pages=-]{appendices/Post_Test_Questionnaire.pdf}
+  \chapter{AttrakDiff 2 Questionnaire}
+  \label{app:attrakdiff}
+  \includepdf[pages=-]{appendices/AttrakDiff_2_Questionnaire.pdf}
+  \chapter{System Usability Scale Questionnaire}
+  \label{app:sus}
+  \includepdf[pages=-]{appendices/SUS_Questionnaire.pdf}
+\end{appendices}
 
 \bibliographystyle{plain}
 \bibliography{references}

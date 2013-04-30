@@ -1,14 +1,13 @@
-In this chapter, the computation of similarities between artists within collections of music
-will be presented.
+In this chapter, the computation of similarities between artists and construction of layouts based on those similarities will be presented.
 
 \begin{itemize}
-	\item \textbf {Matching of music entities from Different Sources} - 
-	\item \textbf {Multidimensional Scaling Algorithm} - 
-	\item \textbf {Optimizations for Execution on Mobile Devices} - 
-	\item \textbf {Downsides of MDS in this Context}
+	\item \textbf {Matching of music entities from Different Sources} - Describes the methods used for merging music objects (artists, albums, titles) and their similarities, and how they deal with uncertainty regarding similarities.
+	\item \textbf {Multidimensional Scaling Algorithm} - Gives details about the MDS algorithm employed for the layout of music collections.
+	\item \textbf {Optimizations for Execution on Mobile Devices} - Elaborates on how aforementioned MDS algorithm can be optimized for the execution on devices with relatively low processing power.
+	\item \textbf {Downsides of MDS in this Context} - Lists some downsides of the usage of MDS in the given context, as opposed to other layout methods.
 \end{itemize}
 
-\section{Matching of music entities from Different Sources}
+\section{Matching of Music Entities from Different Sources}
 
 In order to use similarity data from different information sources (here: web services), these
 data items have to be consolidated in a way that assures that they don't mix up - e.g., objects with
@@ -25,7 +24,7 @@ locally available artists is generated.
 similarity connection is stored for the related artists.
 \end{enumerate}
 
-The matching itself takes place implicitely in steps 2 and 3. In step 2, the matching is performed by the web API
+The matching itself takes place implicitly in steps 2 and 3. In step 2, the matching is performed by Web Services
 itself (which is assumed to be highly optimized and reliable); in step 3, the matching happens in the form of a
 case-insensitive equality-assertion (artist name equals artist name). 
 
@@ -36,19 +35,19 @@ this information is only available when artist Y is in artist X's similar artist
 Therefore, a meaningful default similarity for unknown similarities must be defined. The author has decided on a
 statistical approximation - any artist Y which is not in artist X's similarity list (returned by a web API) is 
 assigned a similarity connection \{X, Y\} of \\
-\emph{0.5 * [last similarity value in the list of artist X's similar artists]} (expected value).
+\emph{0.5 * [least similarity value in the list of artist X's similar artists]} (expected value).
 
 \section{Multidimensional Scaling Algorithm}
 \label{sec:mds-algorithm}
 
 \subsection{About Multidimensional Scaling}
 
-Multidimensional scaling (MDS) means the translation of objects in a high-dimensional space into another space of more or less dimensions. Most often, MDS is used to map objects from a very high dimensional space into a two- or threedimensional space, in order to make their relative positions to each other comprehensible to humans. 
+Multidimensional scaling (MDS) means the translation of objects in a high-dimensional space into another space of more or less dimensions. Most often, MDS is used to map objects from a very high dimensional space into a two- or three-dimensional space, in order to make their relative positions to each other comprehensible to humans. 
 Dimensions in this context do not have to be spatial, or even continuous - a dimension in this sense can be any attribute which all objects in the observed set have in common (or which can be assigned to all objects).
 In order to eliminate or aggregate dimensions (as must be done to reduce dimensionality), several techniques have been found.
-One of them, and the most promising for the objective of this thesis, is the adoption of a spring model, which has been described in section ~\ref{ch:relatedwork}. The emulation of a system made up of springs connecting rings of steel is well suited for the translation of high dimensional objects into a euclidean space.
+One of them, and the most promising for the objective of this thesis, is the adoption of a spring model, which has been described in Section ~\ref{ch:relatedwork}. The emulation of a system made up of springs connecting rings of steel is well suited for the translation of high dimensional objects into a euclidean space.
 
-\subsection{Fitness of MDS for the given problem}
+\subsection{Fitness of MDS for The Given Problem}
 
 The subjective similarity of music, or artists in particular, can be expressed as attributes which are assigned by human beings (their opinions). Such attributes may be:
 
@@ -63,21 +62,21 @@ The subjective similarity of music, or artists in particular, can be expressed a
 \end{itemize}
 
 Whatever the assigned attributes are - by comparing attributes of music titles to those of other titles, a similarity measure can somehow be obtained. Every attribute then can be seen as another dimension, and every music title or artist is an object in a space of N dimensions, where N is the number of attributes assigned.
-Therefore, the problem of laying out music objects in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
-Since the previously mentioned web sources provide readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. Thus, a very complex part of spring model MDS - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is already implicitely performed by those web sources. Intuitively, the retrieved similarities can be used to calculate the length of the connecting springs.
+Therefore, the problem of laying out music collections in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
+Since the previously mentioned web sources provide readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. 
+Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Web Services can directly be used to calculate the length of the connecting springs.
 
 \subsection{Concrete MDS Algorithm}
 
-
 As mentioned before, the chosen MDS algorithm is based on a spring model. In the real world, steel rings interconnected with springs strive to form an equilibrium, where all forces enacted by the springs are balanced. In a perfect equilibrium, the position of every steel ring is a compromise of all forces acting on it, and the rings will not move anymore. The "'system stress"' is then zero. The real-world spring system will also produce non-perfect ending states because of energy loss in the system - at some point, the rings will not move anymore because the original kinetic energy has transformed into other forms of energy and is not available for movement of rigid springs.
-In a digital emulation of this concept, objects are moved around by high-dimensional forces (springs) until, theoretically, an equilibrium has been reached. However, the balancing effect (swinging) produced by these forces cannot happen continously as in the real word. Instead, the swinging spring effect is approximated by computing iterations, each representing a system state at a certain time. Since there is no loss of energy in the system (as observed in the real-world spring system) for every iteration, there are configurations in which the objects will be pushed around by the forces forever, never reaching a final static state. It is therefore common to limit the amount of iterations or regard the positions of objects as "'good enough"' when the system stress has fallen below a threshold. Since system stress grows proportionally to the number of objects (if stress among them stays the same), an optimal system stress threshold is non-trivial to calculate.
-Research has produced both basic and more refined algorithms which approximate the behaviour of a spring model. 
+In a digital emulation of this concept, objects are moved around by high-dimensional forces (springs) until, theoretically, an equilibrium has been reached. However, the balancing effect (swinging) produced by these forces cannot happen continuously as in the real word. Instead, the swinging spring effect is approximated by computing iterations, each representing a system state at a certain time. Since there is no loss of energy in the system (as observed in the real-world spring system) for every iteration, there are configurations in which the objects will be pushed around by the forces forever, never reaching a final static state. It is therefore common to limit the amount of iterations or regard the positions of objects as "'good enough"' when the system stress has fallen below a threshold. Since system stress grows proportionally to the number of objects (if stress among them stays the same), an optimal system stress threshold is non-trivial to calculate.
+Research has produced both basic and more refined algorithms which approximate the behavior of a spring model. 
 The most basic approach is mentioned in \cite{Chalmers:1996:LIT:244979.245035} (and then refined for faster computation) - 
 it starts out by assigning coordinated in low dimensional space (2D or 3D is most likely) for each object (coordinates may be related to high dimensional coordinates, or may be randomized). Iterations are then performed on the low dimensional model, by performing these steps:
 
 \begin{enumerate}
 	\item For every object, calculate its supposed low dimensional distance (LDD) to every other object. The supposed LDD is determined by a custom function (e.g., the Euclidean distance). Here, this function takes a similarity value retrieved from web sources as a parameter.
-	\subitem If the supposed LDD does not match the actual current LDD, calculate a force into a certain direction (vector), either attractive or repulsive, and save it for later application.
+	\subitem If the supposed LDD does not match the actual current LDD, calculate a force into a certain direction (vector), either attractive or repulsive (pulling to or pushing from each other), and save it for later application.
 	\item Apply all previously saved forces onto the corresponding objects.
 \end{enumerate}		
 
@@ -102,21 +101,29 @@ The optimized algorithm is composed of these steps (C1, C2, C3, C4 being predefi
 			\subsubitem If the supposed LDD does not match the actual current LDD, calculate a force for subject into a certain direction (vector), either attractive or repulsive, and save it for later application. (Note: Only the subject is moved)
 		\subitem Apply all previously saved forces onto the corresponding subjects.
 	\item For every object (called "'subject"') NOT in the initial subset do (subset Z containing all objects from the initial subset):
-		\subitem Find the most similar (lowest high-dimensional distance) object in Z, and choose the best quadrant around it, to place the subject there. 
+		\subitem Find the most similar (lowest high-dimensional distance) object in Z, and choose the best quadrant around it, to place the subject there. (There are four quadrants surrounding the most similar object, top-left, top-right, bottom-left, bottom-right.)
+			\subsubitem Vectors are constructed from the most similar object to each quadrant's center, with a length corresponding to the similarity between the two objects.
+			\subsubitem Positioning tests are performed by moving the subject to the end of each constructed vector, and calculating the stress between the most similar object and the temporarily moved subject. The vector of the quadrant which yields the lowest stress wins the test, and subject is assigned the resulting position, which is again the result of adding the vector to the most similar object's position.
 		\subitem Improve on subject's new position by performing C3 iterations very similar to step 2., but only with the initial subset of objects.
 		\subitem Add subject to Z.
-	\item Perform a sampled MDS calculation like in step 2. with C4 iterations, but with all available objects instead of only the initial subset. The pupose is to move grossly mispositioned objects to a better position - very good results can be achieved with a low number of iterations (C4).
+	\item Perform a sampled MDS calculation like in step 2. with C4 iterations, but with all available objects instead of only the initial subset. The purpose is to move grossly mispositioned objects to a better position - very good results can be achieved with a low number of iterations (C4).
 		
 \end{enumerate}
 
-\section{Downsides of MDS in this Context}
+\section{Downsides of MDS in This Context}
 
 The advantages of MDS have been described sufficiently in this section. However, there are some downsides to this approach too, some of which are inherent to the problem at hand and which could not be alleviated by using another method.
 
-If the internal structure of the transformed music entity set \textbf{is not expressable in a two-dimensional space without tradeoffs}, the spatial distances between entities will not always depict their similarity correctly. The larger the transformed set is, the more will the entities' 2D distances be different from their expected ("'should be"') distances. It can be viewed as a given that in most cases distances between some entities will not at all match their expected lengths.
+If the internal structure of the transformed music entity set \textbf{is not expressible in a two-dimensional space without tradeoffs}, the spatial distances between entities will not always depict their similarity correctly. The larger the transformed set is, the more will the entities' 2D distances be different from their expected ("'should be"') distances. It can be viewed as a given that in most cases distances between some entities will not at all match their expected lengths.
 
-The layout produced by the aforementioned MDS method \textbf{will never be the same for two different calculations}, since many parts of the algorithm involve randomness. While the addition of some entities is possible after the layout has been completed, a complete rerun of the algorithm will become necessary if similarities change. This is suboptimal for users because they have to reorient themselves after every major layout change.
+The layout produced by the aforementioned MDS method \textbf{will never be the same for two different calculations}, since many parts of the algorithm involve randomness 
+\footnote{The introduction of randomness in the layout creation algorithm has been necessary, as mentioned before, because it reduces its time complexity from $O(n^3)$ or even $O(n^4)$ to $\mathcal O(N*\sqrt{N})$. Without these optimizations, the algorithm would hardly be able to produce a layout in a mobile app in reasonable time.}.
+While the addition of some entities is possible after the layout has been completed, a complete rerun of the algorithm will become necessary if similarities change. This is suboptimal for users because they have to reorient themselves after every major layout change.
 
 The MDS method presented earlier in this chapter relies on definite high-dimensional vectors (from which similarity measures can be derived), which is not available here - in the context of computing similarity based on web sources, it is unlikely that a similarity measure can be found for every entity-entity relationship. Therefore, \textbf{estimations have to be used for unknown similarity relationships}, potentially polluting the calculation with incorrect values.
 
-\section{Summary of this Section}
+\section{Summary of This Chapter}
+
+The matching of music entities from various sources has been described as a simple, straightforward process, and it was also mentioned how calculation of expected values can provide meaningful approximations for unknown similarities between artists. Subsequently, an introduction to multidimensional scaling and the simplest possible MDS algorithm was given. 
+
+Optimizations which make execution of such a computation for a reasonable number of objects possible on a current mobile device have then been specified, namely the introduction of sampling and interpolation. Finally, downsides of the application of MDS for the generation of layouts were found - layouts would hardly ever look the same after two separate calculations, and estimations of unknown artist similarities may pollute the resulting layout.

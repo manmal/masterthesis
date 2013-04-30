@@ -1,8 +1,420 @@
-\section{Hypotheses}
-\section{Experiment Setup}
-\subsection{Population}
-\subsection{Tasks}
-\subsection{Metrics}
-\section{Evaluation and Analysis of Study Results}
+In order to evaluate how the prototype described in the previous chapter performs when compared to other music library visualizations, a user study has been carried out and analyzed. As the publicly available mobile apps for Android don't support any form of artist discovery, the scope of the user study will be limited to the visualization of artists, and the impact of using the implemented prototype app on usage metrics, as opposed to using other predetermined music apps (visualization methods).
 
-\section{Summary of this Section}
+In this chapter, the conception, execution, and analysis of the user study will be described, in this order:
+
+\begin{itemize}
+	\item \textbf {Hypotheses} - Defines a list of 5 hypotheses to be examined by the user study.
+	\item \textbf {Metrics and Tools} - Describes how the study will gather which data.
+	\item \textbf {Population, Setup, and Process} - Lists execution details of the study, together with a description of the test participants.
+	\item \textbf {Results and Data} - Summarizes the gathered data and provides statistical key figures.
+	\item \textbf {Analysis and Discussion} - Gives a discussion of the study's results and notes on the acceptance or rejection of previously defined hypotheses.
+\end{itemize}
+
+\section{Hypotheses}
+
+As described in \cite{Christopher03thoughtson}, a user study for a visualization can be performed because of various reasons: 
+
+\begin{enumerate}
+	\item To show the practicality of a visualization,
+	\item To find out why a visualization is effective, or
+	\item To show that a theory from another domain applies to a visualization technique under practical conditions.
+\end{enumerate}
+	
+Depending on which of these is the underlying motivation, a hypothesis can be established, to be verified by the user study. Obviously, a user study can not as definitely accept or dismiss a hypothesis as a double-blind experiment with a huge test sample (as used in other domains) can. This is due to various reasons - e.g., experiment variables cannot be controlled as tightly with the available budget, the context of testing a visualization does not lend itself to methods isolating individual test factors, and the context of this thesis does not allow for a large sample. Still, the study will give a hint towards or against acceptance of the hypothesis.
+
+The hypotheses to be evaluated by the following user study are as follows:
+
+\begin{itemize}
+	\item H1: The app prototype (both similarity-based and randomized layouts) allows forming of a more detailed mental model of the music collection than the other music apps, resulting in better memorization of the collection's artists.
+	\item H2: The app prototype (both similarity-based and randomized layouts) allows faster finding of certain artists by name than the other music apps.
+	\item H3: The app prototype (both similarity-based and randomized layouts) allows faster re-finding of certain artists by name after closing the app by name than the other music apps.
+	\item H4: The app prototype with similarity-based artist representation allows for faster finding of artists related to a predefined subject artist.
+	\item H5: The app prototype (both similarity-based and randomized layouts) allows faster finding of 3 artists by mood than the other music apps.
+\end{itemize}
+
+Apart from the verification of these hypotheses, the study will also use questionnaires to determine qualitative metrics commonly used in user interface studies. Those establish qualitative indicators on user satisfaction and general usability of the prototype which do not support or decline the hypothesis, but might be of interest to the reader nonetheless.
+
+\section{Metrics and Tools}
+
+\subsection{Task-Based Evaluation of Multiple Visualizations}
+
+In order to evaluate the visualization which is the center of this thesis, its performance is compared to other established methods in the mobile computing area. This comparison is established by letting test users perform predefined tasks with the prototype app and other, production-grade, music apps for Android. Several metrics are recorded during these tests which can be evaluated afterwards. The outcome of these recordings will give a hint on how well the visualization method (based on artist similarity) resonates with users, as compared to other methods.
+
+\subsection{AttrakDiff 2}
+
+AttrakDiff 2 \cite{tubiblio21687} is a method to measure attractiveness of software to its users. It originates from the domain of user experience and is based on observations in psychology \cite{DBLP:journals/ijhci/Hassenzahl01}. AttrakDiff measures hedonic and pragmatic quality of a product, which assesses its luxurious or stimulating vs purely functional aspects. These qualities are important from a user perspective, as the perceived quality and functionality of a product can have an impact on how many users will use it for how often, or whether any people will use it at all.
+
+Measuring the hedonic and pragmatic qualities of the app prototype will provide no isolatable statements about the usefulness of the abstract main topic of this thesis (visualization of artist similarity). But, it will give a hint of how well the prototype resonates with users' usage patterns and aesthetic taste. The concrete questionnaire can be found in appendix ~\ref{app:attrakdiff}.
+
+\subsection{System Usability Scale}
+
+The System Usability Scale (SUS) has been introduced in 1986 and consists of 10 strong statements, to which a test person agrees or does not agree \cite{Lewis:2009}. Agreement or disagreement is expressed through a scale from 1 to 5. By subtraction of 1 and multiplication by 2,5, the maximum sum of all items is normalized to 100. The outcome of such an evaluation is a measure for the tested system's general usability.
+
+Similar to AttrakDiff 2, this measure is not representative of the visualization method alone, but of the whole prototype. The concrete questionnaire can be found in appendix ~\ref{app:sus}.
+
+\subsection{Pre- and Post-Testing Questionnaires}
+
+To find out about personal facts and opinions of the test users, questionnaires before and after the other evaluations ask for certain information. The Pre-Testing Questionnaire asks for general personal data, like age, profession, and self-assessments concerning usage of music software, while the Post-Testing Questionnaire asks for impressions of the prototype app. This data helps to put the test results into context, regarding the user demography and emotional attitude towards the prototype. The concrete questionnaires can be found in appendices ~\ref{app:pretest} and ~\ref{app:posttest}.
+
+\section{Population, Setup, and Process}
+
+In the following, the setup and process of the user testing process will be described.
+
+\begin{itemize}
+  \item The study is performed with a sample of \textbf{10 test users}. 
+  \item The testing takes place in a well-lit room with low noise level.
+  \item Each testing takes place in one single session.
+  \item Each testing consists of the following steps:
+	\begin{itemize}
+		\item Introduction by the tester
+		\item Pre-Testing questionnaire is filled out by the test person
+		\item Task-based evaluation is performed in a strict order, under close observation of the tester
+		\item AttrakDiff 2 questionnaire is filled out by the test person	
+		\item System Usability Scale questionnaire is filled out by the test person	
+		\item Post-Testing questionnaire is filled out by the test person
+	\end{itemize}
+\end{itemize}
+
+\subsection{Task-Based Evaluation Details}
+
+As mentioned previously, the comparison of visualization methods can be done by letting test users perform tasks, and compare how they interact with each visualization. 
+
+This evaluation will make use of different music collections:
+
+\begin{itemize}
+	\item \textbf{One personalized collection for every user}, based on her favorite artist as a seed and all other artists being derived from a list of the most similar to the seed artist. This collection will likely contain mainly artists the user is familiar with.
+	\item \textbf{Four predefined music collections} which do not have to be known to the user. These are only used for memorization testing.
+\end{itemize}
+
+In the following, the test tasks and their metrics are listed. 
+
+
+\subsubsection{Memorization}
+
+The user shall memorize as many artists in a random music collection as possible. She is given 1 minute to do that. This test is repeated for every visualization method, and for each method a completely different music collection is loaded.
+
+\textbf{Music Collections}: Uses the four predefined music collections, one for each visualization method.
+
+\textbf{Metric}: Number of correctly memorized artists for each visualization method.
+
+	
+\subsubsection{Search for a Given Artist}
+	
+The user is asked to search for a given artist by the artist's name, without using the apps' search functionalities. This test is repeated for every visualization method.
+
+\textbf{Music Collections}: Uses the four predefined music collections, one for each visualization method. 
+
+\textbf{Metric}: Duration of the user's search.
+	
+	
+\subsubsection{Recover a Given Artist After Closing the App}
+	
+The user is pointed to a certain artist in the music collection. Then, the app is restarted and the user has to point out the same artist again, without using the apps' search functionalities. This test is repeated for every visualization method.
+
+\textbf{Music Collections}: Uses the four predefined music collections, one for each visualization method. 
+
+\textbf{Metric}: Duration of the user's search after the app was restarted.
+	
+	
+\subsubsection{Search for a Similar Artist}
+
+The user will search visually for an artist in the presented music collection, without using the apps' search functionalities. This test is repeated for every visualization method.
+
+\textbf{Music Collections}: Uses the user's personalized music collection, based on her favorite artist as a seed.
+
+\textbf{Metric}: Duration of the user's search.
+
+	
+\subsubsection{Search for Artists Given a Mood}
+	
+The user is asked to presume that she is in a certain mood. Given that mood, she has to point out 3 artists matching it. This test is repeated for every visualization method.
+	
+\textbf{Music Collections}: Uses the user's personalized music collection, based on her favorite artist as a seed.
+	
+\textbf{Metric}: Duration of the user's search for all three artists.
+
+
+
+\subsection{Visualization Methods under Test}
+
+The following music collection visualizations were tested by the user study:
+
+\begin{itemize}
+	\item Prototype App for Android (subject of this thesis), Randomized Layout
+	\item Prototype App for Android (subject of this thesis), Artist-Similarity-Based Layout
+	\item Android 4.1 system music player ("'Play Music"')
+	\item 3D music player app for Android ("'Jukefox"')
+\end{itemize}
+
+Their succession in the tests will be varied, to reduce learning effects carrying over into the study results. Side-by-side screenshots of all tested apps can be seen in Figure ~\ref{fig:apps_screenshots}.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=1\textwidth]{figures/apps_screenshots}
+  \caption{Screenshots of All Tested Apps}
+  \label{fig:apps_screenshots}
+\end{figure}
+
+\section{Results and Data}
+
+All test persons were able to understand the tasks which were asked of them. Also, all of them were able to interact with all of the tested apps. This is mostly due to the fact that every test participant has owned or at least tested a smartphone before, and multitouch gestures seems to have become a generally understood convention.
+
+Some of the test persons did not know what to make of the first attributes of the AttrakDiff 2 questionnaire ("'Harmless"' vs. "'Challenging"'), and some users noted that the AttrakDiff 2 attributes "'Brings me closer to people"' vs. "'Separates me from people"' do not make sense in the context of the prototype, because it's no social app. The overseer of the tests in these cases told test users to restrict their judgements to the prototype alone, and use a neutrally positioned option when in doubt.
+
+Whenever objections or suggestions for improvement were mentioned during the tests, the test overseer wrote them down and reminded test persons of them after the tests, so they could write them into the questionnaires if suitable.
+
+\subsection{Study Population}
+
+The population of the user study is characterized by a wide range of ages and professions, consisting of the following persons:
+
+\begin{itemize}
+	\item Student at age 25, female
+	\item Constructing Engineer at age 60, male
+	\item Student at age 25, male
+	\item Student at age 24, female
+	\item Retiree at age 60, female
+	\item Software Engineer at age 26, male
+	\item Student at age 26, male
+	\item Pupil at age 23, male
+	\item Entrepreneur at age 29, male
+	\item Housewife at age 24, female
+\end{itemize}
+
+In the following, statistical standard metrics are presented for most of the known attributes of test users.
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | c | c | }
+	\hline
+	\textbf{Male (\%)} & \textbf{Female (\%)} \\ \hline
+	6 (60\%) & 4 (40\%) \\ \hline
+\end{tabular}
+\caption {Gender Distribution} \label{tab:gender} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | c | c | c | c | }
+	\hline
+	\textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation} \\ \hline
+	32,2 & 25,5 & 195,56 & 13,98 \\ \hline
+\end{tabular}
+\caption {Age Distribution} \label{tab:age-distribution} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | }
+	\hline
+	\textbf{Metric} & \textbf{Yes (\%)} & \textbf{No (\%)} \\ \hline
+	Owns a Smartphone & 9 (90\%) & 1 (10\%) \\ \hline
+	Has Used Desktop Music Software & 10 (100\%) & 0 (0\%) \\ \hline
+	Has Used Mobile Music App & 8 (80\%) & 2 (20\%) \\ \hline
+\end{tabular}
+\caption {Usage Experiences} \label{tab:usage-experiences} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Metric} & \textbf{Daily (\%)} & \textbf{Weekly (\%)} & \textbf{Monthly (\%)} & \textbf{None or insignificant(\%)}\\ \hline
+	Desktop Music Software Usage & 4 (40\%) & 6 (60\%) & 0 (0\%) & 0 (0\%) \\ \hline
+	Mobile Music App Usage & 1 (10\%) & 5 (50\%) & 1 (10\%) & 3 (30\%) \\ \hline
+\end{tabular}
+\caption {Usage Patterns} \label{tab:usage-patterns} 
+\end{center}
+\end{table}
+
+\subsection{Task-Based Evaluation Results}
+\label{sec:taskbased-evaluation-results}
+
+As all test users were asked to perform the pre-defined test tasks, a set of 10 data samples (questionnaires filled out by all participants) was gathered for each task and for each visualization. In the following tables, appropriate metrics derived from the raw data logs are shown.
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Prototype, Random Layout & 6,4 & 6,5 & 2,0 & 1,4 \\ \hline
+	Prototype, Similarity & 6,1 & 6,0 & 2,7 & 1,6 \\ \hline
+	Play Music & 5,0 & 5,0 & 1,8 & 1,3 \\ \hline
+	Jukefox & 4,2 & 4,0 & 0,6 & 0,7 \\ \hline
+\end{tabular}
+\caption {Memorization (Metric: Number of Memorized Artists within 30 seconds)} \label{tab:memorization} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Prototype, Random Layout & 8,0 & 6,5 & 25,8 & 5,1 \\ \hline
+	Prototype, Similarity & 7,5 & 6,0 & 39,9 & 6,3 \\ \hline
+	Play Music & 2,4 & 2,0 & 0,6 & 0,8 \\ \hline
+	Jukefox & 21,9 & 18,0 & 167,5 & 12,9 \\ \hline
+\end{tabular}
+\caption {Search for a Given Artist (Metric: Search Duration in Seconds)} \label{tab:search-for-given} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Prototype, Random Layout & 3,5 & 3,0 & 1,1 & 1,1 \\ \hline
+	Prototype, Similarity & 2,8 & 2,5 & 1,1 & 1,0 \\ \hline
+	Play Music & 1,8 & 1,5 & 1,4 & 1,2 \\ \hline
+	Jukefox & 9,8 & 8,5 & 17,2 & 4,1 \\ \hline
+\end{tabular}
+\caption {Recover a Given Artist (Metric: Search Duration in Seconds)} \label{tab:refind-given} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Prototype, Random Layout & 5,0 & 4,0 & 4,6 & 2,1 \\ \hline
+	Prototype, Similarity & 3,8 & 3,5 & 2,5 & 1,6 \\ \hline
+	Play Music & 3,9 & 1,5 & 45,6 & 6,8 \\ \hline
+	Jukefox & 14,1 & 15,0 & 43,7 & 6,6 \\ \hline
+\end{tabular}
+\caption {Search for an Artist Similar to a Given One (Metric: Search Duration in Seconds)} \label{tab:search-similar} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Prototype, Random Layout & 18,8 & 19,0 & 86,4 & 9,3 \\ \hline
+	Prototype, Similarity & 17,8 & 16,5 & 73,0 & 8,5 \\ \hline
+	Play Music & 16,1 & 16,5 & 51,3 & 7,2 \\ \hline
+	Jukefox & 38,0 & 41,5 & 130,8 & 11,4 \\ \hline
+\end{tabular}
+\caption {Search for 3 Artists Given a Certain Mood (Metric: Search Duration in Seconds)} \label{tab:search-mood} 
+\end{center}
+\end{table}
+
+
+\subsection{Qualitative Questionnaire Results}
+\label{sec:qualitative-questionnaire-results}
+
+As mentioned before, every test participant also filled out an AttrakDiff 2 questionnaire to evaluate the Artist Similarity prototype's hedonic and pragmatic usability quality. In order to correctly interpret the test, negative attribute values are inverted, such that each attribute has a range of 1 to 7 points, where lower means better. The outcome of this test (sum of all points for each user) is best summarized by the concrete metrics derived from its evaluation:
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Quality Metric} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	Hedonic Quality - Stimulation & 2,54 & 2,5 & 0,29 & 0,54 \\ \hline
+	Hedonic Quality - Identity & 2,69 & 2,5 & 0,27 & 0,52 \\ \hline
+	Pragmatic Quality & 2,07 & 2,0 & 0,28 & 0,53 \\ \hline
+\end{tabular}
+\caption {The Prototype's AttrakDiff 2 Qualities on a Scale From 1-7 (Lower is Better)} \label{tab:attrakdiff} 
+\end{center}
+\end{table}
+
+In order to get a grasp of the overall usability of the Artist Similarity prototype app, each test person was also asked to fill out the system usability scale questionnaire after the AttrakDiff 2 test. In the following table, statistical characteristics of the SUS results are presented:
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
+	86 & 86,3 & 75,3 & 8,7 \\ \hline
+\end{tabular}
+\caption {The Prototype's System Usability Scale Results on a Scale from 0 - 100 (Higher is Better)} \label{tab:sus} 
+\end{center}
+\end{table}
+
+\subsection{Post-Test Questionnaire Results}
+
+All users filled out the post-test questionnaire which evaluated their impressions and hypothetical usage of the prototype app (both similarity-based and randomized layout). In the following, the most interesting metrics and findings from these questionnaires are presented.
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | c | c | }
+	\hline
+	\textbf{Yes (\%)} & \textbf{No (\%)} \\ \hline
+	2 (20\%) & 8 (80\%) \\ \hline
+\end{tabular}
+\caption {Users with Problems during the Testing} \label{tab:problems-during-testing} 
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{ | l | c | c | c | c |}
+	\hline
+	\textbf{Yes} & \textbf{Quite Sure} & \textbf{Rather Not} & \textbf{No}\\ \hline
+	6 & 4 & 0 & 0 \\ \hline
+\end{tabular}
+\caption {Hypothetical Real-Life Usage of the Prototype} \label{tab:hypothetical-prototype-usage} 
+\end{center}
+\end{table}
+
+\textbf{Hypothetical Usage Contexts}
+
+Test participants were asked to list contexts where they would use the prototype app. This listing contains a compilation of the given statements:
+
+\begin{itemize}
+	\item Inspiration
+	\item At home
+	\item Public transit, commute, or en route
+	\item Parties
+	\item Search new artists
+\end{itemize}
+
+\textbf{What Users Would Change}
+
+Test participants gave the following suggestions for the prototype:
+
+\begin{itemize}
+	\item Font size is too small
+	\item Add mood clouds
+	\item Add alphabetical sorting
+	\item Zooming is too fast
+	\item Search new artists
+\end{itemize}
+
+\section{Analysis and Discussion}
+
+It is common for user studies with huge samples of hundreds or thousands of participants to analyze the captured raw data with stochastic tools, in order to establish certain truths and accept or reject hypotheses defined up front. A common method is to employ a T-test (Student or Welch) in order to determine whether two data sets have the same mean, with a certain confidence. A typical scenario in the context of the study discussed in this chapter would be to find out whether it took participants less time to search for a similar artist in the similarity-based app prototype as opposed to searching for it in the randomized prototype visualization. This could be done by establishing that search times follow a normal distribution and perform a T-test for the means of the search time samples from the two prototype versions.
+
+However, the sample for this study was made up of only 10 participants (as required by time and resource constraints) - stochastic analysis would still be possible, but the results' significance and probability of rejection of the tested null-hypotheses would be too low to provide any useful insights. For example, the above scenario of searching for a similar artist, using a two-tailed Student's T-test with a significance level of 0.2 (which is already unusually high) would only yield a 55\% probability of the alternative hypothesis being true (meaning, that the similarity-based prototype performs better). Therefore, the author will in the following discuss the study's findings in an informal way, giving insights and pointing out data points of interest.
+
+Generally speaking, the prototype app performed well in certain areas (memorizing and searching), as expected. The Google Play music app, which was used to test a simple test-based list layout without artwork, performed considerably better in other areas, especially when searching for artists by name. Intuitively, this was to be expected because the user can parse all artists with much less scrolling, and elements are very linearly aligned.
+
+In the following, the five hypotheses listed at the beginning of this chapter will be discussed with the findings from the study's task-based experiments (as mentioned before, this is rather a discussion and not a stochastically supported evaluation).
+The first hypothesis, \textbf{H1} (users can memorize more content using the prototype app, demonstrating a more detailed mental model of the music collection), seems to be \textbf{supported} by the study's results. As can be seen in Section ~\ref{sec:taskbased-evaluation-results}, both the randomized and similarity-based layout algorithms outperformed the other two visualization methods. Since the app "'Jukefox"' also provides object-based, spatial artist representation, and users' memorization performance was poorer with this app, it can be deducted that not every object-based visualization has a positive impact on mental model forming.
+
+Hypothesis \textbf{H2} (users can find a certain artist faster using the prototype app) does \textbf{not receive much support} from the study. While test participants were much quicker at solving the task while using the prototype compared to the "'Jukefox"' app, the "'Google Play"' visualization fared best. It can be concluded that pure text-based lists are better suited for searching artists by name, than objectifying visualizations. Also, discoverability is not only dependent on the visualization paradigm (list-based vs. object-based), but is also influenced by optimizations of the visualization's concrete implementation.
+ 
+The third hypothesis, \textbf{H3} (users can recover a certain artist faster after the app was closed), is in its proposition very similar to H2. Hence, the test metrics affecting H3 are similar to the metrics affecting H2, hinting at the \textbf{refusal} of H3. The rationale behind H3 is that a spatial arrangement of artist objects (as the prototype app does) lets users recover a certain artist faster than the first time they searched for it. This was the case for the study experiments within the context of each app, but the learning effect was very strong for each app - users often found an artist in "'Google Play"' again within only 1 second, because they had only to scroll down some lines. For all apps, the mean search duration for an artist was reduced by over 50\% when the user had searched for this artist before.
+
+\textbf{H4} (users can find the artist most similar to a previously pointed out artist faster using the similarity-based prototype app) seems to be \textbf{refused} by the study's gathered data, similar to H2 and H3. The mean of the corresponding search duration logs indicates that the similarity-based prototype app is on par with "'Google Play"' in this regard, but this is greatly owed to a spike caused by test person 5 - this fact is exposed when comparing the durations median (3.5 seconds for the similarity-based prototype, 1.5 seconds for "'Google Play"'), where the latter clearly fared better. The similarity-based prototype seems to perform slightly better here than the prototype with randomized layout, but this could also be due to chaos or learning effects.
+
+The experiments did not give a clear hint of acceptance or refusal of the fifth hypothesis, \textbf{H5} (users can find 3 artists they connect to a predefined mood faster using the similarity-based prototype app) - "'Google Play"' again performed slightly better regarding the average (mean) task duration, but is on par with the similarity-based prototype when looking at the duration median. The similarity-based prototype fared about 15\% better than the randomized prototype w.r.t. the mean duration, but as for H4, this is \textbf{no strong enough hint} to conclude that the similarity-based layout gives users an advantage in this use case. The "'Jukefox"' app performed significantly worse than all other apps, as was the case with most other test tasks.
+
+As a means of measuring the usability of the app prototype (both similarity-based and randomized layout, both of which versions were identical except for the spatial arrangement of artists), the AttrakDiff 2 and System Usability Scale questionnaire data provides interesting insights. \textbf{AttrakDiff 2} data statistics in Section ~\ref{sec:qualitative-questionnaire-results} show that the prototype received good hedonic and pragmatic quality ratings featuring a relatively low standard deviation, with a median of 2,5 and 2,0 (out of 1 to 7), respectively. The \textbf{System Usability Scale} test results are comparably good, at a median of 86,3 (out of 0-100) with a standard deviation of 8,7. It can be concluded that the prototype app was adequately implemented so as to not distort the previously discussed test task metrics in a negative way.
+
+It can be concluded that the implemented 2D visualization with a layout based on artist-similarity provides for the forming of better mental models of music collections than the visualizations used in common music apps.
+
+\section{Summary of this Chapter}
+
+In this chapter, the planning and execution of a user study was described, and the study's gathered data was discussed. Five hypotheses were defined up front, and the study was designed around them, to find hints at the acceptance or refusal of the hypotheses. They center around the research objectives as defined in Chapter ~\ref{ch:scenario} and had the task of finding out how the previously built app prototype fares in comparison to other music collection visualizations on mobile devices. 
+
+The study was carried out by the test participants performing tasks and filling out questionnaires before and after those tasks. The study population is made up of 10 adults of various ages and several professional backgrounds. As the population's size could not be increased considerable because of time and resource constraints, the data subsequently did not allow for reliable stochastic analysis, and therefore the results' discussion was restricted to informal analysis.
+
+This subsequent analyzation of the study's gathered data found that three hypotheses (H2 - H4) are likely to be rejected, one hypothesis (H5) seems to not receive a clear hint to acceptance or rejection, and another hypothesis (H1) is likely to be positive - thus, it seems to be the case that the prototype app allows for better memorization of artists than the other music apps, which could be a hint that users can form a more detailed mental model with the prototype app.
+
+Finally, the discussion of qualitative questionnaires revealed that the app prototype was well recepted by the test participants, and that it is likely that no usability issues distorted the test tasks carried out during the experiments.

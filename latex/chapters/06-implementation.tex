@@ -1,13 +1,41 @@
-\section{Assembly of Algorithms and Information Flow In Concrete Implemention}
+One of the objectives of this thesis is the implementation and analysis of a prototype App for mobile devices. In this chapter, the previously selected algorithms will be put into the context of the App's implementation, and the App's structure itself will be detailed. This chapter is structured as follows:
+
+\begin{itemize}
+	\item \textbf {About Android Apps} - An introduction to the Android operating system.
+	\item \textbf {Assembly of Algorithms and Information Flow In Concrete Implementation} - Gives details on algorithms and information flow between them, as previously listed in an overview in Chapter ~\ref{ch:scenario}.
+	\item \textbf {Illustrations of Algorithm Steps} - Lists illustrations and descriptions of the algorithm succession in the App prototype.
+	\item \textbf {Retrieval of Music Metadata} - Describes how music metadata is retrieved from a mobile device's storage and from web sources.
+	\item \textbf {Retrieval of Similarity Data} - Describes how artist similarity data is retrieved from web sources, and how unknown values are approximated.
+	\item \textbf {Implementation of Multidimensional Scaling} - Contains a pseudo-code listing of one step in the MDS algorithm.
+	\item \textbf {Implementation of Removal of Node Overlappings} - Contains a pseudo-code listing of the algorithm implementation which removes overlappings of graph nodes.
+	\item \textbf {Visualization Details} - Features implementation details of the prototype concerning visualization of graph data.
+	\item \textbf {Structure of the App} - Presents the structure of the prototypical App, together with information about the target operating system.
+\end{itemize}
+
+\section{Assembly of Algorithms and Information Flow In Concrete Implementation}
 \label{sec:algorithm-assembly}
 
-In section ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given.
+In Chapter ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given. These steps are in part also illustrated in Fig. ~\ref{fig:screen_mds_1_initial} to Fig. ~\ref{fig:screen_mds_10_after_all_uncollided_nodes}.
+
+\subsection{About Android Apps}
+
+Android is a mobile operating system developed by the Open Handset Alliance ~\cite{url:openhandsetalliance}, led by Google. Its architecture allows for 3rd party programs (called "'apps"') to easily be run and debugged on Android devices.
+Android apps are run in the Dalvik VM \footnote{A Virtual Machine (VM) is the emulation of computing hardware on which software can be run which is tailored to the emulated architecture, without ever owning the actual hardware. Virtual Machines are usually executed as programs on a host operating system. Android's Dalvik VM allows to execute computer code without the need to compile it up front, like the Java VM, from which it is derived.} which makes use of a register-based architecture, relying on a Linux kernel for low-level functionality ~\cite{dalvik}. The most wide-spread programming language for building Android apps is Java, but various other languages such as Scala or even scripting languages like Groovy or Lua can be used. Since mid 2009, developers can also write and integrate native C and C++ code by making use of the Native Development Kit (NDK).
+
+From an app developer's perspective, the frameworks contained in Android dictate a user-centric application structure, made up of so-called Activities ~\cite{url:androidactivity}. Every Activity encapsulates a screen which is presented to the user. Activities are loosely coupled, allowing only serialized objects and primitive values to be passed between them.
+
+User interface composition in Android is performed partly in the CPU (e.g., in Java code), and partly in the device's GPU (by using the OpenGL interface). Apps can also choose between these composition variants.
+
+Android is a strictly touch-centric operating system, meaning that most user interactions are performed via the device's touch screen. Originally, Android devices were bound to provide hardware buttons, but starting with Android 4.0, those buttons are gradually replaced with software buttons (displayed on the touch screen).
+
+This prototype is built and tested with Android 4.0.
 
 \subsection{Library Visualization}
 
 \begin{itemize}
 	\item Extraction of music metadata on the device \\\\
-			\textbf{Input:} Access cursor to a data store containing the device's music library metadata.  \\
+			\textbf{Input:} Access to a data store containing the device's music library metadata. \footnote{The app prototype utilizes a standard SQLite database in order to store data which can be persisted in order to reduce computation time, thus improving the user experience.}
+			  \\
 			\textbf{Algorithm:} Iterates through all artists and tracks in the device's music library.
 			If an entity has not yet been registered in the app's database, parts of its metadata are 
 			compiled and put into the database. \\
@@ -15,71 +43,75 @@ In section ~\ref{ch:scenario}, an overview was given of how algorithms work toge
 			
 	\item Matching of the device's music metadata with metadata from web sources \\\\
 			\textbf{Input:} Local music metadata stored in the app's database.  \\
-			\textbf{Algorithm:} Iterates through all local music metadata previously retrieved, and calls
-			Last.fm's RESTful API to find matching entities - picking the first match as best match. These pieces
+			\textbf{Algorithm:} Iterates through all local music metadata previously retrieved (artist, albums, titles...), and calls
+			Last.fm's and Echonest's RESTful API to find matching entities - picking the first match as best match. These pieces
 			of remote metadata are then stored in the app's database. \\
 			\textbf{Output:} Remote music metadata stored in the app's database. \\
 			
 	\item Querying of Artist Similarity data from web sources \\\\
 			\textbf{Input:} Local music metadata and matched metadata from remote web sources stored in the app's database. \\
 			\textbf{Algorithm:} Iterates through all local and remote music metadata previously retrieved, and calls
-			Last.fm's RESTful API to get the 100 most similar artists for each. \\
+			Last.fm's RESTful API to get the 100 most similar artists for each artist in the local database. \\
 			\textbf{Output:} Artist similarity relations stored in the app's database. \\
 			
 	\item Completion of Artist Similarity data \\\\
 			\textbf{Input:} Artist similarity relations stored in the app's database. \\
 			\textbf{Algorithm:} Iterates through the previously retrieved artist similarity relations, and
 			adds approximations for similarity relations which have not been found in the web API's results.
-			These approximations are calculated as described in section ~\ref{ch:computation}. \\
+			These approximations are calculated as described in Section ~\ref{ch:computation}. \\
 			\textbf{Output:} Complete artist similarity relations stored in the app's database. \\
 			
 	\item Laying out artists in 2D space with a Multi Dimensional Scaling (MDS) algorithm \\\\
 			\textbf{Input:} Complete artist similarity relations stored in the app's database.   \\
 			\textbf{Algorithm:} Applies a multistep (see sub-steps) algorithm which uses previously
 			retrieved similarity data to position nodes resembling artists without overlappings.  \\
-			\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that their position 
+			\textbf{Output:} Graph structure of nodes resembling artists, laid out such that their position 
 			indicates their similarity to each other. \\
 			
-		\subitem Building up of a distance matrix between artists \\\\
+		\begin{itemize}
+			
+			\item Building up of a distance matrix between artists \\\\
 				\textbf{Input:} Complete artist similarity relations stored in the app's database. \\
 				\textbf{Algorithm:} Iterates through all artist similarity relations, calculates a
-				distance value (\emph{d = Similarity * -1 + 1}, d $\in$ [0, 1] ), and writes it into
+				distance value (\emph{d = 1 - Similarity}, d $\in$ [0, 1], Similarity $\in$ [0, 1]), and writes it into
 				a matrix data structure where both dimensions' labels consist of all existing artists. \\
 				\textbf{Output:} Distance matrix of artists, based on their inverted similarities. \\
 				
-		\subitem Generation of a subset of artists and laying them out according to spring model forces	\\\\
+			\item Generation of a subset of artists and laying them out according to spring model forces	\\\\
 				\textbf{Input:} Distance matrix of artists, based on their inverted similarities. \\
-				\textbf{Algorithm:} Picks a random sample of artists, assigns random positions to them,
+				\textbf{Algorithm:} Picks a random sample of artists of size $\sqrt{N}$ (N: number of all artists), assigns random positions to them,
 				and applies a multi-dimensional scaling algorithm on them (see subsection 
 				~\ref{subch:implementation-mds} later in this section). \\
 				\textbf{Output:} Graph structure of nodes resembling artists (correctly positioned subset) \\
 				
-		\subitem Addition of the remaining artists, positioning them around the initial subset \\\\
+			\item Addition of the remaining artists, positioning them around the initial subset \\\\
 				\textbf{Input:} Graph structure of nodes resembling artists (correctly positioned subset) \\
 				\textbf{Algorithm:} Iterates through the remaining artist nodes and positions each on a position
-				next to its most similar artist (estimating which quadrant will be the best). \\
+				in the vicinity of its most similar artist (estimating which quadrant will be the best, as described in Chapter ~\ref{ch:computation}). \\
 				\textbf{Output:} Graph structure of nodes resembling artists, many of them suboptimally positioned \\
 				
-		\subitem Application of spring model forces on all nodes for a few iterations \\\\
+			\item Application of spring model forces on all nodes for a few iterations \\\\
 				\textbf{Input:} Graph structure of nodes resembling artists, many of them suboptimally positioned \\
-				\textbf{Algorithm:} Applies the aforementioned multi-dimensional algorithm on the whole graph of
-				all artist nodes, thus reducing system stress (finding a better position for each artist).  \\
-				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that their position 
+				\textbf{Algorithm:} Applies the aforementioned multi-dimensional scaling algorithm on the whole graph of
+				all artist nodes, thus reducing system stress \footnote{System stress is a metric for how well the current layout of a graph satisfies its internal forces. The higher the disconnect between the node's optimal distances and their actual distances is, the higher is the stress. One way to calculate stress is: S = $\sum_{n_i, n_j}^{n_N} ( Actual Distance(n_i, n_j) - Optimal Distance(n_i, n_j) ) ^ 2, n_i != n_j$} (finding a better position for each artist).  \\
+				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that their position 
 				indicates their similarity to each other.\\
 				
+			\end{itemize}
+				
 	\item Removal of overlapping of artists' depictions in 2D space	\\\\
-				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that their position 
+				\textbf{Input:} Graph structure of nodes resembling artists, laid out such that their position 
 				indicates their similarity to each other. \\
 				\textbf{Algorithm:} Empties out the graph, and re-adds the artist nodes back into it, one by one,
 				while optionally moving nodes when they are added such that they do not overlap any other nodes. This
-				movement is determined by the vector of both node's center coordinates and their amount
+				movement is determined by the vector of both nodes' center coordinates and their amount
 				of overlapping. For more details about this algorithm, see 
 				~\ref{subch:implementation-overlapping} later in this section. \\
-				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that they don't 
+				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that they don't 
 				overlap each other and their position indicates their similarity to each other. \\
 				
 	\item Display of the laid out artists in OpenGL	\\\\
-				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that they don't 
+				\textbf{Input:} Graph structure of nodes resembling artists, laid out such that they don't 
 				overlap each other and their position indicates their similarity to each other. \\
 				\textbf{Algorithm:} Displays the graph on an OpenGL canvas (3D), by using the artists' images (in form
 				of textures) and their names (rendered to textures). Sets the viewport and transformation
@@ -91,13 +123,13 @@ In section ~\ref{ch:scenario}, an overview was given of how algorithms work toge
 				\textbf{Algorithm:} Continuously reacts to user interface inputs, by moving the OpenGL canvas'
 				pseudo-camera (i.e., manipulating the model transformation matrix) for zooming and panning.
 				Marks an artist node as selected when the user taps onto it, and displays a context menu. \\
-				\textbf{Output:} -
+				\textbf{Output:} Updated view state
 \end{itemize}
 
 \subsection{Artist Discovery}
 
 \begin{itemize}
-	\item Querying of the artists most similar to "'subject"' from web sources \\\\
+	\item Queries last.fm for the N artists most similar to "'subject"'\\\\
 				\textbf{Input:} "'Subject"' artist the user has selected for discovery. \\
 				\textbf{Algorithm:} Queries Last.fm for the artists most similar to "'subject"', and returns
 				an excerpt of those. \\
@@ -106,23 +138,23 @@ In section ~\ref{ch:scenario}, an overview was given of how algorithms work toge
 				\textbf{Input:} Excerpt of artists most similar to "'subject"'. \\
 				\textbf{Algorithm:} Applies a force-based layout algorithm on the collection of "'subject"' and
 				its similar artists, such that the similar artists are arranged in a star around "'subject"'. \\
-				\textbf{Output:} Graph strucure of nodes resembling artists, laid out such that similar
+				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that similar
 				artists encircle "'subject"'. \\
 	\item Continuous re-arrangement of the retrieved artists based on a force-based layout algorithm (also reacting to newly added similar artists) \\\\
-				\textbf{Input:} Graph strucure of nodes resembling artists, laid out such that similar
+				\textbf{Input:} Graph structure of nodes resembling artists, laid out such that similar
 				artists encircle "'subject"'. \\
 				\textbf{Algorithm:} As the user selects more artist nodes as "'subject"' and load
 				its similar artists, this algorithm is then restarted, but the previous subjects and their
 				similar artists are kept, and their positions adapted as needed - i.e., force-based layout
 				calculation does not stop for those. \\
-				\textbf{Output:} - \\
+				\textbf{Output:} Updated graph structure of nodes resembling artists, laid out such that similar artists encircle "'subject"', also related to previously retrieved similar artists \\
 \end{itemize}
 
-\section{Algorithm Illustrations}
+\section{Illustrations of Algorithm Steps}
 
-The previously described algorithms used for the composition of the App will in the following be  illustrated by screenshots of their outcome. These screenshots are based on an example library which the author of this thesis used while debugging and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} could be a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis.
+The previously described algorithms used for the composition of the App will in the following be  illustrated by screenshots of their outcome. These screenshots are based on an example library which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis.
 
-\subsection{Before Computation}
+\subsection{Before the Computation}
 
 In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (to avoid edge cases during the application of spring model forces later on, which arise when all nodes are located at the origin).
 
@@ -166,9 +198,9 @@ Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_
 \end{figure}
 
 \newpage
-\subsection{After 5 Placements of Remaining Nodes (MDS)}
+\subsection{After Placements of 5 Remaining Nodes (MDS)}
 
-After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that some nodes visible on the screen have been moved to positions which differ greatly from the old positions in the last screenshot. Because the placement algorithm is of low complexity, as has been shown in section ~\ref{subsec:mds-selected-algorithm}, placements are performed in much shorter time than the previously described subset iterations.
+After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that some nodes visible on the screen have been moved to positions which differ greatly from the old positions in the last screenshot. Because the placement algorithm is of low complexity, as has been shown in Section ~\ref{subsec:mds-selected-algorithm}, placements are performed in much shorter time than the previously described subset iterations.
 
 \begin{figure}[H]
   \centering
@@ -178,7 +210,7 @@ After spring model forces have been applied to the initial node subset, the rema
 \end{figure}
 
 \newpage
-\subsection{After All Placements of Remaining Nodes (MDS)}
+\subsection{After Placements of All Remaining Nodes (MDS)}
 
 Figure ~\ref{fig:screen_mds_5_after_all_restnode_additions} shows the graph's state after all nodes not in the initial subset have been placed in approximated positions. Although all nodes have been displaced at least once, this is an intermediate state, not yet resembling the algorithm's final outcome. Most nodes should be at least near their optimal position, minimizing system stress, but tests have shown that some nodes will be displaced by much in the following placement corrections. Due to the nature of the performed placement approximation, the such placed nodes take into account only the most similar node - yet there may be other nodes at an entirely different position in the graph to which the placed node is also similar.
 
@@ -192,7 +224,7 @@ Figure ~\ref{fig:screen_mds_5_after_all_restnode_additions} shows the graph's st
 \newpage
 \subsection{After 5 Placement Correction Iterations (MDS)}
 
-Similar to the beginning of the calculations (depicted in section ~\ref{subsec:mds-after-five-subset-iterations}), the spring model algorithm is again applied to the graph, but on all nodes at once. The previously approximated positions for many of the nodes have to be corrected (i.e., system stress has to be reduced) for the produced layout to increase significance. Some or many of the nodes are even at the wrong side of the graph, judging by the forces enacted by all other nodes. Application of a limited number of spring model iterations has the potential to improve the expressiveness of the layout greatly. Figure ~\ref{fig:screen_mds_6_after_5_cleanup_iterations} displays graph state after five spring model iterations.
+Similar to the beginning of the calculations (depicted in Section ~\ref{subsec:mds-after-five-subset-iterations}), the spring model algorithm is again applied to the graph, but on all nodes at once. The previously approximated positions for many of the nodes have to be corrected (i.e., system stress has to be reduced) for the produced layout to increase significance. Some or many of the nodes are even at the wrong side of the graph, judging by the forces enacted by all other nodes. Application of a limited number of spring model iterations has the potential to improve the expressiveness of the layout greatly. Figure ~\ref{fig:screen_mds_6_after_5_cleanup_iterations} displays graph state after five spring model iterations.
 
 \begin{figure}[H]
   \centering
@@ -218,7 +250,7 @@ The graph's nodes have been laid out such that their centers' positions reduce s
 \newpage
 \subsection{After Removal of Node Overlappings from 5 Nodes}
 
-By applying the anti-overlap algorithm described in section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
+By applying the anti-overlap algorithm described in Section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
 
 \begin{figure}[H]
   \centering
@@ -242,7 +274,7 @@ As a continuation of the last screenshot, the following figure ~\ref{fig:screen_
 \newpage
 \subsection{After Removal of Node Overlappings from All Nodes}
 
-Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subsection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the MDS algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
+Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subSection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the MDS algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
 
 In the actual App implementation, this is the first state displayed to the user - all previous states are hidden from her. Subsequently, the App reacts to touch gestures in order to enable navigation and exploration of the structure on small screens (it's understood that screenshot~\ref{fig:screen_mds_10_after_all_uncollided_nodes} does not show all artists of the graph).
 
@@ -267,7 +299,7 @@ Cursor artistCursor = mContext.getContentResolver().query(
 \end{verbatim}
 
 Since the returned metadata also contains a unique key for each multimedia file, metadata can be
-persisted in a database (disconnected from the VM's memory) and later be reused without obstacles.
+persisted in a database and later be reused without obstacles.
 Metadata records themselves contain as much data as the user or the file-generating utility has defined
 before the file was copied onto the device - clearly, files may not have any metadata available at all.
 
@@ -276,14 +308,14 @@ In the implementation of the App, such a cursor is traversed over all available 
 \begin{itemize}
 	\item Artist,
 	\item Album, and
-	\item Track.
+	\item Track title.
 \end{itemize}
 
 While these entities are created, the implementation checks whether they already exist, and skips creation accordingly. Retrieved data is then stored in the App's on-device database.
 
-\subsection{Retrieval of Music Metadata from Websources}
+\subsection{Retrieval of Music Metadata from Web Sources}
 
-Last.fm \cite{url:lastfm} and Echonest \cite{url:echonest} are the defacto standards for music metadata retrieval in the world wide web, 
+Last.fm \cite{url:lastfm} and Echonest \cite{url:echonest} are the de facto standards for music metadata retrieval in the world wide web, 
 at the time of writing of this paper. The author has chosen to use both of these services for retrieval 
 of semantic metadata for the implementation. 
 
@@ -296,148 +328,194 @@ Echonest's artist similarity results contain no similarity metric, but only the 
 
 Last.fm's artist similarity data is, in contrast to Echonest, augmented with accurate similarity measures in the range of $[0 .. 1]$. But, it is not possible to query Last.fm for a certain similarity relationship between two certain artists - instead, the top 100 similar artists for a certain artist can be retrieved. It's clear that this way, many artist-to-artist relations in a music collection will not receive a similarity measure. Instead, a dedicated algorithm has to approximate similarity values which were not provided by Last.fm.
 
-As Last.fm provides similarity value lists per artist ("'subject"'), it can be assumed that every relation to an artist not on the list has a similarity value within the interval \emph{[0 .. x], x = lowest known similarity of "'subject"' to any other artist}. Not having any more details at hand than this fact, the expected value of such an unknown similarity value is $x / 2$ - the author of this thesis decided to use this value as an approximation.
+As Last.fm provides similarity value lists per artist ("'subject"'), it can be assumed that every relation to an artist not on the list has a similarity value within the interval \emph{[0 .. x], x = lowest known similarity of "'subject"' to any other artist}. Not having any more details at hand than this fact, the expected value of such an unknown similarity value is $x / 2$ - the author of this thesis decided to use this value as an approximation. In algorithm listing ~\ref{alg:similarity-approximation}, the algorithm to interpolate similarity values (which is being used in the App's implementation) is described. 
 
-\subsection{Similarity Approximation Algorithm}
+\begin{algorithm}[ht]
+\SetKwData{SimilarArtists}{similarArtists}
+\SetKwData{LowestMatch}{lowestMatch}
+\SetKwData{ArtistOnDevice}{artistOnDevice}
+\SetKwData{InnerArtistOnDevice}{innerArtistOnDevice}
+\SetKwData{SimilarArtist}{similarArtist}
+\SetKwData{ArtistSimilarity}{artistSimilarity}
+\SetKwData{AllArtistSimilarities}{allArtistSimilarities}
+\SetKwFunction{SizeOf}{sizeof}
+\SetKwFunction{GetSimilarArtists}{getSimilarArtists}
+\SetKwFunction{GetSimilarityMatch}{getSimilarityMatch}
+\SetKwFunction{MakeArtistSimilarity}{makeArtistSimilarity}
+\SetKwFunction{Matches}{matches}
+\SetKwFunction{Put}{put}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
 
-In the following, the algorithm to interpolate similarity values (which is being used in the App's implementation) is described in simplified Java code:
+\Input{List of all artists' metadata stored on the device}
+\Output{List of similarities between each artist}
 
-\begin{verbatim}
-for (artistOnDevice : allArtistsOnDevice) {
-  similarArtists = LastFM.getSimilarArtists(artistOnDevice);
-  for (innerArtistOnDevice : allArtistsOnDevice) {
-    if (similarArtists.size() == 0)
-      lowestMatch = 0;
-    else
-      lowestMatch = FLOAT_MAX;
-    // Iterate through all found similarity matches:
-    for (artistInLastFM : similarArtists) {
-      // Find the lowest similarity match in the list:
-      if (artistInLastFM.getSimilarityMatch() < lowestMatch)
-        lowestMatch = artistInLastFM.getSimilarityMatch();
-        // match is found, save a similarity object:
-      if (matches(artistInLastFM, innerArtistOnDevice)) {
-        artistSimilarity = new ArtistSimilarity(artistOnDevice, 
-          innerArtistOnDevice, artistInLastFM.getSimilarityMatch());
-        break;
-      }
+\BlankLine
+
+\For{\ArtistOnDevice$\leftarrow$ firstArtist \KwTo lastArtist}{
+  \SimilarArtists$\leftarrow$ \GetSimilarArtists(\ArtistOnDevice)\;
+  \For{\InnerArtistOnDevice$\leftarrow$ firstArtist \KwTo lastArtist}{
+    \If{\SizeOf{\SimilarArtists} $==$ 0}{\LowestMatch$\leftarrow$ 0\;}
+    \Else{\LowestMatch$\leftarrow$ float-max-value\;}
+
+    \For{\SimilarArtist$\leftarrow$ \SimilarArtists$.first$ \KwTo \SimilarArtists$.last$}{
+      \If{\GetSimilarityMatch{\SimilarArtist} $<$ \LowestMatch}
+         {\LowestMatch$\leftarrow$ \GetSimilarityMatch{\SimilarArtist}\;}
+      \If{\Matches{\SimilarArtist, \InnerArtistOnDevice}}
+        {\ArtistSimilarity$\leftarrow$ \MakeArtistSimilarity{\ArtistOnDevice, 
+          \InnerArtistOnDevice, \GetSimilarityMatch{\SimilarArtist}}\;
+        \textbf{break}\;
+	  }
     }
-	
-    // No similar artists were returned at all:
-    if (similarArtists.size() == 0)
-      ArtistSimilarity artistSimilarity = new ArtistSimilarity(artistOnDevice, 
-        innerArtistOnDevice, 0);    
-    // Match was not found, save interpolated similarity object:
-    else if (artistSimilarity == null)
-      artistSimilarity = new ArtistSimilarity(artistOnDevice, 
-      innerArtistOnDevice, lowestMatch / 2.0f);
 
-    storeSimilarityIfNotExists(artistSimilarity);
+	\If{\SizeOf{\SimilarArtists} $==$ 0}{\ArtistSimilarity$\leftarrow$ \MakeArtistSimilarity{\ArtistOnDevice, 
+      \InnerArtistOnDevice, 0}\;}
+    \ElseIf{\ArtistSimilarity $==$ 0}{\ArtistSimilarity$\leftarrow$ \MakeArtistSimilarity{\ArtistOnDevice, 
+      \InnerArtistOnDevice, \LowestMatch $/ 2$}\;}
+
+	\Put{\AllArtistSimilarities, \ArtistSimilarity}\;
   }
-}	            
-	
-\end{verbatim}
+}
+\Return \AllArtistSimilarities\;
+\BlankLine
+\caption{Similarity Approximation Algorithm}\label{alg:similarity-approximation}
+\end{algorithm}
 
 \section{Implementation of Multidimensional Scaling}
 \label{subch:implementation-mds}
 
-The selected MDS algorithm has already been discussed broadly in section ~\ref{ch:computation}. Implementation of this algorithm required the creation of a number of helper and data classes, but on the whole, the implementation follows the pseudocode from section ~\ref{ch:computation} closely. To better illustrate step 3. from the mentioned pseudocode, the implementational part is included in the following as simplified Java code:
+The selected MDS algorithm has already been discussed broadly in Chapter ~\ref{ch:computation}. Implementation of this algorithm required the creation of a number of helper and data classes, but on the whole, the implementation follows the pseudocode from Chapter ~\ref{ch:computation} closely. To better illustrate step 3. from the mentioned pseudocode, the implementation part is included in the algorithm listing ~\ref{alg:nearest-neighbor-positioning}.
 
-\begin{verbatim}
-subject: the node to be positioned near any other node
-initialSubset: the initial nodes subset of size sqrt(number of all nodes)
-currentSubsetNodes: the nodes subset incrementally populated 
-  by all remaining nodes not in the intial subset
+\begin{algorithm}[ht]
+\SetKwData{Subject}{subject}
+\SetKwData{NearestNode}{nearestNode}
+\SetKwData{CurrentSubsetNodes}{currentSubsetNodes}
+\SetKwData{DistanceToNearestNode}{distanceToNN}
+\SetKwData{UpperRightQuadrant}{urQuadrant}
+\SetKwData{LowerRightQuadrant}{lrQuadrant}
+\SetKwData{UpperLeftQuadrant}{ulQuadrant}
+\SetKwData{LowerLeftQuadrant}{llQuadrant}
+\SetKwData{UpperRightStress}{urStress}
+\SetKwData{LowerRightStress}{lrStress}
+\SetKwData{UpperLeftStress}{ulStress}
+\SetKwData{LowerLeftStress}{llStress}
+\SetKwData{CurrentSubsetNode}{currentSubsetNode}
+\SetKwData{MinStress}{minStress}
+\SetKwData{SumOfForcesOnSubject}{sumOfForcesOnSubject}
+\SetKwData{InitialSubset}{initialSubset}
+\SetKwFunction{Add}{add}
+\SetKwFunction{GetNearestNode}{getNearestNode}
+\SetKwFunction{GetDistanceBetween}{getDistanceBetween}
+\SetKwFunction{GetPointInQuadrant}{getPointInQuadrant}
+\SetKwFunction{GetStress}{getStress}
+\SetKwFunction{Min}{min}
+\SetKwFunction{SetPosition}{setPosition}
+\SetKwFunction{MakeVector}{makeVector}
+\SetKwFunction{Force}{force}
+\SetKwFunction{Displace}{displace}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
 
-nearestNode = getNearestNodeToSubject(subject, currentSubsetNodes);
-distanceToNearestNode = distanceMatrix.getDistanceBetween(subject, nearestNode)
-    * DISTANCE_CONSTANT;
 
-// find out which quadrant (upper-l, lower-l, upper-r, lower-r) (where
-// nearestNode is point zero) is suited best for subject:
-upperRightQuadrant = getPointInQuadrant(1, 1, distanceToNearestNode, nearestNode);
-lowerRightQuadrant = getPointInQuadrant(1, -1, distanceToNearestNode, nearestNode);
-upperLeftQuadrant = getPointInQuadrant(-1, 1, distanceToNearestNode, nearestNode);
-lowerLeftQuadrant = getPointInQuadrant(-1, -1, distanceToNearestNode, nearestNode);
+\Input{Subject [the node to be positioned near any other node]}
+\Input{InitialSubset [the initial nodes subset]}
+\Input{CurrentSubsetNodes [the nodes subset incrementally populated]}
+\Output{No return value; Subject node has been optimally positioned}
 
-// Add up the forces on the four representational quadrant points, for
-// comparison later on:
-upperRightStress = 0, lowerRightStress = 0, upperLeftStress = 0, lowerLeftStress = 0;
-for (currentSubsetNode : currentSubsetNodes) {
-    upperRightStress += getStress(subject, upperRightQuadrant, currentSubsetNode);
-    lowerRightStress += getStress(subject, lowerRightQuadrant, currentSubsetNode);
-    upperLeftStress += getStress(subject, upperLeftQuadrant, currentSubsetNode);
-    lowerLeftStress += getStress(subject, lowerLeftQuadrant, currentSubsetNode);
+\BlankLine
+
+\NearestNode$\leftarrow$ \GetNearestNode{\Subject, \CurrentSubsetNodes}\;
+\DistanceToNearestNode$\leftarrow$ \GetDistanceBetween{\Subject, \NearestNode} $*$ DISTANCE-CONSTANT\;
+
+\UpperRightQuadrant$\leftarrow$ \GetPointInQuadrant{1, 1, \DistanceToNearestNode, \NearestNode}\;
+\LowerRightQuadrant$\leftarrow$ \GetPointInQuadrant{1, -1, \DistanceToNearestNode, \NearestNode}\;
+\UpperLeftQuadrant$\leftarrow$ \GetPointInQuadrant{-1, 1, \DistanceToNearestNode, \NearestNode}\;
+\LowerLeftQuadrant$\leftarrow$ \GetPointInQuadrant{-1, -1, \DistanceToNearestNode, \NearestNode}\;
+
+\tcc{Calculate Stress for upper \& lower, right \& left quadrants...}
+
+\MinStress$\leftarrow$ \Min{\UpperRightStress, \LowerRightStress, \UpperLeftStress, \LowerLeftStress}\;
+
+\If{\UpperRightStress $==$ \MinStress}{\SetPosition{\Subject, \UpperRightQuadrant}\;}
+\ElseIf{\LowerRightStress $==$ \MinStress}{\SetPosition{\Subject, \LowerRightQuadrant}\;}
+\ElseIf{\UpperLeftStress $==$ \MinStress}{\SetPosition{\Subject, \UpperLeftQuadrant}\;}
+\Else{\SetPosition{\Subject, \LowerLeftQuadrant}\;}
+
+\For{i$\leftarrow$ 1 \KwTo QUADRANT-REFINING-ITERATIONS}{
+  \SumOfForcesOnSubject $\leftarrow$ \MakeVector\;
+  \For{$node\leftarrow$ \InitialSubset$.first$ \KwTo \InitialSubset$.last$}{
+     \Add{\SumOfForcesOnSubject, \Force{\Subject, $node$}}\;
+  }
+  \Displace{\Subject, \SumOfForcesOnSubject}\;
 }
 
-// Find the quadrant point with the minimal stress, and move the subject
-// there:
-minStress = Min(Min(upperLeftStress, upperRightStress),
-    Min(lowerLeftStress, lowerRightStress));
-if (upperRightStress == minStress)
-    subject.setPosition(upperRightQuadrant);
-else if (lowerRightStress == minStress)
-    subject.setPosition(lowerRightQuadrant);
-else if (upperLeftStress == minStress)
-    subject.setPosition(upperLeftQuadrant);
-else
-    subject.setPosition(lowerLeftQuadrant);
-
-for (int i = 1; i <= QUADRANT_REFINING_ITERATIONS; i++) {
-    // Improve on the quadrant point position by selecting a subset of
-    // the initial graph subset, and reposition the subject such that
-    // the stress between them and the subject is lowered:
-    sumOfForcesOnSubject = new VirtualVector(0, 0);
-    for (initialSubsetNode : initialSubset)
-        sumOfForcesOnSubject.addVector(forceBetweenNodes(subject, initialSubsetNode));
-    displaceNode(subject, sumOfForcesOnSubject);
-}
-
-currentSubsetNodes.add(subject);
-	
-\end{verbatim}
+\BlankLine
+\caption{Nearest-Neighbor Positioning Algorithm}
+\label{alg:nearest-neighbor-positioning}
+\end{algorithm}
 
 \section{Implementation of Removal of Node Overlappings}
 \label{subch:implementation-overlapping}
 
-The algorithm used for the removal of node overlappings has been shown in section ~/ref{ch:visualization}. The actual implementation required some pragmatic changes, therefore the code is listed in the following in simplified Java:
+The algorithm used for the removal of node overlappings has been shown in Section ~\ref{ch:visualization}. The actual implementation required some pragmatic changes, therefore the code is listed in the algorithm listing ~\ref{alg:removal-node-overlappings}.
 
-\begin{verbatim}
-allNodes: all artists within the graph
-nodesWithoutOverlap: artists within the graph which do not overlap with other artists
-iterationsCount: number of iterations allowed to find a new position for one artist
-nodesSize: diagonal through an artist's depiction square 
-  (i.e., sqrt(x^2 + x^2) | x = artist node width and height), the maximally needed displacement
-  to separate two overlapped artist nodes.
+\begin{algorithm}[ht]
+\SetKwData{Subject}{subject}
+\SetKwData{SubjectDisplacementVector}{subjectDisplacementVector}
+\SetKwData{NodeCentersDistance}{nodeCentersDistance}
+\SetKwData{CollisionCandidate}{collisionCandidate}
+\SetKwData{RandomMargin}{randomMargin}
+\SetKwData{NodesWithoutOverlap}{nodesWithoutOverlap}
+\SetKwFunction{Randomize}{randomize}
+\SetKwFunction{GetEuclideanDistance}{getEuclideanDistance}
+\SetKwFunction{MakeVector}{makeVector}
+\SetKwFunction{SetVectorLength}{setVectorLength}
+\SetKwFunction{Displace}{displace}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+
+\Input{Subject [node to be freed from overlappings with others]}
+\Input{NodesWithoutOverlap [nodes to which this algorithm has been applied]}
+\Output{No return value; Subject node has been freed of overlappings}
+
+\BlankLine
+
+  \For{i$\leftarrow$ 0 \KwTo ITERATIONS}{
+    \For{\CollisionCandidate$\leftarrow$ \NodesWithoutOverlap$.first$ \KwTo \NodesWithoutOverlap$.last$}{
+      \NodeCentersDistance$\leftarrow$ \GetEuclideanDistance{\Subject, \CollisionCandidate}\;
+      \RandomMargin$\leftarrow$ \Randomize{}\;
+
+\tcc{NODES-SIZE: diagonal through an artist's depiction square, the maximally needed displacement
+	  to separate two overlapped artist nodes.}
 	
-for (subjectNode : allNodes) {
-  // move subjectNode around to find an empty spot for it among nodesWithoutOverlap
-  for (i = 0; i < iterationsCount; i++) {
-    for (collisionCandidate : nodesWithoutOverlap) {
-      nodeCentersDistance = subjectNode.getEuclideanDistanceTo(collisionCandidate);
-      randomMargin = random();
-      if (nodeCentersDistance < nodesSize + randomMargin) {
-        subjectNodeDisplacementVector = collisionCandidate.getVectorTo(subjectNode);
-        subjectNodeDisplacementVector.setLength(nodesSize - nodeCentersDistance + random()); 
-        subjectNode.move(subjectNodeDisplacementVector);
+      \If{\NodeCentersDistance $< NODES-SIZE +$ \RandomMargin}{
+        \SubjectDisplacementVector$\leftarrow$ \MakeVector{\CollisionCandidate, \Subject}\;
+		\SetVectorLength{\SubjectDisplacementVector, NODES-SIZE $-$ \NodeCentersDistance $+$ \Randomize{}}\;
+        \Displace{\Subject, \SubjectDisplacementVector}\;
       }
     }
   }
-  nodesWithoutOverlap.add(subjectNode);
-}
-\end{verbatim}
+
+\BlankLine
+\caption{Removal of Node Overlappings Algorithm}
+\label{alg:removal-node-overlappings}
+\end{algorithm}
+
 
 The optimized algorithm has a predefined number of iterations, by the end of which a node should no longer overlap any other nodes. This number has to be chosen carefully - too high and the overall computation duration will increase linearly, too low and not all node overlappings will be removed.
 
 \section{Visualization Details}
 
-Apart from the previously described computational algorithms, the App features a number of components or behaviour not contained in the Android operating system. In the following, the most interesting features aiding the visualization of content will be described.
+Apart from the previously described computational algorithms, the App features a number of components or behavior not contained in the Android operating system. In the following, the most interesting features aiding the visualization of content will be described.
 
 \subsection{Drawing with OpenGL}
 
-Android provides App developers with the possibility to implement threedimensional viewports in OpenGL ES \cite{url:opengles}, which is a downsized version of ordinary OpenGL and meant for implementation in handheld devices. OpenGL is a specification which is used as a blueprint by operating systems vendors and GPU producers alike. An OpenGL context can be seen as a state-machine which is manipulated by external API calls.
+Android provides App developers with the possibility to implement three-dimensional viewports in OpenGL ES \cite{url:opengles}, which is a downsized version of ordinary OpenGL and meant for implementation in handheld devices. OpenGL is a specification which is used as a blueprint by operating systems vendors and GPU producers alike. An OpenGL context can be seen as a state-machine which is manipulated by external API calls.
 
-In order to be able to employ OpenGL for graph rendering, the author of this thesis had to create a number of abstract metaclasses and find a way to resemble user interactions in the drawn 3D picture. As mentioned before, the objective was to draw pseudo-2D, such that all music objects are displayed as pictures, viewed from the top. Accordingly, the viewport has to move sideways when the user moves one finger over the touchscreen, and it has to change its distance to the graph objects when the user zooms.
+While the prototype shall implement a 2D visualization, its implementation in OpenGL (which is a 3D drawing specification) is necessary to provide a reasonably high framerate. Early prototype tests with a strict 2D implementation (Android 2D canvas drawing) showed that image rendering let the framerate drop considerably, so that viewport zooming, panning, and animations were no longer smooth to the human eye. The app's usability suffered from this, and so the prototype was rebuilt using OpenGL. The reason why OpenGL performs better in this context is that GPUs are better suited for handling images (textures) than CPUs, because their architecture and instruction sets are primarily dedicated to rendering.
+
+In order to be able to employ OpenGL for graph rendering, the author of this thesis had to create a number of abstract meta classes and find a way to resemble user interactions in the drawn 3D picture. As mentioned before, the objective was to draw pseudo-2D, such that all music objects are displayed as pictures, viewed from the top. Accordingly, the viewport has to move sideways when the user moves one finger over the touchscreen, and it has to change its distance to the graph objects when the user zooms.
 
 \subsection{Touchscreen Handling}
 
@@ -451,7 +529,7 @@ There are three touchscreen gestures supported by the App's implementation:
 	\item \textbf{Zooming} - The user rests two fingers on the screen surface, and changes the distance
 	between her finger tips. If the distance decreases, then the zoom factor will increase; and vice versa.
 	Ideally, the touched points would always stay right under the user's finger tips, but in the built
-	App prototype, this has not been achieved, because of the threedimensional nature of the OpenGL
+	App prototype, this has not been achieved, because of the three-dimensional nature of the OpenGL
 	rendering process.
 	\item \textbf{Tapping} - The user taps her finger onto the screen surface at a point on which the
 	desired object is located, and lets go again immediately. The App then reacts to this interaction
@@ -462,28 +540,126 @@ There are three touchscreen gestures supported by the App's implementation:
 
 To make transitions between view states in the App smoother and easier to follow for users, animations have been implemented to do so. It has been shown in an empirical study that comprehension of changes can be improved by adding animations ~\cite{Schlienger:2007}.
 
-\textbf{Whole-screen transition} - If the user chooses to display an artist's albums, the transition to the next Activity (fullscreen Android layout component) is implemented as a fade-over animation, meaning that the second screen is added as an overlay and its alpha channel is animated from 0 to 1. This way, the user is able to notice the change of context without being disturbed by untracable changes.
+\textbf{Whole-screen transition} - If the user chooses to display an artist's albums, the transition to the next Activity (fullscreen Android layout component) is implemented as a fade-over animation, meaning that the second screen is added as an overlay and its alpha channel is animated from 0 to 1. This way, the user is able to notice the change of context without being disturbed by untraceable changes.
 
-\textbf{Artist Node animation} - If the user selects an artist by tapping, the artist's image depiction is moved on the z-axis towards the virtual camera - appearing nearer to the viewport. This puts an emphasis on the selected artist and makes for a pleasing optical effect. As OpenGL is a high-level framework, animations like this have to be implemented by the developer - keeping track of animation start and projected end time, and determining the state for every newly drawn frame.
+\textbf{Artist Node animation} - If the user selects an artist by tapping, the artist's image depiction is moved on the z-axis towards the virtual camera - appearing nearer to the viewport. This puts an emphasis on the selected artist and makes for a pleasing optical effect. As OpenGL is a low-level framework, animations like this have to be implemented by the developer - keeping track of animation start and projected end time, and determining the state for every newly drawn frame.
 
 \textbf{Context-related graph area darkening} - If the user chooses to display an artist's related (similar) artists, the graph area darkens over all other currently displayed artists, to put an emphasis on the selected artist and its related artists. This effect is achieving by adding a rectangle between the emphasized artists and the others, which is at first transparent and then gains opacity through an animation.
 
 \section{Structure of the App}
 
-\subsection{About Android Apps}
+The prototypical App implementation is targeted at the Android operating system. In this section, some implementation specifics will be given for better reproducability.
 
-Android is a mobile operating system developed by the Open Handset Alliance ~\cite{url:openhandsetalliance}, led by Google. Its architecture allows for 3rd party programs (called "'apps"') to easily be run and debugged on Android devices.
-Android apps are run in the Dalvik VM which makes use of a register-based architecture, relying on a Linux kernel for low-level functionality ~\cite{dalvik}. The most wide-spread programming language for building Android apps is Java, but various other languages such as Scala or even scripting languages like Groovy or Lua can be used. Since mid 2009, developers can also write and integrate native C and C++ code by making use of the Native Development Kit (NDK).
+\subsection{Activities}
 
-From an app developer's perspective, the frameworks contained in Android dictate a user-centric application structure, made up of so-called Activities ~\cite{url:androidactivity}. Every Activity encapsulates a screen which is presented to the user. Activities are loosely coupled, allowing only serialized objects and primitive values to be passed between them.
+The App's UI stack consists of two Activities (screens):
 
-User interface composition in Android is performed partly in the CPU (e.g., in Java code), and partly in the device's GPU (by using the OpenGL interface). Apps can also choose between these composition variants.
+\begin{itemize}
+	\item \textbf{Loading Activity} - Fetching metadata from the internal storage and web sources, and compilation of the same is a lengthy process, and therefore a dedicated Activity exists in the App, displaying progress indicators.
+	\item \textbf{Artists Activity} - The main screen of the App, showing all artists in the user's music collection, laid out such that nearness between artists implicates similarity.
+	\item \textbf{Albums Activity} - The secondary screen, displaying an artist the user has selected on the previous screen, along with their albums.
+\end{itemize}
 
-Android is a strictly touch-centric operating system, meaning that most user interactions are performed via the device's touch screen. Originally, Android devices were bound to provide hardware buttons, but starting with Android 4.0, those buttons are gradually replaced with software buttons (displayed on the touch screen).
+\subsection{Classes and Packages}
 
-\subsection{App Components}
+In the following, figures of the App's class and package structure will be depicted. The reader can refer to their descriptions in the figures' captions.
 
-Activities
-Helper Classes
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-main}}
+  \caption{The App's main package, containing Activities, the root App class (a singleton in Android), and a generic graph view class.}
+  \label{fig:package-main}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-computation}}
+  \caption{Package containing all classes and interfaces related to computation - MDS layout, spring layout, node overlap removal, and intermediate helper computations.}
+  \label{fig:package-computation}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-download}}
+  \caption{Classes related to download of content, like images.}
+  \label{fig:package-download}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-graph}}
+  \caption{Graph-related and auxiliary classes, with their functionality ranging from graph nodes and graph state retention to animation state helpers.}
+  \label{fig:package-graph}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-glhelper}}
+  \caption{Package containing OpenGL helper classes, as needed for the use of OpenGL ES in Android.}
+  \label{fig:package-glhelper}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-manager}}
+  \caption{Management classes responsible for querying and storing music metadata on the device and on web sources.}
+  \label{fig:package-manager}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-model}}
+  \caption{Package with model classes which hold music metadata from both the device and web sources.}
+  \label{fig:package-model}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-util}}
+  \caption{Utility components which provide functionality to the rest of the App's classes, most of them being generic and exchangeable.}
+  \label{fig:package-util}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \fbox{\includegraphics[width=0.7\textwidth]{figures/package-widget}}
+  \caption{Package containing widget classes which could be used in most Android apps - currently containing only one such component.}
+  \label{fig:package-widget}
+\end{figure}
+
+\subsection{Third Party Libraries}
+
+\begin{itemize}
+	
+	\item \textbf{jEn-api}, an Echonest API library for Java, also working in Android apps. \\
+License: \emph{New BSD License}
+
+	\item \textbf{lastfm-java}, an unofficial Last.fm API library for Java, also working in Android apps. \\
+License: \emph{New BSD License}
+
+	\item \textbf{ORMLite}, a low-profile object relational mapper for SQLite in Java, also working in Android apps. \\
+License: \emph{ISC License}
+
+	\item \textbf{JSON.simple}, a JSON (JavaScript Object Notation) parser for Java, also working in Android apps. \\
+License: \emph{Apache 2.0 License}
+
+	\item \textbf{Android Support Library v4}, a library provided by Google to enable more recent Android features for older OS versions. \\
+License: \emph{Apache 2.0 License}
+
+	\item \textbf{Android Annotations}, a compile-time library which generates code from Java annotations, to allow pseudo-dependency injection and more advanced features. \\
+License: \emph{Apache 2.0 License}
+
+\end{itemize}
 
 \section{Summary of this Section}
+
+This chapter has explained the components, algorithms, and concepts used to construct a prototype demonstrating the visualization of artist similarity, runnable on mobile Android devices.
+
+Algorithms and the flow of information between them has been described, both for the visualization of a music library (on-device metadata extraction, matching, web source metadata extraction and interpolation, layout generation, removal of node overlappings, display of the graph to the user), and for artist discovery (querying of related artists from web sources, their integration into the layout, and continuous rearrangement via a force-based layout algorithm).
+Thereafter, different states of the App prototype while executing the previously described algorithms have been illustrated, using screenshots.
+
+Retrieval of music metadata from the user's device and web sources, and retrieval of similarity data from web sources has been described in detail. Since this similarity data may be incomplete, an interpolation algorithm for unknown values has been given.
+A part of the MDS algorithm (already described in length in Chapter ~\ref{ch:computation}), the  positioning of graph nodes based on system stress minimization, has been detailed as pseudocode. The algorithm for the removal of node overlappings in the graph was also shown.
+To provide some details about visualization and the App's user interaction model, OpenGL drawing, touchscreen gestures, and animations were elaborated on.
+
+Finally, a short introduction to the Android operating system was given, and the prototype App's structure (Activities and other classes) and third party libraries were detailed.
