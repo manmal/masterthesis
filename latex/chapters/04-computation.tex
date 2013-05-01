@@ -46,38 +46,20 @@ The subjective similarity of music, or artists in particular, can be expressed a
 Whatever the assigned attributes are - by comparing attributes of music titles to those of other titles, a similarity measure can somehow be obtained. Every attribute then can be seen as another dimension, and every music title or artist is an object in a space of N dimensions, where N is the number of attributes assigned. Therefore, the problem of laying out music collections in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
 Since the webservice Last.fm provides readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Last.fm can directly be used to calculate the length of the connecting springs.
 
-\subsection{Concrete MDS Algorithm}
+\subsection{Concrete MDS Algorithm with Optimizations for Execution on Mobile Devices}
 
-As mentioned before, the chosen MDS algorithm is based on a spring model. In the real world, steel rings interconnected with springs strive to form an equilibrium, where all forces enacted by the springs are balanced. In a perfect equilibrium, the position of every steel ring is a compromise of all forces acting on it, and the rings will not move anymore. The "'system stress"' is then zero. The real-world spring system will also produce non-perfect ending states because of energy loss in the system - at some point, the rings will not move anymore because the original kinetic energy has transformed into other forms of energy and is not available for movement of rigid springs.
-In a digital emulation of this concept, objects are moved around by high-dimensional forces (springs) until, theoretically, an equilibrium has been reached. However, the balancing effect (swinging) produced by these forces cannot happen continuously as in the real word. Instead, the swinging spring effect is approximated by computing iterations, each representing a system state at a certain time. Since there is no loss of energy in the system (as observed in the real-world spring system) for every iteration, there are configurations in which the objects will be pushed around by the forces forever, never reaching a final static state. It is therefore common to limit the amount of iterations or regard the positions of objects as "'good enough"' when the system stress has fallen below a threshold. Since system stress grows proportionally to the number of objects (if stress among them stays the same), an optimal system stress threshold is non-trivial to calculate.
-Research has produced both basic and more refined algorithms which approximate the behavior of a spring model. 
-The most basic approach is mentioned in \cite{Chalmers:1996:LIT:244979.245035} (and then refined for faster computation) - 
-it starts out by assigning coordinated in low dimensional space (2D or 3D is most likely) for each object (coordinates may be related to high dimensional coordinates, or may be randomized). Iterations are then performed on the low dimensional model, by performing these steps:
+As mentioned before, the generation of a 2D-projection of music collections is performed by executing a MDS algorithm using a spring model. In section ~\ref{subsec:2dprojection}, such a basic MDS algorithm was described, and in the same section, optimizations introduced by \cite{Chalmers:1996:LIT:244979.245035} and \cite{Morrison:2003:FMS} have been listed.
+
+In the following, the optimized algorithm will be explained step by step (SeedNodeIterations, NeighborCandidateSetSize, C3, C4 being predefined constants):
 
 \begin{enumerate}
-	\item For every object, calculate its supposed low dimensional distance (LDD) to every other object. The supposed LDD is determined by a custom function (e.g., the Euclidean distance). Here, this function takes a similarity value retrieved from web sources as a parameter.
-	\subitem If the supposed LDD does not match the actual current LDD, calculate a force into a certain direction (vector), either attractive or repulsive (pulling to or pushing from each other), and save it for later application.
-	\item Apply all previously saved forces onto the corresponding objects.
-\end{enumerate}		
-
-\section{Optimizations for Execution on Mobile Devices}
-
-The most basic MDS algorithm described previously is computationally too expensive to perform with a reasonably large data set (up to 1000 objects) on a mobile device, at a complexity of $O(N^3)$ or $O(N^4)$ \cite{Chalmers:1996:LIT:244979.245035}. Chalmers therefore introduces a stochastic sampling method and the use of neighbor sets in \cite{Chalmers:1996:LIT:244979.245035}. Instead of performing force calculations for every object to every other object in each iteration, subsets of objects are picked and used randomly. Also, for every object a neighbor set is created which keeps objects of the lowest high-dimensional distances. It is reported in \cite{Chalmers:1996:LIT:244979.245035} that these optimizations reduce the algorithm's complexity to $O(N^2)$.
-
-Further on, \cite{Morrison:2003:FMS} introduces another optimization: Initially, only a subset of all objects is selected and the aforementioned stochastic layout algorithm is performed on those. Then, the rest of the objects is added to the layout following an estimation of their best positions. Finally, the stochastic layout algorithm is performed again, for a limited number of iterations. Thus, the complexity of the algorithm is further reduced to $\mathcal O(N*\sqrt{N})$.
-
-\subsection{Selected Algorithm in Detail}
-\label{subsec:mds-selected-algorithm}
-
-The optimized algorithm is composed of these steps (C1, C2, C3, C4 being predefined constants):
-
-\begin{enumerate}
-	\item Select a random subset of $\sqrt{N}$ objects (N = number of all objects)
-	\item Perform a sampled MDS calculation on the initial layout, by performing C1 iterations of the following:
-		\subitem For each object in the subset (called "'subject"') do:
-			\subsubitem Generate a random subset of all objects containing C2 objects; concurrently, switch objects into subject's neighbor set if either the set has not reached its capacity, or if the object has a lower high-dimensional distance than the current most distant neighbor.
-			\subsubitem For every object in either the random subset or the neighbor set, calculate its supposed low dimensional distance (LDD) to the subject. The supposed LDD is determined by a custom function (e.g., the Euclidean distance). Here, this function takes a similarity value retrieved from web sources as a parameter.
-			\subsubitem If the supposed LDD does not match the actual current LDD, calculate a force for subject into a certain direction (vector), either attractive or repulsive, and save it for later application. (Note: Only the subject is moved)
+	\item Select a random set of $\sqrt{N}$ objects (N = number of all objects), called "'seed nodes set"'
+	\item Perform a sampled MDS calculation on the initial layout, by performing \emph{SeedNodeIterations} iterations of the following:
+		\subitem For each "'current seed node"' in the seed nodes set do:
+			\subsubitem Define a "'neighbor set"' of nodes which are neighbors of the current seed node. It is initially empty, and will be filled later on.
+			\subsubitem Generate a "'neighbor candidate set"' which contains \emph{NeighborCandidateSetSize} nodes (taken from ALL nodes, not only from the seed nodes set); concurrently, switch objects into the current seed node's neighbor set if either the neighbor set has not reached its capacity, or if the current seed node has a lower input space distance (looked up in the similarity matrix) than the neighbor node with the highest input space distance (also looked up in the similarity matrix).
+			\subsubitem For every object in either the random subset or the neighbor set, calculate its optimal (should-be) output space distance to the subject. The supposed output space distance is determined by the Euclidean distance in the output space (2D). This function takes a similarity value retrieved from Last.fm as a parameter.
+			\subsubitem If the optimal output space distance does not match the actual current output space distance, then calculate a force for the current seed node into a certain direction (vector), either attractive or repulsive, and save it for later application. (Note: Only the current seed node is moved.)
 		\subitem Apply all previously saved forces onto the corresponding subjects.
 	\item For every object (called "'subject"') NOT in the initial subset do (subset Z containing all objects from the initial subset):
 		\subitem Find the most similar (lowest high-dimensional distance) object in Z, and choose the best quadrant around it, to place the subject there. (There are four quadrants surrounding the most similar object, top-left, top-right, bottom-left, bottom-right.)
