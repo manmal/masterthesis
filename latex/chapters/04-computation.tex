@@ -14,23 +14,20 @@ In order to use similarity data from different information sources (here: web se
 The following approach has been chosen to perform the gathering and matching of different online sources of similarity data:
 
 \begin{enumerate}
-	\item A list of music files residing on the mobile device is compiled, and from there a list of locally available artists is generated (the list is not processed, meaning that spelling errors or duplicates are not corrected).
-	\item For all locally available artists, the available online APIs are queried, returning lists of similar artists.
-	\item Within the returned lists, the locally available artists are searched for - if there is a match, a
-similarity connection is stored for the related artists.
+	\item A list of music files residing on the mobile device is compiled, and from there a list of locally available music entities (artists, albums, titles) is generated. This list of locally available music entities is not processed, meaning that spelling errors or duplicates are not amended.
+	\item All locally available music entities (artists, albums, titles) are linked to corresponding entities in Last.fm's and Echonest's web APIs. This is done by issuing a search query for every locally available music entity to both APIs, and storing the query results on the device (using the query result's list's first item, assuming that it will in most cases resemble the desired music entity). The result is that each locally available music entity is augmented with metadata from both web APIs. Last.fm's representation of each music entity will from there on be used as authoritative metadata source, eliminating spelling errors in the locally available music entity.
+	\item For all locally available artists, the Last.fm API is queried, returning a list of at most 100 similar artists for each available artist. This similarity ranking list contains a similarity measure in the range of [0..1] for every similar artist, where 1 means "'most similar or equivalent"' and 0 means "'not related at all"'.
+	\item The similarity ranking lists retrieved in the last step are searched to find out whether they contain other locally available artists. This search currently is a case-insensitive equality comparison of artist names. If a locally available artist is found in a similarity ranking list, then the similarity value is stored without further processing, thus creating a similarity connection between one locally available artist and another locally available artist. If it is not foundin the similarity ranking list, then a statistical approximation is used (as described in the next paragraph).
 \end{enumerate}
 
-The matching itself takes place implicitly in steps 2 and 3. In step 2, the matching is performed by Web Services
-itself (which is assumed to be highly optimized and reliable); in step 3, the matching happens in the form of a
-case-insensitive equality-assertion (artist name equals artist name). 
-
-The result of this approach is a number of similarity connections between locally stored artists. It can be assumed that as much as 90 percent or more of potential similarity connections cannot be established based on the web APIs' results - currently, they cannot be queried specifically for the similarity between artist X and artist Y, but this information is only available when artist Y is in artist X's similar artists list, or vice versa. Therefore, a meaningful default similarity for unknown similarities must be defined. The author has decided on a statistical approximation - any artist Y which is not in artist X's similarity list (returned by a web API) is assigned a similarity connection \{X, Y\} of \\
-\emph{0.5 * [least similarity value in the list of artist X's similar artists]} (expected value).
+The results of these steps are: Music entity metadata that connects locally available entities with metadata from Last.fm and Echonest, and a number of similarity connections between locally available artists, retrieved from Last.fm. All the retrieved data resides in the device's memory or storage. In empirical tests, it has been found that as much as 90 percent or more of potential similarity connections cannot be established based on the web APIs' results. That means that up to 90 percent of artists in a music collection have no incoming or outgoing similarity link to another artist in the music collection. This is due to the fact that Last.fm will not output more than 100 entries of similar artists at this time, making it unlikely that artists are contained in each other's similarity ranking lists. It is not possible at this time to query Last.fm specifically for the similarity between an artist X and an artist Y, so the similarity between X and Y is only available when artist Y is in artist X's similar artists list, or vice versa. 
+Omitting the definition of any default similarity value in such cases (leaving the similarity between examplary artists X and Y at zero or undefined) could generally be an option. However, the selected 2D-projection algorithm (multi-dimensional scaling algorithm using a spring model) produces undesirable results with this approach (placing artists without a similarity link at completely random positions, often far away from the other artists).
+So, a meaningful default similarity for unknown similarities must be defined. A reasonable approach is to use a statistical approximation. An artist Y (who is not in the similarity ranking list of an artist X) must have a lower similarity to X than the least similar artist in the similarity ranking list of artist X. Since we lack any additional data, the expected similarity of artist X and artist Y then euals:\\
+\emph{0.5 * [least similarity value in the similarity ranking list of artists of artist X]}.\\
+This approximation is applied to all locally available artists which are not in 
 
 \section{Multidimensional Scaling Algorithm}
 \label{sec:mds-algorithm}
-
-
 
 \subsection{Fitness of MDS for The Given Problem}
 
