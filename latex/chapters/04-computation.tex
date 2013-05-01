@@ -21,17 +21,17 @@ The following approach has been chosen to perform the gathering and matching of 
 \end{enumerate}
 
 The results of these steps are: Music entity metadata that connects locally available entities with metadata from Last.fm and Echonest, and a number of similarity connections between locally available artists, retrieved from Last.fm. All the retrieved data resides in the device's memory or storage. In empirical tests, it has been found that as much as 90 percent or more of potential similarity connections cannot be established based on the web APIs' results. That means that up to 90 percent of artists in a music collection have no incoming or outgoing similarity link to another artist in the music collection. This is due to the fact that Last.fm will not output more than 100 entries of similar artists at this time, making it unlikely that artists are contained in each other's similarity ranking lists. It is not possible at this time to query Last.fm specifically for the similarity between an artist X and an artist Y, so the similarity between X and Y is only available when artist Y is in artist X's similar artists list, or vice versa. 
-Omitting the definition of any default similarity value in such cases (leaving the similarity between examplary artists X and Y at zero or undefined) could generally be an option. However, the selected 2D-projection algorithm (multi-dimensional scaling algorithm using a spring model) produces undesirable results with this approach (placing artists without a similarity link at completely random positions, often far away from the other artists).
-So, a meaningful default similarity for unknown similarities must be defined. A reasonable approach is to use a statistical approximation. An artist Y (who is not in the similarity ranking list of an artist X) must have a lower similarity to X than the least similar artist in the similarity ranking list of artist X. Since we lack any additional data, the expected similarity of artist X and artist Y then euals:\\
+Omitting the definition of any default similarity value in such cases (leaving the similarity between examplary artists X and Y at zero or undefined) could generally be an option. However, the selected 2D-projection algorithm (multi-dimensional scaling algorithm using a spring model) produces undesirable results with this approach (placing artists without a similarity link at completely random positions, often far away from the other artists, confusing the user).
+So, a meaningful default similarity for unknown similarities must be defined. A reasonable approach is to use a statistical approximation. An artist Y (who is not in the similarity ranking list of an artist X) must have a lower similarity to X than the least similar artist in the similarity ranking list of artist X. Since we lack any additional data, the expected similarity of artist X and artist Y then equals:\\
 \emph{0.5 * [least similarity value in the similarity ranking list of artists of artist X]}.\\
-This approximation is applied to all locally available artists which are not in 
+This approximation is applied to all similarity links which point to locally available artists which are not in an other locally available artist's similarity ranking list, instead of a zero or undefined similarity.
 
 \section{Multidimensional Scaling Algorithm}
 \label{sec:mds-algorithm}
 
-\subsection{Fitness of MDS for The Given Problem}
+\subsection{The Given Problem}
 
-The subjective similarity of music, or artists in particular, can be expressed as attributes which are assigned by human beings (their opinions). Such attributes may be:
+The subjective similarity of music, or artists in particular, can be expressed as attributes which are assigned by human beings (their opinions). Such attributes are:
 
 \begin{itemize}
 	\item Rhythm
@@ -39,12 +39,12 @@ The subjective similarity of music, or artists in particular, can be expressed a
 	\item Mood
 	\item Popularity
 	\item Genre
-	\item Tuning
+	\item Tonality
 	\item ...
 \end{itemize}
 
 Whatever the assigned attributes are - by comparing attributes of music titles to those of other titles, a similarity measure can somehow be obtained. Every attribute then can be seen as another dimension, and every music title or artist is an object in a space of N dimensions, where N is the number of attributes assigned. Therefore, the problem of laying out music collections in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
-Since the previously mentioned web sources provide readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Web Services can directly be used to calculate the length of the connecting springs.
+Since the webservice Last.fm provides readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Last.fm can directly be used to calculate the length of the connecting springs.
 
 \subsection{Concrete MDS Algorithm}
 
