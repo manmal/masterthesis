@@ -50,28 +50,31 @@ Since the webservice Last.fm provides readymade similarity measures between arti
 
 As mentioned before, the generation of a 2D-projection of music collections is performed by executing a MDS algorithm using a spring model. In section ~\ref{subsec:2dprojection}, such a basic MDS algorithm was described, and in the same section, optimizations introduced by \cite{Chalmers:1996:LIT:244979.245035} and \cite{Morrison:2003:FMS} have been listed.
 
-In the following, the optimized algorithm will be explained step by step (SeedNodeIterations, NeighborCandidateSetSize, C3, C4 being predefined constants):
+In the following, the optimized algorithm will be explained step by step (SeedNodeIterations, NeighborCandidateSetSize, CleanupIterations being predefined constants):
 
 \begin{enumerate}
-	\item Select a random set of $\sqrt{N}$ objects (N = number of all objects), called "'seed nodes set"'
+	\item Select a random set \textbf{seed nodes set} of $\sqrt{N}$ nodes (N = number of all artists available on the device)
 	\item Perform a sampled MDS calculation on the initial layout, by performing \emph{SeedNodeIterations} iterations of the following:
-		\subitem For each "'current seed node"' in the seed nodes set do:
-			\subsubitem Define a "'neighbor set"' of nodes which are neighbors of the current seed node. It is initially empty, and will be filled later on.
-			\subsubitem Generate a "'neighbor candidate set"' which contains \emph{NeighborCandidateSetSize} nodes (taken from ALL nodes, not only from the seed nodes set); concurrently, switch objects into the current seed node's neighbor set if either the neighbor set has not reached its capacity, or if the current seed node has a lower input space distance (looked up in the similarity matrix) than the neighbor node with the highest input space distance (also looked up in the similarity matrix).
-			\subsubitem For every object in either the random subset or the neighbor set, calculate its optimal (should-be) output space distance to the subject. The supposed output space distance is determined by the Euclidean distance in the output space (2D). This function takes a similarity value retrieved from Last.fm as a parameter.
-			\subsubitem If the optimal output space distance does not match the actual current output space distance, then calculate a force for the current seed node into a certain direction (vector), either attractive or repulsive, and save it for later application. (Note: Only the current seed node is moved.)
-		\subitem Apply all previously saved forces onto the corresponding subjects.
-	\item For every object (called "'subject"') NOT in the initial subset do (subset Z containing all objects from the initial subset):
-		\subitem Find the most similar (lowest high-dimensional distance) object in Z, and choose the best quadrant around it, to place the subject there. (There are four quadrants surrounding the most similar object, top-left, top-right, bottom-left, bottom-right.)
-			\subsubitem Vectors are constructed from the most similar object to each quadrant's center, with a length corresponding to the similarity between the two objects.
-			\subsubitem Positioning tests are performed by moving the subject to the end of each constructed vector, and calculating the stress between the most similar object and the temporarily moved subject. The vector of the quadrant which yields the lowest stress wins the test, and subject is assigned the resulting position, which is again the result of adding the vector to the most similar object's position.
-		\subitem Improve on subject's new position by performing C3 iterations very similar to step 2., but only with the initial subset of objects.
-		\subitem Add subject to Z.
-	\item Perform a sampled MDS calculation like in step 2. with C4 iterations, but with all available objects instead of only the initial subset. The purpose is to move grossly mispositioned objects to a better position - very good results can be achieved with a low number of iterations (C4).
+		\begin{enumerate}
+			\item For each \textbf{current seed node} in the \textbf{seed nodes set} do:
+				\subitem Define a \textbf{neighbor set} of nodes which are neighbors of the \textbf{current seed node} - it is initially empty, and will be filled later on. Define a \textbf{displacement forces set} of forces which will be applied at the end of dealing with the \textbf{current seed node} (step 2.b).
+				\subitem Generate a \textbf{neighbor candidate set} which contains \emph{NeighborCandidateSetSize} nodes (taken from ALL nodes, not only from the \textbf{seed nodes set}); concurrently, switch objects into the \textbf{current seed node}'s \textbf{neighbor set} if either the \textbf{neighbor set} has not reached its capacity, or if the \textbf{current seed node} has a lower input space distance (looked up in the similarity matrix) than the neighbor node with the highest input space distance (also looked up in the similarity matrix).
+				\subitem For every object in either the random subset or the \textbf{neighbor set}, calculate its optimal (should-be) output space distance to the \textbf{current seed node}. The supposed output space distance is determined by the Euclidean distance in the output space (2D), by taking the similarity value retrieved from Last.fm into account.
+				\subitem If the optimal output space distance does not match the actual current output space distance, then calculate a force for the \textbf{current seed node} into a certain direction (vector), either attractive or repulsive, and save it into the \textbf{displacement forces set} for application in step 2.b. (Note: Only the current seed node is moved.)
+			\item Apply all previously saved forces in the \textbf{displacement forces set} onto the corresponding seed nodes, by displacing each seed node with the sums of all saved force vectors in \textbf{displacement forces set} which belong to the seed node. The result is that every seed node in \textbf{seed nodes set} has been moved by forces enacted on it by other nodes produced in step 2.a. The forces are not applied earlier so that the nodes don't move in the middle of calculating forces of other nodes during step 2.a.
+		\end{enumerate}
+	\item For every \textbf{node} NOT in the \textbf{seed nodes set} do (with \textbf{processed nodes set} initially containing all objects from \textbf{seed nodes set}):
+		\begin{enumerate}
+			\item Find the most similar \textbf{processed node candidate} (having the lowest input space distance to \textbf{node} of nodes in \textbf{processed nodes set}) , and choose the least stressed quadrant around it, to place the \textbf{node} there. There are four quadrants surrounding \textbf{processed node candidate}, top-left, top-right, bottom-left, bottom-right. The least stressed quadrant is determined as follows:
+				\subitem Vectors are constructed from the \textbf{processed node candidate} to each quadrant's center, with a length corresponding to the similarity between \textbf{node} and \textbf{processed node candidate}, taken from the similarity matrix.
+				\subitem Positioning tests are performed by moving the \textbf{node} to the end of each constructed vector, and calculating the stress between the \textbf{processed node candidate} and the temporarily moved \textbf{node}. The \textbf{vector of the quadrant} which yields the lowest stress wins the test (being the least stressed quadrant), and \textbf{node} is assigned the resulting position, which is again the result of adding the \textbf{vector of the quadrant} to the \textbf{processed node candidate}'s position.
+			\item Add \textbf{node} to \textbf{processed nodes set}.
+		\end{enumerate}
+	\item Perform a sampled MDS calculation like in step 2. with \emph{CleanupIterations} iterations, but with all available nodes instead of with nodes in \textbf{seed nodes set}. The purpose is to move grossly mispositioned objects to a better position - very good results can already be achieved with a low value of \emph{CleanupIterations}.
 		
 \end{enumerate}
 
-\section{Downsides of MDS in This Context}
+\section{Downsides of MDS in this Context}
 
 The advantages of MDS have been described sufficiently in this section. However, there are some downsides to this approach too, some of which are inherent to the problem at hand and which could not be alleviated by using another method.
 
