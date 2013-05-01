@@ -9,16 +9,12 @@ In this chapter, the computation of similarities between artists and constructio
 
 \section{Matching of Music Entities from Different Sources}
 
-In order to use similarity data from different information sources (here: web services), these
-data items have to be consolidated in a way that assures that they don't mix up - e.g., objects with
-the same name are assumed to depict the same artist (typos or naming variations should be amended).
+In order to use similarity data from different information sources (here: web services), these data items have to be consolidated in a way that assures that they don't mix up - e.g., objects with the same name are assumed to depict the same artist (typos or naming variations should be amended).
 
-The following approach has been chosen to perform the gathering and matching of different online sources of 
-similarity data:
+The following approach has been chosen to perform the gathering and matching of different online sources of similarity data:
 
 \begin{enumerate}
-	\item A list of music files residing on the mobile device is compiled, and from there a distinct list of 
-locally available artists is generated.
+	\item A list of music files residing on the mobile device is compiled, and from there a list of locally available artists is generated (the list is not processed, meaning that spelling errors or duplicates are not corrected).
 	\item For all locally available artists, the available online APIs are queried, returning lists of similar artists.
 	\item Within the returned lists, the locally available artists are searched for - if there is a match, a
 similarity connection is stored for the related artists.
@@ -28,13 +24,7 @@ The matching itself takes place implicitly in steps 2 and 3. In step 2, the matc
 itself (which is assumed to be highly optimized and reliable); in step 3, the matching happens in the form of a
 case-insensitive equality-assertion (artist name equals artist name). 
 
-The result of this approach is a number of similarity connections between locally stored artists. It can be assumed
-that as much as 90 percent or more of potential similarity connections cannot be established based on the web APIs'
-results - currently, they cannot be queried specifically for the similarity between artist X and artist Y, but 
-this information is only available when artist Y is in artist X's similar artists list, or vice versa.
-Therefore, a meaningful default similarity for unknown similarities must be defined. The author has decided on a
-statistical approximation - any artist Y which is not in artist X's similarity list (returned by a web API) is 
-assigned a similarity connection \{X, Y\} of \\
+The result of this approach is a number of similarity connections between locally stored artists. It can be assumed that as much as 90 percent or more of potential similarity connections cannot be established based on the web APIs' results - currently, they cannot be queried specifically for the similarity between artist X and artist Y, but this information is only available when artist Y is in artist X's similar artists list, or vice versa. Therefore, a meaningful default similarity for unknown similarities must be defined. The author has decided on a statistical approximation - any artist Y which is not in artist X's similarity list (returned by a web API) is assigned a similarity connection \{X, Y\} of \\
 \emph{0.5 * [least similarity value in the list of artist X's similar artists]} (expected value).
 
 \section{Multidimensional Scaling Algorithm}
@@ -56,10 +46,8 @@ The subjective similarity of music, or artists in particular, can be expressed a
 	\item ...
 \end{itemize}
 
-Whatever the assigned attributes are - by comparing attributes of music titles to those of other titles, a similarity measure can somehow be obtained. Every attribute then can be seen as another dimension, and every music title or artist is an object in a space of N dimensions, where N is the number of attributes assigned.
-Therefore, the problem of laying out music collections in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
-Since the previously mentioned web sources provide readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. 
-Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Web Services can directly be used to calculate the length of the connecting springs.
+Whatever the assigned attributes are - by comparing attributes of music titles to those of other titles, a similarity measure can somehow be obtained. Every attribute then can be seen as another dimension, and every music title or artist is an object in a space of N dimensions, where N is the number of attributes assigned. Therefore, the problem of laying out music collections in two-dimensional layouts with respect to their subjective similarity can be reduced to a multidimensional scaling problem.
+Since the previously mentioned web sources provide readymade similarity measures between artists, we can take a shortcut here, and remain oblivious of audio attributes such as rhythm or mood. It has not been publicized how Last.fm generates similarity information based on their users' behaviour, but it can be assumed that they use Collaborative Filtering algorithms ~\cite{Takacs:2007}, or market basket analysis ~\cite{Aggarwal99anew}. Due to the possibility of externalizing similarity data aggregation to a Web Service, a major part of spring model MDS work - the filtering and mapping of different attributes w.r.t. their impact on object similarity - is a solved problem. The similarities that are retrieved from Web Services can directly be used to calculate the length of the connecting springs.
 
 \subsection{Concrete MDS Algorithm}
 
@@ -77,8 +65,7 @@ it starts out by assigning coordinated in low dimensional space (2D or 3D is mos
 
 \section{Optimizations for Execution on Mobile Devices}
 
-The most basic MDS algorithm described previously is computationally too expensive to perform with a reasonably large data set (up to 1000 objects) on a mobile device, at a complexity of $O(N^3)$ or $O(N^4)$ \cite{Chalmers:1996:LIT:244979.245035}.
-Chalmers therefore introduces a stochastic sampling method and the use of neighbor sets in \cite{Chalmers:1996:LIT:244979.245035}. Instead of performing force calculations for every object to every other object in each iteration, subsets of objects are picked and used randomly. Also, for every object a neighbor set is created which keeps objects of the lowest high-dimensional distances. It is reported in \cite{Chalmers:1996:LIT:244979.245035} that these optimizations reduce the algorithm's complexity to $O(N^2)$.
+The most basic MDS algorithm described previously is computationally too expensive to perform with a reasonably large data set (up to 1000 objects) on a mobile device, at a complexity of $O(N^3)$ or $O(N^4)$ \cite{Chalmers:1996:LIT:244979.245035}. Chalmers therefore introduces a stochastic sampling method and the use of neighbor sets in \cite{Chalmers:1996:LIT:244979.245035}. Instead of performing force calculations for every object to every other object in each iteration, subsets of objects are picked and used randomly. Also, for every object a neighbor set is created which keeps objects of the lowest high-dimensional distances. It is reported in \cite{Chalmers:1996:LIT:244979.245035} that these optimizations reduce the algorithm's complexity to $O(N^2)$.
 
 Further on, \cite{Morrison:2003:FMS} introduces another optimization: Initially, only a subset of all objects is selected and the aforementioned stochastic layout algorithm is performed on those. Then, the rest of the objects is added to the layout following an estimation of their best positions. Finally, the stochastic layout algorithm is performed again, for a limited number of iterations. Thus, the complexity of the algorithm is further reduced to $\mathcal O(N*\sqrt{N})$.
 
