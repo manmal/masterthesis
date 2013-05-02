@@ -104,18 +104,17 @@ The authors of ~\cite{journals/vlc/MisueELS95} therefore define the concept of t
 
 The FT algorithm identifies clusters of overlapping nodes, and then performs transfer scans on them: left-to-right, right-to-left, upside-to-downside, and downside-to-upside. During the scans, the nodes in each cluster are moved such that the clusters become free of overlaps. Multiple iterations may be necessary, as the separation of one cluster may cause nodes to move on top of nodes from other clusters - thereby forming new clusters. Finally, the layout eventually is overlap-free, preserving the aforementioned mental map of the graph.
 
-The aforementioned methods of overlap-removal are complex (considering the need to form clusters), so the author decided to employ a more basic approach, but very similar to the previous algorithms. The graph canvas is virtually emptied, and re-filled one by one with the originally contained artist nodes, while making sure that a newly added node does not overlap with any others. The algorithm is described in the following listing:
+The aforementioned methods of overlap-removal are complex (considering the need to form clusters), so the author decided to employ a more basic approach, but very similar to the previous algorithms. The graph canvas is virtually emptied, and re-filled one by one with the originally contained artist nodes, while making sure that a newly added node does not overlap with any others. The algorithm is described in the following listing (DistanceThreshold, NodeRepresentationRadius being a constant):
 
 \begin{enumerate}
 \item Remove all nodes from the graph structure.	
-\item For every node ("'subjectNode"') do:
+\item For every node (\textbf{subjectNode}) do:
 	\begin{enumerate}
-		\item For every node ("'alreadyPositionedNode"') in the set of already positioned nodes do:
-		\item If the distance between subjectNode and alreadyPositionedNode is beloww a
-		threshold, create a vector from alreadyPositionedNode's center to subjectNode's center, set
-		its length such that they don't overlap, and displace subjectNode by it.
-		\item If subjectNode still overlaps with another node, step to 2.a.
-		\item Add subjectNode to the set of already positioned nodes.
+		\item For every \textbf{alreadyPositionedNode} in the \textbf{set of already positioned nodes} do:
+		\item If the distance between \textbf{subjectNode} and \textbf{alreadyPositionedNode} is smaller than \emph{DistanceThreshold}, create a \textbf{centerDistanceVector} from \textbf{alreadyPositionedNode}'s center to \textbf{subjectNode}'s center, set
+		its length to \emph{NodeRepresentationRadius} - \textbf{centerDistanceVector}'s length (such that the nodes don't overlap), and displace \textbf{subjectNode} by it.
+		\item If \textbf{subjectNode} still overlaps with another node, step to 2.a.
+		\item Add \textbf{subjectNode} to the \textbf{set of already positioned nodes}.
 	\end{enumerate}
 \end{enumerate}
 
