@@ -80,14 +80,49 @@ The advantages of MDS have been described sufficiently in this section. However,
 
 If the internal structure of the transformed music entity set \textbf{is not expressible in a two-dimensional space without tradeoffs}, the spatial distances between entities will not always depict their similarity correctly. The larger the transformed set is, the more will the entities' 2D distances be different from their expected ("'should be"') distances. It can be viewed as a given that in most cases distances between some entities will not at all match their expected lengths.
 
-The layout produced by the aforementioned MDS method \textbf{will never be the same for two different calculations}, since many parts of the algorithm involve randomness 
+The layout produced by the aforementioned MDS method \textbf{will never be the same for two different calculations}, since parts of the algorithm involve randomness 
 \footnote{The introduction of randomness in the layout creation algorithm has been necessary, as mentioned before, because it reduces its time complexity from $O(n^3)$ or even $O(n^4)$ to $\mathcal O(N*\sqrt{N})$. Without these optimizations, the algorithm would hardly be able to produce a layout in a mobile app in reasonable time.}.
 While the addition of some entities is possible after the layout has been completed, a complete rerun of the algorithm will become necessary if similarities change. This is suboptimal for users because they have to reorient themselves after every major layout change.
 
 The MDS method presented earlier in this chapter relies on definite high-dimensional vectors (from which similarity measures can be derived), which is not available here - in the context of computing similarity based on web sources, it is unlikely that a similarity measure can be found for every entity-entity relationship. Therefore, \textbf{estimations have to be used for unknown similarity relationships}, potentially polluting the calculation with incorrect values.
 
+\section{Removal of Node Overlapping}
+\label{sec:removal-node-overlapping}
+
+As the reader may have noticed, the positions of objects computed as described in Section ~\ref{ch:computation} don't respect any aesthetic criteria. ~\cite{Li:2005} gives an overview of such criteria, three of which also apply to graphs produced by MDS:
+
+\begin{itemize}
+	\item Minimization of the area taken up
+	\item Minimization of total object distance
+	\item Aspect ratio close to or matching the specification
+\end{itemize}
+
+However, an even more important aesthetic factor in the perception of graph drawings is the \textbf{removal of node overlappings}. The computational layout method applied in this thesis - spring model MDS (see Section ~\ref{ch:computation}) - can not give any heed to overlapping nodes (or margin between them), since nodes are positioned as points, not 2D objects. However, the objects do need to be displayed as 2D shapes (e.g. as rectangles, circles, images,...), and therefore the resulting layout can (and in many cases, will) contain overlappings.
+As this may impact the perception of the graph by humans in a negative way (objects may even be completely hidden by other objects), a way has to be found to eliminate overlappings as reliably as possible, without affecting the conveyed information of object similarities too much.
+
+The authors of ~\cite{journals/vlc/MisueELS95} therefore define the concept of the Mental Map, meaning that a graph has properties which should be maintained if transformed: Orthogonal Ordering, Proximity Relations, and Topology. An algorithm called Force Scan (FS) is then proposed to remove node overlappings while preserving the Mental Map of a graph. FS operates by first moving nodes horizontally, maintaining their horizontal ordering, and then moving nodes vertically, maintaining their vertical ordering. Several improvements to FS have been discussed (~\cite{Hayashi:1998:LAP:647550.728930} ~\cite{Huang03force-transfer:a} ~\cite{Li:2005}), while the algorithm in ~\cite{Huang03force-transfer:a} - \textbf{Force Transfer (FT)} - seems to be the most suitable for this thesis' use case, as it is of lower computational complexity than FS and produces pleasing layouts.
+
+The FT algorithm identifies clusters of overlapping nodes, and then performs transfer scans on them: left-to-right, right-to-left, upside-to-downside, and downside-to-upside. During the scans, the nodes in each cluster are moved such that the clusters become free of overlaps. Multiple iterations may be necessary, as the separation of one cluster may cause nodes to move on top of nodes from other clusters - thereby forming new clusters. Finally, the layout eventually is overlap-free, preserving the aforementioned mental map of the graph.
+
+The aforementioned methods of overlap-removal are complex (considering the need to form clusters), so the author decided to employ a more basic approach, but very similar to the previous algorithms. The graph canvas is virtually emptied, and re-filled one by one with the originally contained artist nodes, while making sure that a newly added node does not overlap with any others. The algorithm is described in the following listing:
+
+\begin{enumerate}
+\item Remove all nodes from the graph structure.	
+\item For every node ("'subjectNode"') do:
+	\begin{enumerate}
+		\item For every node ("'alreadyPositionedNode"') in the set of already positioned nodes do:
+		\item If the distance between subjectNode and alreadyPositionedNode is beloww a
+		threshold, create a vector from alreadyPositionedNode's center to subjectNode's center, set
+		its length such that they don't overlap, and displace subjectNode by it.
+		\item If subjectNode still overlaps with another node, step to 2.a.
+		\item Add subjectNode to the set of already positioned nodes.
+	\end{enumerate}
+\end{enumerate}
+
+The result of this algorithm is a graph state which is free of node overlappings, with a predefined node rectangle size.
+
 \section{Summary}
 
-The matching of music entities from various sources has been described as a simple, straightforward process, and it was also mentioned how calculation of expected values can provide meaningful approximations for unknown similarities between artists. Subsequently, an introduction to multidimensional scaling and the simplest possible MDS algorithm was given. 
+The matching of music entities from Last.fm and Echonest has been described as a simple and straightforward process with the result that locally available music entities (artists, albums, tracks) are augmented with metadata from these two web APIs. Artist similarity measures are retrieved from Last.fm by querying the web API for artist similarity lists, and it was also mentioned how calculation of expected values can provide meaningful approximations for unknown similarities between artists.
 
-Optimizations which make execution of such a computation for a reasonable number of objects possible on a current mobile device have then been specified, namely the introduction of sampling and interpolation. Finally, downsides of the application of MDS for the generation of layouts were found - layouts would hardly ever look the same after two separate calculations, and estimations of unknown artist similarities may pollute the resulting layout.
+The concrete multi-dimensional scaling algorithm (using a spring model) was then presented in-depth, incorporating optimizations (sampling, interpolation) which make execution of 2D layout generation for a big number of objects possible on a current-generation mobile device. Finally, downsides of the application of MDS for the generation of layouts were found - layouts would hardly ever look the same after two separate calculations, and estimations of unknown artist similarities may pollute the resulting layout.
