@@ -25,7 +25,7 @@ Depending on which of these is the underlying motivation, a hypothesis can be es
 The hypotheses to be evaluated by the following user study are as follows:
 
 \begin{itemize}
-	\item H1: The app prototype (both similarity-based and randomized layouts) allows forming of a more detailed mental model of the music collection than the other music apps, resulting in better memorization of the collection's artists.
+	\item H1: The app prototype (both similarity-based and randomized layouts) allows forming of a more detailed mental model of the music collection than the other music apps under test, resulting in better memorization of the collection's artists.
 	\item H2: The app prototype (both similarity-based and randomized layouts) allows faster finding of certain artists by name than the other music apps.
 	\item H3: The app prototype (both similarity-based and randomized layouts) allows faster re-finding of certain artists by name after closing the app by name than the other music apps.
 	\item H4: The app prototype with similarity-based artist representation allows for faster finding of artists related to a predefined subject artist.
@@ -39,6 +39,28 @@ Apart from the verification of these hypotheses, the study will also use questio
 \subsection{Task-Based Evaluation of Multiple Visualizations}
 
 In order to evaluate the visualization which is the center of this thesis, its performance is compared to other established methods in the mobile computing area. This comparison is established by letting test users perform predefined tasks with the prototype app and other, production-grade, music apps for Android. Several metrics are recorded during these tests which can be evaluated afterwards. The outcome of these recordings will give a hint on how well the visualization method (based on artist similarity) resonates with users, as compared to other methods.
+
+The concrete visualizations which will be compared are:
+
+\begin{itemize}
+	\item Andromeda for Android (prototype built for this thesis)
+	\item Modified Andromeda for Android, with a simple randomized layout instead of MDS using spring model as 2D projection algorithm
+	\item "'Play Music"', the current Android system music player, also availabe on the Play Store \cite{url:playmusic}
+	\item "'Jukefox"', a 3D music player app for Android available on the Play Store \cite{url:jukefox}
+\end{itemize}
+
+The modified version of Andromeda (with randomized layout) is expected to perform worse in the tests than the unmodified, original version of Andromeda. Both shall be tested in order to evaluate how much better the unmodified version with the 2D-projection using artist similarities performs compared to an app which has the same interface, but where randomized positions are assigned to each artist.
+
+Their succession in the tests will be varied, to reduce learning effects carrying over into the study results. Side-by-side screenshots of all tested apps can be seen in Figure ~\ref{fig:apps_screenshots}.
+
+It can not be avoided that some users are already familiar with production level apps. Concretely, two users had used the "'Play Music"' app before entering the test, as was reported by them during the tests. It is likely that this gave the "'Play Music"' app an advantage over the other apps - however, as will be shown later on, this app fared consistently very good in most of the tasks, and not only for these two users. The other production level app, "'Jukefox"', was not known to any test users prior to the tests.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=1\textwidth]{figures/apps_screenshots}
+  \caption{Screenshots of All Tested Apps}
+  \label{fig:apps_screenshots}
+\end{figure}
 
 \subsection{AttrakDiff 2}
 
@@ -82,8 +104,8 @@ As mentioned previously, the comparison of visualization methods can be done by 
 This evaluation will make use of different music collections:
 
 \begin{itemize}
-	\item \textbf{One personalized collection for every user}, based on her favorite artist as a seed and all other artists being derived from a list of the most similar to the seed artist. This collection will likely contain mainly artists the user is familiar with.
-	\item \textbf{Four predefined music collections} which do not have to be known to the user. These are only used for memorization testing.
+	\item \textbf{One personalized collection for every user}, based on her favorite artist as a seed and all other artists being derived from a list of the most similar to the seed artist. Each test user's list was created by first asking the test user for her favorite artist (seed artist), then querying Last.fm for the 20 most similar artists of this seed artist, generating short music files (with meaningless bitstream content) with corresponding metadata, and storing the generated files in the device's media storage. The Android OS subsequently scanned the files and updated its internal music metadata caches, which are then used by all four apps under test. The rationale for this process is that this collection will likely contain mainly artists the user is familiar with, making it easier to form a mental model of the respective collection. The test tasks performed with these personalized music collections also depend on the user's rough knowledge of the contained artists (like selecting artists for a given mood).
+	\item \textbf{Four predefined music collections} which contain artists which ideally are not known to the user (but knowledge of these artists has not been checked for the users, because this would skew the results). These are only used for memorization testing. Obviously, it would not do to use a personalized collection for memorization tasks, because memorization results would else be more likely to be skewed if the user knows many of the artists.
 \end{itemize}
 
 In the following, the test tasks and their metrics are listed. 
@@ -118,7 +140,7 @@ The user is pointed to a certain artist in the music collection. Then, the app i
 	
 \subsubsection{Search for a Similar Artist}
 
-The user will search visually for an artist in the presented music collection, without using the apps' search functionalities. This test is repeated for every visualization method.
+The user will search visually for an artist in the presented music collection, without using the apps' search functionalities. This artist is the next-similar to the users's personalized collection's seed node (favorite artist), according to data from Last.fm. This test is repeated for every visualization method.
 
 \textbf{Music Collections}: Uses the user's personalized music collection, based on her favorite artist as a seed.
 
@@ -134,38 +156,17 @@ The user is asked to presume that she is in a certain mood. Given that mood, she
 \textbf{Metric}: Duration of the user's search for all three artists.
 
 
-
-\subsection{Visualization Methods under Test}
-
-The following music collection visualizations were tested by the user study:
-
-\begin{itemize}
-	\item Prototype App for Android (subject of this thesis), Randomized Layout
-	\item Prototype App for Android (subject of this thesis), Artist-Similarity-Based Layout
-	\item Android 4.1 system music player ("'Play Music"')
-	\item 3D music player app for Android ("'Jukefox"')
-\end{itemize}
-
-Their succession in the tests will be varied, to reduce learning effects carrying over into the study results. Side-by-side screenshots of all tested apps can be seen in Figure ~\ref{fig:apps_screenshots}.
-
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=1\textwidth]{figures/apps_screenshots}
-  \caption{Screenshots of All Tested Apps}
-  \label{fig:apps_screenshots}
-\end{figure}
-
 \section{Results and Data}
 
 All test persons were able to understand the tasks which were asked of them. Also, all of them were able to interact with all of the tested apps. This is mostly due to the fact that every test participant has owned or at least tested a smartphone before, and multitouch gestures seems to have become a generally understood convention.
 
-Some of the test persons did not know what to make of the first attributes of the AttrakDiff 2 questionnaire ("'Harmless"' vs. "'Challenging"'), and some users noted that the AttrakDiff 2 attributes "'Brings me closer to people"' vs. "'Separates me from people"' do not make sense in the context of the prototype, because it's no social app. The overseer of the tests in these cases told test users to restrict their judgements to the prototype alone, and use a neutrally positioned option when in doubt.
+3 test persons did not know what to make of the first attributes of the AttrakDiff 2 questionnaire ("'Harmless"' vs. "'Challenging"'), and 2 test persons noted that the AttrakDiff 2 attributes "'Brings me closer to people"' vs. "'Separates me from people"' do not make sense in the context of the prototype, because it's no social app. The observer of the tests in these cases told test users to restrict their judgements to the prototype alone, and use a neutrally positioned option when in doubt.
 
 Whenever objections or suggestions for improvement were mentioned during the tests, the test overseer wrote them down and reminded test persons of them after the tests, so they could write them into the questionnaires if suitable.
 
 \subsection{Study Population}
 
-The population of the user study is characterized by a wide range of ages and professions, consisting of the following persons:
+The population of the user study is characterized by an age range of [20..25] and one outlier of an age of 60 years, and the following professions:
 
 \begin{itemize}
 	\item Student at age 25, female
@@ -197,8 +198,8 @@ In the following, statistical standard metrics are presented for most of the kno
 \begin{center}
 \begin{tabular}{ | c | c | c | c | }
 	\hline
-	\textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation} \\ \hline
-	32,2 & 25,5 & 195,56 & 13,98 \\ \hline
+	\textbf{Mean} & \textbf{Median}\\ \hline
+	32,2 & 25,5 \\ \hline
 \end{tabular}
 \caption {Age Distribution} \label{tab:age-distribution} 
 \end{center}
@@ -221,7 +222,7 @@ In the following, statistical standard metrics are presented for most of the kno
 \begin{center}
 \begin{tabular}{ | l | c | c | c | c |}
 	\hline
-	\textbf{Metric} & \textbf{Daily (\%)} & \textbf{Weekly (\%)} & \textbf{Monthly (\%)} & \textbf{None or insignificant(\%)}\\ \hline
+	\textbf{Metric} & \textbf{Daily (\%)} & \textbf{Weekly (\%)} & \textbf{Monthly (\%)} & \textbf{Rarely(\%)}\\ \hline
 	Desktop Music Software Usage & 4 (40\%) & 6 (60\%) & 0 (0\%) & 0 (0\%) \\ \hline
 	Mobile Music App Usage & 1 (10\%) & 5 (50\%) & 1 (10\%) & 3 (30\%) \\ \hline
 \end{tabular}
@@ -232,17 +233,17 @@ In the following, statistical standard metrics are presented for most of the kno
 \subsection{Task-Based Evaluation Results}
 \label{sec:taskbased-evaluation-results}
 
-As all test users were asked to perform the pre-defined test tasks, a set of 10 data samples (questionnaires filled out by all participants) was gathered for each task and for each visualization. In the following tables, appropriate metrics derived from the raw data logs are shown.
+As all test users were asked to perform the pre-defined test tasks, a set of 10 data samples (questionnaires filled out by all participants) was gathered for each task and for each visualization. In the following tables, appropriate metrics derived from the raw data logs are shown. The top values are marked as bold.
 
 \begin{table}[H]
 \begin{center}
 \begin{tabular}{ | l | c | c | c | c |}
 	\hline
 	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
-	Prototype, Random Layout & 6,4 & 6,5 & 2,0 & 1,4 \\ \hline
+	Prototype, Random Layout & \textbf{6,4} & \textbf{6,5} & 2,0 & 1,4 \\ \hline
 	Prototype, Similarity & 6,1 & 6,0 & 2,7 & 1,6 \\ \hline
 	Play Music & 5,0 & 5,0 & 1,8 & 1,3 \\ \hline
-	Jukefox & 4,2 & 4,0 & 0,6 & 0,7 \\ \hline
+	Jukefox & 4,2 & 4,0 & \textbf{0,6} & \textbf{0,7} \\ \hline
 \end{tabular}
 \caption {Memorization (Metric: Number of Memorized Artists within 30 seconds)} \label{tab:memorization} 
 \end{center}
@@ -255,8 +256,8 @@ As all test users were asked to perform the pre-defined test tasks, a set of 10 
 	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
 	Prototype, Random Layout & 8,0 & 6,5 & 25,8 & 5,1 \\ \hline
 	Prototype, Similarity & 7,5 & 6,0 & 39,9 & 6,3 \\ \hline
-	Play Music & 2,4 & 2,0 & 0,6 & 0,8 \\ \hline
-	Jukefox & 21,9 & 18,0 & 167,5 & 12,9 \\ \hline
+	Play Music & 2,4 & 2,0 & \textbf{0,6} & \textbf{0,8} \\ \hline
+	Jukefox & \textbf{21,9} & \textbf{18,0} & 167,5 & 12,9 \\ \hline
 \end{tabular}
 \caption {Search for a Given Artist (Metric: Search Duration in Seconds)} \label{tab:search-for-given} 
 \end{center}
@@ -268,9 +269,9 @@ As all test users were asked to perform the pre-defined test tasks, a set of 10 
 	\hline
 	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
 	Prototype, Random Layout & 3,5 & 3,0 & 1,1 & 1,1 \\ \hline
-	Prototype, Similarity & 2,8 & 2,5 & 1,1 & 1,0 \\ \hline
+	Prototype, Similarity & 2,8 & 2,5 & \textbf{1,1} & \textbf{1,0} \\ \hline
 	Play Music & 1,8 & 1,5 & 1,4 & 1,2 \\ \hline
-	Jukefox & 9,8 & 8,5 & 17,2 & 4,1 \\ \hline
+	Jukefox & \textbf{9,8} & \textbf{8,5} & 17,2 & 4,1 \\ \hline
 \end{tabular}
 \caption {Recover a Given Artist (Metric: Search Duration in Seconds)} \label{tab:refind-given} 
 \end{center}
@@ -282,9 +283,9 @@ As all test users were asked to perform the pre-defined test tasks, a set of 10 
 	\hline
 	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
 	Prototype, Random Layout & 5,0 & 4,0 & 4,6 & 2,1 \\ \hline
-	Prototype, Similarity & 3,8 & 3,5 & 2,5 & 1,6 \\ \hline
+	Prototype, Similarity & 3,8 & 3,5 & \textbf{2,5} & \textbf{1,6} \\ \hline
 	Play Music & 3,9 & 1,5 & 45,6 & 6,8 \\ \hline
-	Jukefox & 14,1 & 15,0 & 43,7 & 6,6 \\ \hline
+	Jukefox & \textbf{14,1} & \textbf{15,0} & 43,7 & 6,6 \\ \hline
 \end{tabular}
 \caption {Search for an Artist Similar to a Given One (Metric: Search Duration in Seconds)} \label{tab:search-similar} 
 \end{center}
@@ -297,8 +298,8 @@ As all test users were asked to perform the pre-defined test tasks, a set of 10 
 	\textbf{Visualization} & \textbf{Mean} & \textbf{Median} & \textbf{Variance} & \textbf{Standard Deviation}\\ \hline
 	Prototype, Random Layout & 18,8 & 19,0 & 86,4 & 9,3 \\ \hline
 	Prototype, Similarity & 17,8 & 16,5 & 73,0 & 8,5 \\ \hline
-	Play Music & 16,1 & 16,5 & 51,3 & 7,2 \\ \hline
-	Jukefox & 38,0 & 41,5 & 130,8 & 11,4 \\ \hline
+	Play Music & 16,1 & 16,5 & \textbf{51,3} & \textbf{7,2} \\ \hline
+	Jukefox & \textbf{38,0} & \textbf{41,5} & 130,8 & 11,4 \\ \hline
 \end{tabular}
 \caption {Search for 3 Artists Given a Certain Mood (Metric: Search Duration in Seconds)} \label{tab:search-mood} 
 \end{center}
@@ -308,7 +309,7 @@ As all test users were asked to perform the pre-defined test tasks, a set of 10 
 \subsection{Qualitative Questionnaire Results}
 \label{sec:qualitative-questionnaire-results}
 
-As mentioned before, every test participant also filled out an AttrakDiff 2 questionnaire to evaluate the Artist Similarity prototype's hedonic and pragmatic usability quality. In order to correctly interpret the test, negative attribute values are inverted, such that each attribute has a range of 1 to 7 points, where lower means better. The outcome of this test (sum of all points for each user) is best summarized by the concrete metrics derived from its evaluation:
+As mentioned before, every test participant also filled out an AttrakDiff 2 questionnaire to evaluate the unmodified Andromeda App's hedonic and pragmatic usability quality. In order to correctly interpret the test, negative attribute values are inverted, such that each attribute has a range of 1 to 7 points, where lower means better. The outcome of this test (sum of all points for each user) is best summarized by the concrete metrics derived from its evaluation:
 
 \begin{table}[H]
 \begin{center}
