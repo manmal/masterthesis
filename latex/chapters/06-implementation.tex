@@ -80,8 +80,8 @@ This prototype is built and tested with Android 4.0.
 			\item Generation of a subset of artists and laying them out according to spring model forces	\\\\
 				\textbf{Input:} Distance matrix of artists, based on their inverted similarities. \\
 				\textbf{Algorithm:} Picks a random sample of artists of size $\sqrt{N}$ (N: number of all artists), assigns random positions to them,
-				and applies a multi-dimensional scaling algorithm on them (see subsection 
-				~\ref{subch:implementation-mds} later in this section). \\
+				and applies a multi-dimensional scaling algorithm on them (see section 
+				~\ref{subsec:contretemds} for further reference). \\
 				\textbf{Output:} Graph structure of nodes resembling artists (correctly positioned subset) \\
 				
 			\item Addition of the remaining artists, positioning them around the initial subset \\\\
@@ -106,7 +106,7 @@ This prototype is built and tested with Android 4.0.
 
 				\textbf{Note 1:} The concrete algorithm applies a random margin to repositioned nodes in order to prevent the forming of a equi-distant artist grid. In empirical observations, it has been found that users regard a equi-distant artist grid as too unnatural. An approach inspired by audio processing called "'humanization"' loosens up this rigid structure, that means that small random additions or subtractions are performed on the vector lengths moving the respective artists. The resulting object positions are not more than a few pixels different than without randomization, but the subjective result for the user improves.
 
-				\textbf{Note 2:} After implementation, it turned out that this implemented removal of overlapping of nodes algorithm increases system stress severely, and in some cases also removes semantic meaning originally produced by the previous 2D layout generation algorithm. The only motivation for the removal of node overlappings are of cosmetical nature: visual overlappings could disturb the user's perception of the result, and hide nodes from the user when they are overlaid by other nodes. In future research, an algorithm better preserving the original layout (like the force transfer algorithm described in section ~\ref{sec:removal-node-overlapping}) should be evaluated and, if yielding better results, replace the algorithm described in this step.
+				\textbf{Note 2:} After implementation, it turned out that this implemented removal of overlapping of nodes algorithm increases system stress severely (up to orders of magnitude), and in some cases also removes semantic meaning originally produced by the previous 2D layout generation algorithm. The only motivation for the removal of node overlappings are of cosmetical nature: visual overlappings could disturb the user's perception of the result, and hide nodes from the user when they are overlaid by other nodes. In future research, an algorithm better preserving the original layout (like the force transfer algorithm described in section ~\ref{sec:removal-node-overlapping}) should be evaluated and, if yielding better results, replace the algorithm described in this step.
 				 \\
 				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that they don't 
 				overlap each other and their position indicates their similarity to each other. \\
