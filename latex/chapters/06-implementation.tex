@@ -146,20 +146,76 @@ Andromeda was built and tested with Android 4.0.
 
 \section{Illustrations of Algorithm Steps}
 
-The previously described algorithms used for the composition of the App will in the following be  illustrated by screenshots of their outcome. These screenshots are based on a library of 21 artists (in the Pop/Rock genres) which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis.
+The previously described algorithms used for the composition of the App will in the following be illustrated by screenshots of their outcome. These screenshots (merged into Figures ~\ref{fig:andromeda-agorithms-screens-1} and ~\ref{fig:andromeda-agorithms-screens-2}) are based on a library of 21 artists (in the Pop/Rock genres) which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis. In the following sub sections, the algorithms steps shown in the screenshots will be explained.
 
 \subsection{Before the Computation}
 
 In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of 21 artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (position randomization prevents nodes from having the exact same position, which would otherwise lead to forces not being applied between nodes with with the same position).
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_1_initial}
-  \caption{The initial graph state before MDS calculation}
-  \label{fig:screen_mds_1_initial}
+	\centering
+	\subfloat[The initial graph state before MDS/spring model calculations]{
+		\label{fig:screen_mds_1_initial}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_1_initial}
+	}
+	\hfill
+	\subfloat[Graph state after 5 iterations on the seed nodes subset]{
+		\label{fig:screen_mds_2_after_5_subset_iterations}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_2_after_5_subset_iterations}
+	}
+	\hfill
+	\subfloat[Graph state after 20 spring model iterations on the seed nodes subset]{
+		\label{fig:screen_mds_3_after_20_subset_iterations}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_3_after_20_subset_iterations}
+	}
+	\vspace{10 mm}
+	\subfloat[Graph state after 5 placements of nodes outside the seed nodes subset]{
+		\label{fig:screen_mds_4_after_5_restnode_additions}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_4_after_5_restnode_additions}
+	}
+	\hspace{5 mm}
+	\subfloat[Graph state after placements of all nodes outside the seed nodes subset]{
+		\label{fig:screen_mds_5_after_all_restnode_additions}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_5_after_all_restnode_additions}
+	}
+
+	\caption{Andromeda Algorithm Screenshots I/II}
+	\label{fig:andromeda-agorithms-screens-1}
 \end{figure}
 
-\newpage
+
+\begin{figure}[H]
+	\centering
+	\subfloat[Graph state after 5 spring model iterations of all nodes]{
+		\label{fig:screen_mds_6_after_5_cleanup_iterations}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_6_after_5_cleanup_iterations}
+	}
+	\hfill
+	\subfloat[Graph state after 10 spring force iterations of all nodes]{
+		\label{fig:screen_mds_7_after_10_cleanup_iterations}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_7_after_10_cleanup_iterations}
+	}
+	\hfill
+	\subfloat[Graph state after removal of node overlappings from 5 nodes]{
+		\label{fig:screen_mds_8_after_5_uncollided_nodes}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_8_after_5_uncollided_nodes}
+	}
+	\vspace{10 mm}
+	\subfloat[Graph state after removal of node overlappings from half of all nodes]{
+		\label{fig:screen_mds_9_after_half_uncollided_nodes}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_9_after_half_uncollided_nodes}
+	}
+	\hspace{5 mm}
+	\subfloat[Graph state after removal of node overlappings from all nodes]{
+		\label{fig:screen_mds_10_after_all_uncollided_nodes}
+		\includegraphics[width=0.3\textwidth]{figures/screen_mds_10_after_all_uncollided_nodes}
+	}
+
+	\caption{Andromeda Algorithm Screenshots II/II}
+	\label{fig:andromeda-agorithms-screens-2}
+\end{figure}
+
+
 \subsection{After 5 Subset Iterations (MDS)}
 \label{subsec:mds-after-five-subset-iterations}
 
@@ -172,112 +228,42 @@ As previously described in sections ~\ref{sec:mds-algorithm} and ~\ref{sec:algor
 
 The screenshot depicted in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations} shows the graph's state after five iterations of step 2. If compared to figure ~\ref{fig:screen_mds_1_initial}, it can be observed that four of the artist nodes (Airbourne, Chikinki, Keane, and Les Chameleons; their movements marked by arrows) have been moved to more outward positions.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_2_after_5_subset_iterations}
-  \caption{Graph state after 5 iterations of the initial subset}
-  \label{fig:screen_mds_2_after_5_subset_iterations}
-\end{figure}
-
-\newpage
 \subsection{After 20 Subset Iterations (MDS)}
 
 Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_after_20_subset_iterations} shows graph state during the second step (application of a number of spring model iterations on the initial subset) of MDS computation, but with 20 iterations of progress. It's easy to see that the four artist nodes (Airbourne, Chikinki, Keane, and Les Chameleons; which have already been moved in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations}) have been displaced even more. The system stress for this subset of 4 nodes by now has fallen to almost zero (almost reached equilibrium), and further iterations will not move the nodes by much any more.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_3_after_20_subset_iterations}
-  \caption{Graph state after 20 spring force iterations of the initial subset}
-  \label{fig:screen_mds_3_after_20_subset_iterations}
-\end{figure}
-
-\newpage
 \subsection{After Placements of 5 Remaining Nodes (MDS)}
 
 After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that five nodes (AC/DC, Aerosmith, Alice Cooper, Arctic Monkeys, Oasis) have been moved to positions which differ from the old positions in the last screenshot (The new positions have been calculated by the algorithm described in section ~\ref{subsec:libraryvis}). 
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_4_after_5_restnode_additions}
-  \caption{Graph state after 5 placements of nodes outside the initial subset}
-  \label{fig:screen_mds_4_after_5_restnode_additions}
-\end{figure}
-
-\newpage
 \subsection{After Placements of All Remaining Nodes (MDS)}
 
 Figure ~\ref{fig:screen_mds_5_after_all_restnode_additions} shows the graph's state after all nodes not in the initial subset have been placed in approximated positions. Although all nodes have been displaced at least once, this is an intermediate state, not yet resembling the algorithm's final outcome. Most nodes should be at least near their optimal position, minimizing system stress, but tests have shown that some nodes will be displaced by much in the following placement corrections. The reason for this is that the "'remaining nodes"' have been placed next to their most similar node (artist), but this position does in some cases not satisfy the spring model forces, and they have to move in order to correct the placement error. The amendment of these placement errors is the reason why the next step will perform a placement correction by re-applying the spring model algorithm on all artist nodes.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_5_after_all_restnode_additions}
-  \caption{Graph state after placements of all nodes outside the initial subset}
-  \label{fig:screen_mds_5_after_all_restnode_additions}
-\end{figure}
-
-\newpage
 \subsection{After 5 Placement Correction Iterations (MDS)}
 
 Similar to the beginning of the calculations (depicted in Section ~\ref{subsec:mds-after-five-subset-iterations}), the spring model algorithm is again applied to the graph, but on all nodes at once. The previously approximated positions for many of the nodes have to be corrected (i.e., system stress has to be reduced) for the produced layout to increase significance. Application of a limited number of spring model iterations has the potential to improve the expressiveness of the layout greatly and reduce system stress. Figure ~\ref{fig:screen_mds_6_after_5_cleanup_iterations} displays graph state after five spring model iterations, reducing system stress by ~20 percent. Artist "'Mr. Big"' has been placed on a sub-optimal position by the previous algorithm steps, and after five correction iterations has now been moved upwards, as compared to the last screenshot.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_6_after_5_cleanup_iterations}
-  \caption{Graph state after 5 spring model iterations of all nodes}
-  \label{fig:screen_mds_6_after_5_cleanup_iterations}
-\end{figure}
-
-\newpage
 \subsection{After 10 Placement Correction Iterations (MDS)}
 \label{subsec:mds-after-ten-placement-iterations}
 
 After 10 spring model iterations, the resulting layout features lower system stress than after 5 iterations (see last step). It can be observed in figure ~\ref{fig:screen_mds_7_after_10_cleanup_iterations} that nodes have not moved so much in this step as they moved in the previous step (going from 0 to 5 placement correction iterations).
 The graph's nodes have been laid out such that their centers' positions reduce system stress - not giving any heed to overlappings. Therefore, the process does not end here, but these overlappings are eliminated in the next steps in order to prevent that any one node hides the other.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_7_after_10_cleanup_iterations}
-  \caption{Graph state after 10 spring force iterations of all nodes}
-  \label{fig:screen_mds_7_after_10_cleanup_iterations}
-\end{figure}
-
-\newpage
 \subsection{After Removal of Node Overlappings from 5 Nodes}
 
 By applying the algorithm for removal of node overlappings described in section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed. Two artists have not been moved because they did not overlap with other artists, but three artists (Aerosmith, Airbourne, Alice Cooper) have been moved, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_8_after_5_uncollided_nodes}
-  \caption{Graph state after removal of node overlappings from 5 nodes}
-  \label{fig:screen_mds_8_after_5_uncollided_nodes}
-\end{figure}
-
-\newpage
 \subsection{After Removal of Node Overlappings from Half of All Nodes}
 
 As a continuation of the last screenshot, the following figure ~\ref{fig:screen_mds_9_after_half_uncollided_nodes} depicts the graph's state after half of all artist nodes have been repositioned to avoid overlappings.
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_9_after_half_uncollided_nodes}
-  \caption{Graph state after removal of node overlappings from half of all nodes}
-  \label{fig:screen_mds_9_after_half_uncollided_nodes}
-\end{figure}
-
-\newpage
 \subsection{After Removal of Node Overlappings from All Nodes}
 
 Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subSection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the MDS algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
 
 In the actual App implementation, this is the first state displayed to the user - all previous states are hidden from her. Subsequently, the App reacts to touch gestures in order to enable navigation and exploration of the structure on small screens (it's understood that screenshot~\ref{fig:screen_mds_10_after_all_uncollided_nodes} does not show all artists of the graph).
 
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=0.4\textwidth]{figures/screen_mds_10_after_all_uncollided_nodes}
-  \caption{Graph state after removal of node overlappings from all nodes}
-  \label{fig:screen_mds_10_after_all_uncollided_nodes}
-\end{figure}
 
 \section{Retrieval of Music Metadata}
 
