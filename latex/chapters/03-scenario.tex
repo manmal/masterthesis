@@ -6,7 +6,7 @@ In this chapter, the scope of this thesis will be defined and a user scenario ou
 	\item \textbf {Selected Visualization Computation} - Defines which algorithms have been selected for the computation of visual data to be presented to the user, dependent on the previously chosen similarity computation.
 	\item \textbf {Selected Algorithm for Removal of Overlapping of Artists} - Presents the algorithm used for the removal of overlappings in the displayed graph computed by the previously described algorithms.
 	\item \textbf {Selected Layout Algorithm for Artist Discovery} - Describes the method which computes the displayed graph's layout when freshly discovered (related) nodes are added to it.
-	\item \textbf {Overview of the Assembly of Algorithms and Information Flow} - Provides figures showing the algorithmic components and information flow between them in the prototypical App.
+	\item \textbf {Overview of the Assembly of Algorithms and Information Flow} - Provides figures showing the algorithmic components and information flow between them in the prototypical App ("'Andromeda"').
 \end{itemize}
 
 \section{Scope Definition and Research Objectives}
@@ -17,7 +17,7 @@ The scope of this thesis is defined by the following goals:
 	\item Verification of the selected artist similarity computation method being feasible for mobile end user devices.
 	\item Verification of the selected artist similarity visualization method being a sensible choice for mobile end user devices.
 	\item Description of the implementation of a prototype (able to perform the selected computation and visualization methods) on the Android mobile OS platform ~\cite{url:android}.
-	\item Description of the design and presentation of the results of a user study, in order to test a set of hypotheses evaluating the performance of the implemented prototype and its visualization approach.
+	\item Description of the design and presentation of the results of a user study, in order to test a set of hypotheses evaluating the performance of the implemented prototype ("'Andromeda"') and its visualization approach.
 \end{itemize}
 
 \section{Selected 2D-Projection Method}
@@ -68,5 +68,5 @@ Artist discovery is initiated by the user selecting a certain artist ("'subject"
 
 \section{Summary}
 
-After the definition of the scope of this thesis (verification of artist similarity computational methods and implementation in a prototype), algorithms have been selected for further treatment which have already been outlined in Chapter ~\ref{ch:relatedwork}. For the computation of artist similarity, a multi-dimensional scaling method has been chosen, and the accompanying visualization is highly dependent on the computational part - therefore, a 2D visualization of the MDS output has been selected. 
+After the definition of the scope of this thesis (verification of artist similarity computational methods and implementation in a prototype called "'Andromeda"'), algorithms have been selected for further treatment which have already been outlined in Chapter ~\ref{ch:relatedwork}. For the computation of artist similarity, a multi-dimensional scaling method has been chosen, and the accompanying visualization is highly dependent on the computational part - therefore, a 2D visualization of the MDS output has been selected. 
 While the algorithm for the removal of node overlappings in the graph resulting from the previously mentioned computation is a modification of a force-transfer algorithm, the layout computation for artist discovery has been chosen to be force-directed. Finally, an overview of the algorithms and information flow between them has been given, for both artist similarity visualization and artist discovery.

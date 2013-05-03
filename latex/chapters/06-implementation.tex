@@ -3,12 +3,12 @@ One of the objectives of this thesis is the implementation and analysis of a pro
 \begin{itemize}
 	\item \textbf {About Android Apps} - An introduction to the Android operating system.
 	\item \textbf {Assembly of Algorithms and Information Flow In Concrete Implementation} - Gives details on algorithms and information flow between them, as previously listed in an overview in Chapter ~\ref{ch:scenario}.
-	\item \textbf {Illustrations of Algorithm Steps} - Lists illustrations and descriptions of the algorithm succession in the App prototype.
+	\item \textbf {Illustrations of Algorithm Steps} - Lists illustrations and descriptions of the algorithm succession in Andromeda.
 	\item \textbf {Retrieval of Music Metadata} - Describes how music metadata is retrieved from a mobile device's storage and from web sources.
 	\item \textbf {Retrieval of Similarity Data} - Describes how artist similarity data is retrieved from web sources, and how unknown values are approximated.
 	\item \textbf {Implementation of Multidimensional Scaling} - Contains a pseudo-code listing of one step in the MDS algorithm.
 	\item \textbf {Implementation of Removal of Node Overlappings} - Contains a pseudo-code listing of the algorithm implementation which removes overlappings of graph nodes.
-	\item \textbf {Visualization Details} - Features implementation details of the prototype concerning visualization of graph data.
+	\item \textbf {Visualization Details} - Features implementation details of the prototype "'Andromeda"' concerning visualization of graph data.
 	\item \textbf {Structure of the App} - Presents the structure of the prototypical App, together with information about the target operating system.
 \end{itemize}
 
@@ -28,14 +28,14 @@ User interface composition in Android is performed partly in the CPU (e.g., in J
 
 Android is a strictly touch-centric operating system, meaning that most user interactions are performed via the device's touch screen. Originally, Android devices were bound to provide hardware buttons, but starting with Android 4.0, those buttons are gradually replaced with software buttons (displayed on the touch screen).
 
-This prototype is built and tested with Android 4.0.
+Andromeda was built and tested with Android 4.0.
 
 \subsection{Library Visualization}
 \label{subsec:libraryvis}
 
 \begin{itemize}
 	\item Extraction of music metadata on the device \\\\
-			\textbf{Input:} Access to a data store containing the device's music library metadata. \footnote{The app prototype utilizes a standard SQLite database in order to store data which can be persisted in order to reduce computation time, thus improving the user experience.}
+			\textbf{Input:} Access to a data store containing the device's music library metadata. \footnote{Andromeda utilizes a standard SQLite database in order to store data which can be persisted in order to reduce computation time, thus improving the user experience.}
 			  \\
 			\textbf{Algorithm:} Iterates through all artists and tracks in the device's music library.
 			If an entity has not yet been registered in the app's database, parts of its metadata (for all entities: name, Last.fm entity ID, Echonest entity ID, Last.fm imageURL; for artists: albums, tracks; for albums: artist, tracks; for tracks: artist, album) are compiled and put into the database. \\
@@ -330,7 +330,7 @@ Apart from the previously described computational algorithms, the App features a
 
 Android provides App developers with the possibility to implement three-dimensional viewports in OpenGL ES \cite{url:opengles}, which is a downsized version of ordinary OpenGL and meant for implementation in handheld devices. OpenGL is a specification which is used as a blueprint by operating systems vendors and GPU producers alike. An OpenGL context can be seen as a state-machine which is manipulated by external API calls.
 
-While the prototype shall implement a 2D visualization, its implementation in OpenGL (which is a 3D drawing specification) is necessary to provide a reasonably high framerate. Early prototype tests with a strict 2D implementation (Android 2D canvas drawing) showed that image rendering let the framerate drop considerably, so that viewport zooming, panning, and animations were no longer smooth to the human eye. The app's usability suffered from this, and so the prototype was rebuilt using OpenGL. The reason why OpenGL performs better in this context is that GPUs are better suited for handling images (textures) than CPUs, because their architecture and instruction sets are primarily dedicated to rendering.
+While Andromeda shall implement a 2D visualization, its implementation in OpenGL (which is a 3D drawing specification) is necessary to provide a reasonably high framerate. Early prototype tests with a strict 2D implementation (Android 2D canvas drawing) showed that image rendering let the framerate drop considerably, so that viewport zooming, panning, and animations were no longer smooth to the human eye. The app's usability suffered from this, and so Andromeda was rebuilt using OpenGL. The reason why OpenGL performs better in this context is that GPUs are better suited for handling images (textures) than CPUs, because their architecture and instruction sets are primarily dedicated to rendering.
 
 In order to be able to employ OpenGL for graph rendering, the author of this thesis had to create a number of abstract meta classes and find a way to resemble user interactions in the drawn 3D picture. As mentioned before, the objective was to draw pseudo-2D, such that all music objects are displayed as pictures, viewed from the top. Accordingly, the viewport has to move sideways when the user moves one finger over the touchscreen, and it has to change its distance to the graph objects when the user zooms.
 
@@ -342,7 +342,7 @@ There are three touchscreen gestures supported by the App's implementation:
 \begin{itemize}
 	\item \textbf{Panning/Scrolling} - The user taps the finger onto the screen surface, does not let 
 	go, and pulls the finger across the surface.
-	\item \textbf{Zooming} - The user rests two fingers on the screen surface, and changes the distance	between her finger tips. If the distance decreases, then the zoom factor will increase; and vice versa.	Ideally, the reference points (which are touched by the user's fingers when she placed her fingertips on the screen) would always overlap with the user's fingertips, meaning that while the fingertips contract or pull apart, the zoom level would adapt such that the reference points stay beneath the fingertips. However, in the built App prototype, this has been considered out of scope, because of the three-dimensional nature of the OpenGL	rendering process making it difficult to achieve this effect.
+	\item \textbf{Zooming} - The user rests two fingers on the screen surface, and changes the distance	between her finger tips. If the distance decreases, then the zoom factor will increase; and vice versa.	Ideally, the reference points (which are touched by the user's fingers when she placed her fingertips on the screen) would always overlap with the user's fingertips, meaning that while the fingertips contract or pull apart, the zoom level would adapt such that the reference points stay beneath the fingertips. However, in Andromeda, this has been considered out of scope, because of the three-dimensional nature of the OpenGL	rendering process making it difficult to achieve this effect.
 	\item \textbf{Tapping} - The user taps her finger onto the screen surface at a point on which the
 	desired object is located, and lets go again immediately. The App then reacts to this interaction
 	with an adequate response or action, depending on the current state of the user interface.
@@ -400,10 +400,10 @@ License: \emph{Apache 2.0 License}
 
 \section{Summary}
 
-This chapter has explained the components, algorithms, and concepts used to construct a prototype demonstrating the visualization of artist similarity, runnable on mobile Android devices.
+This chapter has explained the components, algorithms, and concepts used to construct a prototype (called "'Andromeda"') demonstrating the visualization of artist similarity, runnable on mobile Android devices.
 
 Algorithms and the flow of information between them has been described, both for the visualization of a music library (on-device metadata extraction, matching, web source metadata extraction and interpolation, layout generation, removal of node overlappings, display of the graph to the user), and for artist discovery (querying of related artists from web sources, their integration into the layout, and continuous rearrangement via a force-based layout algorithm).
-Thereafter, different states of the App prototype while executing the previously described algorithms have been illustrated, using screenshots.
+Thereafter, different states of Andromeda while executing the previously described algorithms have been illustrated, using screenshots.
 
 Retrieval of music metadata from the user's device and web sources, and retrieval of similarity data from web sources has been described in detail. Since this similarity data may be incomplete, an interpolation algorithm for unknown values has been given.
 A part of the MDS algorithm (already described in length in Chapter ~\ref{ch:computation}), the  positioning of graph nodes based on system stress minimization, has been detailed as pseudocode. The algorithm for the removal of node overlappings in the graph was also shown.
