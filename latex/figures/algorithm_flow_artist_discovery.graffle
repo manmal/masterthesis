@@ -53,7 +53,7 @@
 	<key>Creator</key>
 	<string>Manuel Maly</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -172,12 +172,12 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1187
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf370
 \cocoascreenfonts1{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Light;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
-\f0\fs36 \cf1 Querying of the artists most similar to 'subject' from web sources}</string>
+\f0\fs36 \cf1 Retrieval of artist similarity ranking list for the seed node from Last.fm}</string>
 					</dict>
 				</dict>
 			</array>
@@ -276,12 +276,12 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1187
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf370
 \cocoascreenfonts1{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Light;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
-\f0\fs36 \cf0 Integration of the retrieved artists around 'subject' in 2D space, at randomized \
+\f0\fs36 \cf0 Integration of the retrieved artists around the seed node in 2D space, at randomized \
 but similar positions}</string>
 					</dict>
 				</dict>
@@ -348,12 +348,12 @@ but similar positions}</string>
 			<key>Text</key>
 			<dict>
 				<key>Text</key>
-				<string>{\rtf1\ansi\ansicpg1252\cocoartf1187
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf370
 \cocoascreenfonts1{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Light;}
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
-\f0\fs36 \cf1 Continuous re-arrangement of the retrieved artists based on a force-based layout algorithm (also reacting to newly added similar artists)}</string>
+\f0\fs36 \cf1 Continuous re-arrangement of the retrieved artists based on a force-directed layout algo. (reacting to newly added similar artists)}</string>
 			</dict>
 		</dict>
 	</array>
@@ -424,7 +424,7 @@ but similar positions}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2012-09-18 08:17:26 +0000</string>
+	<string>2013-05-04 08:36:41 +0000</string>
 	<key>Modifier</key>
 	<string>Manuel Maly</string>
 	<key>NotesVisible</key>
@@ -455,7 +455,7 @@ but similar positions}</string>
 		<key>NSPaperName</key>
 		<array>
 			<string>string</string>
-			<string>Ohne Titel</string>
+			<string>55360E50-1663-497F-8B06-FC6972FCA424</string>
 		</array>
 		<key>NSPaperSize</key>
 		<array>

@@ -1,13 +1,10 @@
 One of the objectives of this thesis is the implementation and analysis of a prototype App for mobile devices. In this chapter, the previously selected algorithms will be put into the context of the App's implementation, and the App's structure itself will be detailed. This chapter is structured as follows:
 
 \begin{itemize}
-	\item \textbf {About Android Apps} - An introduction to the Android operating system.
 	\item \textbf {Assembly of Algorithms and Information Flow In Concrete Implementation} - Gives details on algorithms and information flow between them, as previously listed in an overview in Chapter ~\ref{ch:scenario}.
 	\item \textbf {Illustrations of Algorithm Steps} - Lists illustrations and descriptions of the algorithm succession in Andromeda.
 	\item \textbf {Retrieval of Music Metadata} - Describes how music metadata is retrieved from a mobile device's storage and from web sources.
 	\item \textbf {Retrieval of Similarity Data} - Describes how artist similarity data is retrieved from web sources, and how unknown values are approximated.
-	\item \textbf {Implementation of Multidimensional Scaling} - Contains a pseudo-code listing of one step in the MDS algorithm.
-	\item \textbf {Implementation of Removal of Node Overlappings} - Contains a pseudo-code listing of the algorithm implementation which removes overlappings of graph nodes.
 	\item \textbf {Visualization Details} - Features implementation details of the prototype "'Andromeda"' concerning visualization of graph data.
 	\item \textbf {Structure of the App} - Presents the structure of the prototypical App, together with information about the target operating system.
 \end{itemize}
@@ -15,7 +12,7 @@ One of the objectives of this thesis is the implementation and analysis of a pro
 \section{Assembly of Algorithms and Information Flow In Concrete Implementation}
 \label{sec:algorithm-assembly}
 
-In Chapter ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given. These steps are in part also illustrated in Fig. ~\ref{fig:screen_mds_1_initial} to Fig. ~\ref{fig:screen_mds_10_after_all_uncollided_nodes}.
+In Chapter ~\ref{ch:scenario}, an overview was given of how algorithms work together in the system. In-depth implementation-specific details of this assembly and information flow will now be given. The algorithm steps are in part also illustrated by screenshots in Fig. ~\ref{fig:screen_mds_1_initial} to Fig. ~\ref{fig:screen_mds_10_after_all_uncollided_nodes}.
 
 \subsection{About Android Apps}
 
@@ -136,11 +133,11 @@ Andromeda was built and tested with Android 4.0.
 				\textbf{Output:} Excerpt of artists most similar to the seed artist. \\
 	\item Integration of the retrieved artists around the seed artist in 2D space, at positions that are assigned by a force-directed layout algorithm, as follows: \\\\
 				\textbf{Input:} Excerpt of artists most similar to the seed artist. \\
-				\textbf{Algorithm:} Applies a force-based layout algorithm on the collection of the seed artist and	its similar artists, such that the similar artists are arranged in a star around the seed artist. \\
+				\textbf{Algorithm:} Applies a force-directed layout algorithm on the collection of the seed artist and	its similar artists, such that the similar artists are arranged in a star around the seed artist. \\
 				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that similar artists encircle the seed artist. In tests it has been found that this structure is also free of overlappings, because a larger number of nodes will produce a layout with a larger area. The area taken up is controlled by an area constant which is taken account in the calculation of forces. \\
-	\item Continuous re-arrangement of the retrieved artists based on a force-based layout algorithm (also reacting to newly added similar artists) \\\\
+	\item Continuous re-arrangement of the retrieved artists based on a force-directed layout algorithm (also reacting to newly added similar artists) \\\\
 				\textbf{Input:} Graph structure of nodes resembling artists, laid out such that similar	artists encircle the seed artist. \\
-				\textbf{Algorithm:} As the user selects more artist nodes as seed artists and load its similar artists, this algorithm is then restarted, but the previous subjects and their	similar artists are kept, and their positions adapted as needed - i.e., force-based layout calculation does not stop for those. \\
+				\textbf{Algorithm:} As the user selects more artist nodes as seed artists and load its similar artists, this algorithm is then restarted, but the previous subjects and their	similar artists are kept, and their positions adapted as needed - i.e., force-directed layout calculation does not stop for those. \\
 				\textbf{Output:} Updated graph structure of nodes resembling artists, laid out such that similar artists encircle the seed artist, also related to previously retrieved similar artists \\
 \end{itemize}
 
@@ -148,18 +145,18 @@ Andromeda was built and tested with Android 4.0.
 
 The previously described algorithms used for the composition of the App will in the following be illustrated by screenshots of their outcome. These screenshots (merged into Figures ~\ref{fig:andromeda-agorithms-screens-1} and ~\ref{fig:andromeda-agorithms-screens-2}) are based on a library of 21 artists (in the Pop/Rock genres) which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis. In the following sub sections, the algorithms steps shown in the screenshots will be explained.
 
-\subsection{Before the Computation}
+\subsection{Initial State}
 
 In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of 21 artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (position randomization prevents nodes from having the exact same position, which would otherwise lead to forces not being applied between nodes with with the same position).
 
 \begin{figure}[H]
 	\centering
-	\subfloat[The initial graph state before MDS/spring model calculations]{
+	\subfloat[The initial graph state before the spring model calculations]{
 		\label{fig:screen_mds_1_initial}
 		\includegraphics[width=0.3\textwidth]{figures/screen_mds_1_initial}
 	}
 	\hfill
-	\subfloat[Graph state after 5 iterations on the seed nodes subset]{
+	\subfloat[Graph state after 5 spring model iterations on the seed nodes subset]{
 		\label{fig:screen_mds_2_after_5_subset_iterations}
 		\includegraphics[width=0.3\textwidth]{figures/screen_mds_2_after_5_subset_iterations}
 	}
@@ -191,7 +188,7 @@ In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a 
 		\includegraphics[width=0.3\textwidth]{figures/screen_mds_6_after_5_cleanup_iterations}
 	}
 	\hfill
-	\subfloat[Graph state after 10 spring force iterations of all nodes]{
+	\subfloat[Graph state after 10 spring model iterations of all nodes]{
 		\label{fig:screen_mds_7_after_10_cleanup_iterations}
 		\includegraphics[width=0.3\textwidth]{figures/screen_mds_7_after_10_cleanup_iterations}
 	}
@@ -216,7 +213,7 @@ In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a 
 \end{figure}
 
 
-\subsection{After 5 Subset Iterations (MDS)}
+\subsection{After 5 Subset Iterations (Spring Model)}
 \label{subsec:mds-after-five-subset-iterations}
 
 As previously described in sections ~\ref{sec:mds-algorithm} and ~\ref{sec:algorithm-assembly}, the first steps in the App's MDS computation are:
@@ -228,23 +225,23 @@ As previously described in sections ~\ref{sec:mds-algorithm} and ~\ref{sec:algor
 
 The screenshot depicted in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations} shows the graph's state after five iterations of step 2. If compared to figure ~\ref{fig:screen_mds_1_initial}, it can be observed that four of the artist nodes (Airbourne, Chikinki, Keane, and Les Chameleons; their movements marked by arrows) have been moved to more outward positions.
 
-\subsection{After 20 Subset Iterations (MDS)}
+\subsection{After 20 Subset Iterations (Spring Model)}
 
-Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_after_20_subset_iterations} shows graph state during the second step (application of a number of spring model iterations on the initial subset) of MDS computation, but with 20 iterations of progress. It's easy to see that the four artist nodes (Airbourne, Chikinki, Keane, and Les Chameleons; which have already been moved in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations}) have been displaced even more. The system stress for this subset of 4 nodes by now has fallen to almost zero (almost reached equilibrium), and further iterations will not move the nodes by much any more.
+Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_after_20_subset_iterations} shows graph state during the second step (application of a number of spring model iterations on the initial subset) of spring model computation, but with 20 iterations of progress. It's easy to see that the four artist nodes (Airbourne, Chikinki, Keane, and Les Chameleons; which have already been moved in figure ~\ref{fig:screen_mds_2_after_5_subset_iterations}) have been displaced even more. The system stress for this subset of 4 nodes by now has fallen to almost zero (almost reached equilibrium), and further iterations will not move the nodes by much any more.
 
-\subsection{After Placements of 5 Remaining Nodes (MDS)}
+\subsection{After Placements of 5 Remaining Nodes (Spring Model)}
 
 After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that five nodes (AC/DC, Aerosmith, Alice Cooper, Arctic Monkeys, Oasis) have been moved to positions which differ from the old positions in the last screenshot (The new positions have been calculated by the algorithm described in section ~\ref{subsec:libraryvis}). 
 
-\subsection{After Placements of All Remaining Nodes (MDS)}
+\subsection{After Placements of All Remaining Nodes (Sprint Model)}
 
 Figure ~\ref{fig:screen_mds_5_after_all_restnode_additions} shows the graph's state after all nodes not in the initial subset have been placed in approximated positions. Although all nodes have been displaced at least once, this is an intermediate state, not yet resembling the algorithm's final outcome. Most nodes should be at least near their optimal position, minimizing system stress, but tests have shown that some nodes will be displaced by much in the following placement corrections. The reason for this is that the "'remaining nodes"' have been placed next to their most similar node (artist), but this position does in some cases not satisfy the spring model forces, and they have to move in order to correct the placement error. The amendment of these placement errors is the reason why the next step will perform a placement correction by re-applying the spring model algorithm on all artist nodes.
 
-\subsection{After 5 Placement Correction Iterations (MDS)}
+\subsection{After 5 Placement Correction Iterations (Sprint Model)}
 
 Similar to the beginning of the calculations (depicted in Section ~\ref{subsec:mds-after-five-subset-iterations}), the spring model algorithm is again applied to the graph, but on all nodes at once. The previously approximated positions for many of the nodes have to be corrected (i.e., system stress has to be reduced) for the produced layout to increase significance. Application of a limited number of spring model iterations has the potential to improve the expressiveness of the layout greatly and reduce system stress. Figure ~\ref{fig:screen_mds_6_after_5_cleanup_iterations} displays graph state after five spring model iterations, reducing system stress by ~20 percent. Artist "'Mr. Big"' has been placed on a sub-optimal position by the previous algorithm steps, and after five correction iterations has now been moved upwards, as compared to the last screenshot.
 
-\subsection{After 10 Placement Correction Iterations (MDS)}
+\subsection{After 10 Placement Correction Iterations (Sprint Model)}
 \label{subsec:mds-after-ten-placement-iterations}
 
 After 10 spring model iterations, the resulting layout features lower system stress than after 5 iterations (see last step). It can be observed in figure ~\ref{fig:screen_mds_7_after_10_cleanup_iterations} that nodes have not moved so much in this step as they moved in the previous step (going from 0 to 5 placement correction iterations).
@@ -260,7 +257,7 @@ As a continuation of the last screenshot, the following figure ~\ref{fig:screen_
 
 \subsection{After Removal of Node Overlappings from All Nodes}
 
-Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subSection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the MDS algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
+Screenshot ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} shows the final state of the graph, at the end of all computations. This is a compromise between the intermediate result shown in subSection ~\ref{subsec:mds-after-ten-placement-iterations}, and a user-friendly (easy to grasp) representation of the graph. Clearly, system stress has been increased by removal of node overlappings; but, the process has made the spring model algorithm's results readable and easily understandable. The resulting margin between the nodes is subject to adjustable parameters, leaving room for further optimization.
 
 In the actual App implementation, this is the first state displayed to the user - all previous states are hidden from her. Subsequently, the App reacts to touch gestures in order to enable navigation and exploration of the structure on small screens (it's understood that screenshot~\ref{fig:screen_mds_10_after_all_uncollided_nodes} does not show all artists of the graph).
 
@@ -388,11 +385,11 @@ License: \emph{Apache 2.0 License}
 
 This chapter has explained the components, algorithms, and concepts used to construct a prototype (called "'Andromeda"') demonstrating the visualization of artist similarity, runnable on mobile Android devices.
 
-Algorithms and the flow of information between them has been described, both for the visualization of a music library (on-device metadata extraction, matching, web source metadata extraction and interpolation, layout generation, removal of node overlappings, display of the graph to the user), and for artist discovery (querying of related artists from web sources, their integration into the layout, and continuous rearrangement via a force-based layout algorithm).
+Algorithms and the flow of information between them has been described, both for the visualization of a music library (on-device metadata extraction, matching, web source metadata extraction and interpolation, layout generation, removal of node overlappings, display of the graph to the user), and for artist discovery (querying of related artists from web sources, their integration into the layout, and continuous rearrangement via a force-directed layout algorithm).
 Thereafter, different states of Andromeda while executing the previously described algorithms have been illustrated, using screenshots.
 
 Retrieval of music metadata from the user's device and web sources, and retrieval of similarity data from web sources has been described in detail. Since this similarity data may be incomplete, an interpolation algorithm for unknown values has been given.
-A part of the MDS algorithm (already described in length in Chapter ~\ref{ch:computation}), the  positioning of graph nodes based on system stress minimization, has been detailed as pseudocode. The algorithm for the removal of node overlappings in the graph was also shown.
-To provide some details about visualization and the App's user interaction model, OpenGL drawing, touchscreen gestures, and animations were elaborated on.
+A part of the MDS (by application of a spring model) algorithm (already described in length in Chapter ~\ref{ch:computation}), the positioning of graph nodes based on system stress minimization, has been detailed as pseudocode. The algorithm for the removal of node overlappings in the graph was also shown.
+To provide some details about visualization and the App's user interaction model, OpenGL drawing, touchscreen gestures, and animations were described.
 
-Finally, a short introduction to the Android operating system was given, and the prototype App's structure (Activities and other classes) and third party libraries were detailed.
+Finally, a short introduction to the Android operating system was given, and the Andromeda prototype App's structure (Activities and other classes) and third party libraries were detailed.

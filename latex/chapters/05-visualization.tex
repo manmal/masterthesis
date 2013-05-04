@@ -1,14 +1,13 @@
-In this chapter, the visualization of objects whose positions have previously been computed (see Section ~\ref{ch:computation}) will be discussed. Also, the interaction patterns for the mobile application prototype "'Andromeda"' will be defined.
+In this chapter, the visualization of objects whose positions have previously been computed (see Chapter ~\ref{ch:computation}) will be discussed. Also, the interaction patterns for the mobile application prototype "'Andromeda"' will be defined.
 
 \begin{itemize}
 	\item \textbf {Visualization} - Describes how visualization is implemented in Andromeda.
-	\item \textbf {User Interaction} - Lists information segments in Andromeda and possibilities of interaction for the user.
-	\item \textbf {Removal of Node Overlapping} - Sketches the algorithm of how overlapping between multiple artist nodes are removed.
+	\item \textbf {User Interaction} - Lists information segments in the Andromeda prototype and possibilities of interaction for the user.
 \end{itemize}
 
 \section{Visualization}
 
-After the computation of similarity measures and the resulting layout of music objects has been performed (see Section ~\ref{ch:computation}), the mode of visualization for Andromeda has to be defined. As has already been discussed, the possible modes of information display have been narrowed down due to several constraints, determining that a 2D visualization represents the best compromise for the scope of this thesis. Small screens on mobile devices introduce a further constraint: in most use cases, not all of the content will fit on one screen; therefore, a zooming and panning mechanism will be employed. To provide users with a rich experience, the objects shall not be shown as points, but as shapes - if an image of the object exists in an online source, it shall be used, or otherwise, a monocolored rectangle shall be shown. In order that users can orient themselves better, a non-solid background will be used - this provides visual feedback to the user while zooming when no objects are currently visible on the screen.
+After the computation of similarity measures and the resulting layout of music objects has been performed (see Chapter ~\ref{ch:computation}), the mode of visualization for Andromeda has to be defined. As has already been discussed, the possible modes of information display have been narrowed down due to several constraints, determining that a 2D visualization represents the best compromise for the scope of this thesis. Small screens on mobile devices introduce a further constraint: in most use cases, not all of the content will fit on one screen; therefore, a zooming and panning mechanism will be employed. To provide users with a rich experience, the objects shall not be shown as points, but as shapes - if an image of the object exists in an online source, it shall be used, or otherwise, a monocolored rectangle shall be shown. In order that users can orient themselves better, a non-solid background will be used - this provides visual feedback to the user while zooming when no objects are currently visible on the screen.
 
 \begin{figure}[H]
   \centering
@@ -41,5 +40,3 @@ Exploration of the graph is performed by two common touch gestures, namely pinch
 \section{Summary}
 
 This chapter has made the concepts for visualization in Andromeda accessible to the reader. Apart from the introduction of implementation details regarding visualization (2D canvas for graph display, shape-based node rendering), the way how users interact with Andromeda has been defined. Information is segmented into several contexts, "'breadcrumbs"' help the user navigate, and well-established multitouch gestures let the user control information presentation. 
-
-As an improvement to readability and understandability of graph layouts, a computational method similar to force-transfer algorithms has been included in order to remove graph node overlappings.

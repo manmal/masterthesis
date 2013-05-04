@@ -1,10 +1,10 @@
 In this chapter, the retrieval of similarities between artists and the construction of 2D layouts based on those similarities will be presented.
 
 \begin{itemize}
-	\item \textbf {Matching of music entities from Different Sources} - Describes the methods used for merging music objects (artists, albums, titles) and their similarities, and how they deal with uncertainty regarding similarities.
-	\item \textbf {Multidimensional Scaling Algorithm} - Gives details about the MDS algorithm employed for the layout of music collections.
-	\item \textbf {Optimizations for Execution on Mobile Devices} - Elaborates on how aforementioned MDS algorithm can be optimized for the execution on devices with relatively low processing power.
-	\item \textbf {Downsides of MDS in this Context} - Lists some downsides of the usage of MDS in the given context, as opposed to other layout methods.
+	\item \textbf {Matching of Music Entities from Different Sources and Similarity Value Retrieval} - Describes the methods used for merging music objects (artists, albums, titles) and their similarities, and how they deal with uncertainty regarding similarities.
+	\item \textbf {Multidimensional Scaling by Application of a Spring Model} - Gives details about the MDS algorithm (by application of a spring model) employed for the layout of music collections and elaborates on how this algorithm can be optimized for the execution on devices with relatively low processing power.
+	\item \textbf {Downsides of MDS in this Context} - Lists some downsides of the usage of MDS in the given context.
+	\item \textbf {Removal of Node Overlappings} - Presents options for the removal of node overlappings produced by the previously presented spring model algorithm, and selects one simplified algorithm for further usage in this thesis.
 \end{itemize}
 
 \section{Matching of Music Entities from Different Sources and Similarity Value Retrieval}
@@ -27,7 +27,7 @@ So, a meaningful default similarity for unknown similarities must be defined. A 
 \emph{0.5 * [least similarity value in the similarity ranking list of artists of artist X]}.\\
 This approximation is applied to all similarity links which point to locally available artists which are not in an other locally available artist's similarity ranking list, instead of a zero or undefined similarity.
 
-\section{Multidimensional Scaling Algorithm}
+\section{Multidimensional Scaling by Application of a Spring Model}
 \label{sec:mds-algorithm}
 
 \subsection{The Given Problem}
@@ -88,7 +88,7 @@ While the addition of some entities is possible after the layout has been comple
 
 The MDS method presented earlier in this chapter relies on definite high-dimensional vectors (from which similarity measures can be derived), which is not available here - in the context of computing similarity based on web sources, it is unlikely that a similarity measure can be found for every entity-entity relationship. Therefore, \textbf{estimations have to be used for unknown similarity relationships}, potentially polluting the calculation with incorrect values.
 
-\section{Removal of Node Overlapping}
+\section{Removal of Node Overlappings}
 \label{sec:removal-node-overlapping}
 
 As the reader may have noticed, the positions of objects computed as described in Section ~\ref{ch:computation} don't respect any aesthetic criteria. ~\cite{Li:2005} gives an overview of such criteria, three of which also apply to graphs produced by MDS:
@@ -99,7 +99,7 @@ As the reader may have noticed, the positions of objects computed as described i
 	\item Aspect ratio close to or matching the specification
 \end{itemize}
 
-However, an even more important aesthetic factor in the perception of graph drawings is the \textbf{removal of node overlappings}. The computational layout method applied in this thesis - MDS by application of a spring model (see Section ~\ref{ch:computation}) - can not give any heed to overlapping nodes (or margin between them), since nodes are positioned as points, not 2D objects. However, the objects do need to be displayed as 2D shapes (e.g. as rectangles, circles, images,...), and therefore the resulting layout can (and in many cases, will) contain overlappings.
+However, an even more important aesthetic factor in the perception of graph drawings is the \textbf{removal of node overlappings}. The computational layout method applied in this thesis - MDS by application of a spring model (see Chapter ~\ref{ch:computation}) - can not give any heed to overlapping nodes (or margin between them), since nodes are positioned as points, not 2D objects. However, the objects do need to be displayed as 2D shapes (e.g. as rectangles, circles, images,...), and therefore the resulting layout can (and in many cases, will) contain overlappings.
 As this may impact the perception of the graph by humans in a negative way (objects may even be completely hidden by other objects), a way has to be found to eliminate overlappings as reliably as possible, without affecting the conveyed information of object similarities too much.
 
 The authors of ~\cite{journals/vlc/MisueELS95} therefore define the concept of the Mental Map, meaning that a graph has properties which should be maintained if transformed: Orthogonal Ordering, Proximity Relations, and Topology. An algorithm called Force Scan (FS) is then proposed to remove node overlappings while preserving the Mental Map of a graph. FS operates by first moving nodes horizontally, maintaining their horizontal ordering, and then moving nodes vertically, maintaining their vertical ordering. Several improvements to FS have been discussed (~\cite{Hayashi:1998:LAP:647550.728930} ~\cite{Huang03force-transfer:a} ~\cite{Li:2005}), while the algorithm in ~\cite{Huang03force-transfer:a} - \textbf{Force Transfer (FT)} - seems to be the most suitable for this thesis' use case, as it is of lower computational complexity than FS and produces pleasing layouts.
@@ -126,4 +126,6 @@ The result of this algorithm is a graph state which is free of node overlappings
 
 The matching of music entities from Last.fm and Echonest has been described as a simple and straightforward process with the result that locally available music entities (artists, albums, tracks) are augmented with metadata from these two web APIs. Artist similarity measures are retrieved from Last.fm by querying the web API for artist similarity lists, and it was also mentioned how calculation of expected values can provide meaningful approximations for unknown similarities between artists.
 
-The concrete multi-dimensional scaling algorithm (by application of a spring model) was then presented in-depth, incorporating optimizations (sampling, interpolation) which make execution of 2D layout generation for a big number of objects possible on a current-generation mobile device. Finally, downsides of the application of MDS for the generation of layouts were found - layouts would hardly ever look the same after two separate calculations, and estimations of unknown artist similarities may pollute the resulting layout.
+The concrete multi-dimensional scaling algorithm (by application of a spring model) was then presented in-depth, incorporating optimizations (sampling, interpolation) which make execution of 2D layout generation for a big number of objects feasible on a current-generation mobile device. Downsides of the application of MDS for the generation of layouts were found - layouts would hardly ever look the same after two separate calculations, and estimations of unknown artist similarities may pollute the resulting layout. 
+
+Finally, a simple algorithm for the removal of node overlappings in the produced 2D layout was presented, with a hint that further research should concentrate on its substitution with an algorithm which preserves (spring model) system stress.
