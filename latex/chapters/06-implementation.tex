@@ -1,4 +1,4 @@
-One of the objectives of this thesis is the implementation and analysis of a prototype App for mobile devices. In this chapter, the previously selected algorithms will be put into the context of the App's implementation, and the App's structure itself will be detailed. This chapter is structured as follows:
+One of the objectives of this thesis is the implementation and analysis of a prototype App for mobile devices. In this Chapter, the previously selected algorithms will be put into the context of the App's implementation, and the App's structure itself will be detailed. This chapter is structured as follows:
 
 \begin{itemize}
 	\item \textbf {Assembly of Algorithms and Information Flow In Concrete Implementation} - Gives details on algorithms and information flow between them, as previously listed in an overview in Chapter ~\ref{ch:scenario}.
@@ -143,11 +143,11 @@ Andromeda was built and tested with Android 4.0.
 
 \section{Illustrations of Algorithm Steps}
 
-The previously described algorithms used for the composition of the App will in the following be illustrated by screenshots of their outcome. These screenshots (merged into Figures ~\ref{fig:andromeda-agorithms-screens-1} and ~\ref{fig:andromeda-agorithms-screens-2}) are based on a library of 21 artists (in the Pop/Rock genres) which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the computational algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis. In the following sub sections, the algorithms steps shown in the screenshots will be explained.
+The previously described algorithms used for the composition of 2D layouts in the App will in the following be illustrated by screenshots of their outcome. These screenshots (merged into Figures ~\ref{fig:andromeda-agorithms-screens-1} and ~\ref{fig:andromeda-agorithms-screens-2}) are based on a library of 21 artists (in the Pop/Rock genres) which the author of this thesis used while implementing, debugging, and testing the App. Many of the states depicted on the screenshots are not to be found in the actual App, because during the execution of algorithms the current graph state is hidden from the user. Only Figure ~\ref{fig:screen_mds_10_after_all_uncollided_nodes} is a screenshot of the final version of the App. The other figures serve as pure illustration for this thesis. In the following sub sections, the algorithms steps shown in the screenshots will be explained.
 
 \subsection{Initial State}
 
-In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of 21 artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (position randomization prevents nodes from having the exact same position, which would otherwise lead to forces not being applied between nodes with with the same position).
+In figure ~\ref{fig:screen_mds_1_initial}, the initial graph state is shown - a loose collection of 21 artist nodes strewn around the graph's origin in a random manner. At this point, no computation has yet been performed except the assignment of random positions (position randomization prevents nodes from having the exact same position, which would otherwise lead to forces not being applied between nodes with the same position).
 
 \begin{figure}[H]
 	\centering

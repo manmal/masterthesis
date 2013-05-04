@@ -1,4 +1,4 @@
-In this chapter, the retrieval of similarities between artists and the construction of 2D layouts based on those similarities will be presented.
+In this Chapter, the retrieval of similarities between artists and the construction of 2D layouts based on those similarities will be presented.
 
 \begin{itemize}
 	\item \textbf {Matching of Music Entities from Different Sources and Similarity Value Retrieval} - Describes the methods used for merging music objects (artists, albums, titles) and their similarities, and how they deal with uncertainty regarding similarities.
@@ -86,7 +86,7 @@ The layout produced by the aforementioned MDS method \textbf{will never be the s
 \footnote{The introduction of randomness in the layout creation algorithm has been necessary, as mentioned before, because it reduces its time complexity from $O(n^3)$ or even $O(n^4)$ to $\mathcal O(N*\sqrt{N})$. Without these optimizations, the algorithm would hardly be able to produce a layout in a mobile app in reasonable time.}.
 While the addition of some entities is possible after the layout has been completed, a complete rerun of the algorithm will become necessary if similarities change. This is suboptimal for users because they have to reorient themselves after every major layout change.
 
-The MDS method presented earlier in this chapter relies on definite high-dimensional vectors (from which similarity measures can be derived), which is not available here - in the context of computing similarity based on web sources, it is unlikely that a similarity measure can be found for every entity-entity relationship. Therefore, \textbf{estimations have to be used for unknown similarity relationships}, potentially polluting the calculation with incorrect values.
+The MDS method presented earlier in this Chapter relies on definite high-dimensional vectors (from which similarity measures can be derived), which is not available here - in the context of computing similarity based on web sources, it is unlikely that a similarity measure can be found for every entity-entity relationship. Therefore, \textbf{estimations have to be used for unknown similarity relationships}, potentially polluting the calculation with incorrect values.
 
 \section{Removal of Node Overlappings}
 \label{sec:removal-node-overlapping}
@@ -120,7 +120,7 @@ The aforementioned methods of overlap-removal are complex (considering the need 
 	\end{enumerate}
 \end{enumerate}
 
-The result of this algorithm is a graph state which is free of node overlappings, with a predefined node rectangle size. After the implementation of this algorithm, the author found that this algorithm can increase the layout's system stress orders of magnitude, because this algorithm obviously does not take the spring model forces into account. Further research should find a more layout-preserving way of removing node overlappings, as noted in Section ~\ref{subsec:libraryvis}.
+The result of this algorithm is a graph state which is free of node overlappings, with a predefined node rectangle size. After the implementation of this algorithm, the author found that this algorithm can increase the layout's system stress orders of magnitude, because this algorithm obviously does not take the spring model forces into account. Also, it is not guaranteed to preserve any of the mental-map-preserving features mentioned earlier (Orthogonal Ordering, Proximity Relations, and Topology). Further research should find a more layout-preserving way of removing node overlappings, as also noted in Section ~\ref{subsec:libraryvis}.
 
 \section{Summary}
 
