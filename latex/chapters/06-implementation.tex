@@ -53,7 +53,7 @@ Andromeda was built and tested with Android 4.0.
 			\textbf{Input:} Artist similarity relations stored in the app's database. \\
 			\textbf{Algorithm:} Iterates through the previously retrieved artist similarity relations, and
 			adds approximations for similarity relations which have not been found in the web API's results.
-			These approximations are calculated as described in section ~\ref{sec:matching-music-entities}. \\
+			These approximations are calculated as described in Section ~\ref{sec:matching-music-entities}. \\
 			\textbf{Output:} Complete artist similarity relations stored in the app's database. \\
 			
 	\item Laying out artists in 2D space with a Multi Dimensional Scaling (MDS) algorithm \\\\
@@ -103,7 +103,7 @@ Andromeda was built and tested with Android 4.0.
 
 				\textbf{Note 1:} The concrete algorithm applies a random margin to repositioned nodes in order to prevent the forming of a equi-distant artist grid. In empirical observations, it has been found that users regard a equi-distant artist grid as too unnatural. An approach inspired by audio processing called "'humanization"' loosens up this rigid structure, that means that small random additions or subtractions are performed on the vector lengths moving the respective artists. The resulting object positions are not more than a few pixels different than without randomization, but the subjective result for the user improves.
 
-				\textbf{Note 2:} After implementation, it turned out that this implemented removal of overlapping of nodes algorithm increases system stress severely (up to orders of magnitude), and in some cases also removes semantic meaning originally produced by the previous 2D layout generation algorithm. The only motivation for the removal of node overlappings are of cosmetical nature: visual overlappings could disturb the user's perception of the result, and hide nodes from the user when they are overlaid by other nodes. In future research, an algorithm better preserving the original layout (like the force transfer algorithm described in section ~\ref{sec:removal-node-overlapping}) should be evaluated and, if yielding better results, replace the algorithm described in this step.
+				\textbf{Note 2:} After implementation, it turned out that this implemented removal of overlapping of nodes algorithm increases system stress severely (up to orders of magnitude), and in some cases also removes semantic meaning originally produced by the previous 2D layout generation algorithm. The only motivation for the removal of node overlappings are of cosmetical nature: visual overlappings could disturb the user's perception of the result, and hide nodes from the user when they are overlaid by other nodes. In future research, an algorithm better preserving the original layout (like the force transfer algorithm described in Section ~\ref{sec:removal-node-overlapping}) should be evaluated and, if yielding better results, replace the algorithm described in this step.
 				 \\
 				\textbf{Output:} Graph structure of nodes resembling artists, laid out such that they don't 
 				overlap each other and their position indicates their similarity to each other. \\
@@ -231,7 +231,7 @@ Similar to the previous figure, the following screenshot ~\ref{fig:screen_mds_3_
 
 \subsection{After Placements of 5 Remaining Nodes (Spring Model)}
 
-After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that five nodes (AC/DC, Aerosmith, Alice Cooper, Arctic Monkeys, Oasis) have been moved to positions which differ from the old positions in the last screenshot (The new positions have been calculated by the algorithm described in section ~\ref{subsec:libraryvis}). 
+After spring model forces have been applied to the initial node subset, the remaining nodes (not being in the initial subset) are now placed in semantically sane positions. In figure ~\ref{fig:screen_mds_4_after_5_restnode_additions}, it can be observed that five nodes (AC/DC, Aerosmith, Alice Cooper, Arctic Monkeys, Oasis) have been moved to positions which differ from the old positions in the last screenshot (The new positions have been calculated by the algorithm described in Section ~\ref{subsec:libraryvis}). 
 
 \subsection{After Placements of All Remaining Nodes (Sprint Model)}
 
@@ -249,7 +249,7 @@ The graph's nodes have been laid out such that their centers' positions reduce s
 
 \subsection{After Removal of Node Overlappings from 5 Nodes}
 
-By applying the algorithm for removal of node overlappings described in section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed. Two artists have not been moved because they did not overlap with other artists, but three artists (Aerosmith, Airbourne, Alice Cooper) have been moved, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
+By applying the algorithm for removal of node overlappings described in Section ~\ref{sec:removal-node-overlapping}, overlapping artist nodes are separated from each other. Figure ~\ref{fig:screen_mds_8_after_5_uncollided_nodes} shows the graph's state after five nodes have been processed. Two artists have not been moved because they did not overlap with other artists, but three artists (Aerosmith, Airbourne, Alice Cooper) have been moved, i.e. they have been repositioned such that they keep a certain margin to any other nodes.
 
 \subsection{After Removal of Node Overlappings from Half of All Nodes}
 
@@ -295,7 +295,7 @@ Last.fm \cite{url:lastfm} and Echonest \cite{url:echonest} are the de facto stan
 at the time of writing of this paper. The author has chosen to use both of these services for retrieval 
 of semantic metadata for the implementation. 
 
-After the device's music titles and their metadata have been retrieved, their metadata has to be augmented or corrected with the normalized data from external sources - Last.fm and Echonest. To ensure a stable mapping from on-device to remote music metadata records, these are fetched up front. For every artist, album, and track the App has retrieved from the device, a match is searched for in web sources. Search for matches is performed by sending an ordinary search query to the web sources, and metadata records are returned as a result. Excerpts of the acquired records are then stored in the App's on-device database, as described in section ~\ref{sec:matching-music-entities}.
+After the device's music titles and their metadata have been retrieved, their metadata has to be augmented or corrected with the normalized data from external sources - Last.fm and Echonest. To ensure a stable mapping from on-device to remote music metadata records, these are fetched up front. For every artist, album, and track the App has retrieved from the device, a match is searched for in web sources. Search for matches is performed by sending an ordinary search query to the web sources, and metadata records are returned as a result. Excerpts of the acquired records are then stored in the App's on-device database, as described in Section ~\ref{sec:matching-music-entities}.
 
 \section{Retrieval of Similarity Data}
 

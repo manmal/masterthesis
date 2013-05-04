@@ -50,7 +50,7 @@ Since the webservice Last.fm provides readymade similarity measures between arti
 \subsection{Concrete MDS Algorithm with Optimizations for Execution on Mobile Devices}
 \label{subsec:contretemds}
 
-As mentioned before, the generation of a 2D-projection of music collections is performed by executing a MDS algorithm by application of a spring model. In section ~\ref{subsec:2dprojection}, such a basic MDS algorithm was described, and in the same section, optimizations introduced by \cite{Chalmers:1996:LIT:244979.245035} and \cite{Morrison:2003:FMS} have been listed.
+As mentioned before, the generation of a 2D-projection of music collections is performed by executing a MDS algorithm by application of a spring model. In Section ~\ref{subsec:2dprojection}, such a basic MDS algorithm was described, and in the same section, optimizations introduced by \cite{Chalmers:1996:LIT:244979.245035} and \cite{Morrison:2003:FMS} have been listed.
 
 In the following, the optimized algorithm will be explained step by step (SeedNodeIterations, NeighborCandidateSetSize, CleanupIterations being predefined constants):
 
@@ -120,7 +120,7 @@ The aforementioned methods of overlap-removal are complex (considering the need 
 	\end{enumerate}
 \end{enumerate}
 
-The result of this algorithm is a graph state which is free of node overlappings, with a predefined node rectangle size. After the implementation of this algorithm, the author found that this algorithm can increase the layout's system stress orders of magnitude, because this algorithm obviously does not take the spring model forces into account. Further research should find a more layout-preserving way of removing node overlappings, as noted in section ~\ref{subsec:libraryvis}.
+The result of this algorithm is a graph state which is free of node overlappings, with a predefined node rectangle size. After the implementation of this algorithm, the author found that this algorithm can increase the layout's system stress orders of magnitude, because this algorithm obviously does not take the spring model forces into account. Further research should find a more layout-preserving way of removing node overlappings, as noted in Section ~\ref{subsec:libraryvis}.
 
 \section{Summary}
 
